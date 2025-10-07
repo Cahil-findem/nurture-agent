@@ -50,6 +50,14 @@ const Onboarding: React.FC<OnboardingProps> = ({ onNavigate, initialStep = 1, na
         setCurrentStep(2);
         setIsTransitioning(false);
       }, 600); // Wait for fade-out animation
+    } else if (currentStep === 2) {
+      // Transition to step 3
+      setTransitionDirection('forward');
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentStep(3);
+        setIsTransitioning(false);
+      }, 600); // Wait for fade-out animation
     } else {
       // Go to goal selection page
       onNavigate?.('goal-selection', 'forward');
@@ -65,6 +73,14 @@ const Onboarding: React.FC<OnboardingProps> = ({ onNavigate, initialStep = 1, na
         setCurrentStep(1);
         setIsTransitioning(false);
       }, 600); // Wait for fade-out animation
+    } else if (currentStep === 3) {
+      // Transition back to step 2
+      setTransitionDirection('backward');
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentStep(2);
+        setIsTransitioning(false);
+      }, 600); // Wait for fade-out animation
     }
   };
 
@@ -74,10 +90,15 @@ const Onboarding: React.FC<OnboardingProps> = ({ onNavigate, initialStep = 1, na
         greeting: `Hey ${userName} 👋`,
         message: "I'm Cleo, and I'll be helping you build personal<br>relationships with your talent. Let's get started!"
       };
-    } else {
+    } else if (currentStep === 2) {
       return {
         greeting: "Think of me as part of your team.",
         message: "I'll automatically nurture your talent based on their achievements, career updates, and interests."
+      };
+    } else {
+      return {
+        greeting: "I nurture your talent around the clock.",
+        message: "Anytime you want to adjust our approach or hit pause, just let me know."
       };
     }
   };
@@ -96,7 +117,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onNavigate, initialStep = 1, na
     <div className="onboarding-container">
       {/* Progress Bar */}
       <div className="progress-bar">
-        <div className="progress-fill" style={{ width: currentStep === 1 ? '20%' : '40%' }}></div>
+        <div className="progress-fill" style={{ width: currentStep === 1 ? '20%' : currentStep === 2 ? '40%' : '60%' }}></div>
       </div>
 
       {/* Main Content */}
@@ -122,7 +143,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onNavigate, initialStep = 1, na
           </div>
 
           <div className={`buttons-container ${getAnimationClass('animate-delay-2')}`}>
-            {currentStep === 2 && (
+            {(currentStep === 2 || currentStep === 3) && (
               <div className="button-wrapper">
                 <div
                   className="btn btn-secondary"

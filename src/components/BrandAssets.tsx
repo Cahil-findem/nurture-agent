@@ -15,29 +15,28 @@ interface BrandAssetsProps {
 const BrandAssets: React.FC<BrandAssetsProps> = ({
   assets,
   onAssetsChange,
-  maxAssets = 8
 }) => {
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (!files || assets.length >= maxAssets) return;
+  // const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = event.target.files;
+  //   if (!files || assets.length >= maxAssets) return;
 
-    const newAssets: BrandAsset[] = [];
+  //   const newAssets: BrandAsset[] = [];
 
-    for (let i = 0; i < files.length && (assets.length + newAssets.length) < maxAssets; i++) {
-      const file = files[i];
-      const url = URL.createObjectURL(file);
+  //   for (let i = 0; i < files.length && (assets.length + newAssets.length) < maxAssets; i++) {
+  //     const file = files[i];
+  //     const url = URL.createObjectURL(file);
 
-      newAssets.push({
-        id: `asset-${Date.now()}-${i}`,
-        url,
-        name: file.name
-      });
-    }
+  //     newAssets.push({
+  //       id: `asset-${Date.now()}-${i}`,
+  //       url,
+  //       name: file.name
+  //     });
+  //   }
 
-    if (newAssets.length > 0) {
-      onAssetsChange?.([...assets, ...newAssets]);
-    }
-  };
+  //   if (newAssets.length > 0) {
+  //     onAssetsChange?.([...assets, ...newAssets]);
+  //   }
+  // };
 
   const handleRemoveAsset = (assetId: string) => {
     const updatedAssets = assets.filter(asset => {

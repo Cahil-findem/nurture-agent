@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Chip from './Chip';
-import Dropdown from './Dropdown';
 import './ChipSelector.css';
 
 interface ChipSelectorOption {
@@ -19,7 +18,6 @@ const ChipSelector: React.FC<ChipSelectorProps> = ({
   selectedValues,
   onValuesChange,
   options,
-  placeholder = "Select an option"
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 

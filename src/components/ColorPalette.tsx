@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import './ColorPalette.css';
 
 interface ColorSwatch {
@@ -15,24 +14,23 @@ interface ColorPaletteProps {
 const ColorPalette: React.FC<ColorPaletteProps> = ({
   colors,
   onColorsChange,
-  maxColors = 8
 }) => {
-  const [newColor, setNewColor] = useState('#000000');
+  // const [newColor, setNewColor] = useState('#000000');
 
-  const handleAddColor = () => {
-    if (colors.length < maxColors) {
-      const newColorSwatch: ColorSwatch = {
-        color: newColor,
-        hex: newColor
-      };
-      onColorsChange?.([...colors, newColorSwatch]);
-    }
-  };
+  // const handleAddColor = () => {
+  //   if (colors.length < maxColors) {
+  //     const newColorSwatch: ColorSwatch = {
+  //       color: newColor,
+  //       hex: newColor
+  //     };
+  //     onColorsChange?.([...colors, newColorSwatch]);
+  //   }
+  // };
 
-  const handleRemoveColor = (indexToRemove: number) => {
-    const updatedColors = colors.filter((_, index) => index !== indexToRemove);
-    onColorsChange?.(updatedColors);
-  };
+  // const handleRemoveColor = (indexToRemove: number) => {
+  //   const updatedColors = colors.filter((_, index) => index !== indexToRemove);
+  //   onColorsChange?.(updatedColors);
+  // };
 
   const handleColorChange = (index: number, newColorValue: string) => {
     const updatedColors = colors.map((color, i) =>

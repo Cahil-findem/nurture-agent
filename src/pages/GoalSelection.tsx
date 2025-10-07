@@ -12,11 +12,9 @@ const GoalSelection: React.FC<GoalSelectionProps> = ({ onNavigate, navigationDir
   const [transitionDirection, setTransitionDirection] = useState<'forward' | 'backward'>('forward');
 
   const goals = [
-    { id: 'pipeline', text: 'Build future-ready pipeline' },
-    { id: 'roles', text: 'Fill critical roles faster' },
-    { id: 'engagement', text: 'Increase candidate engagement' },
-    { id: 'brand', text: 'Strengthen employer brand' },
-    { id: 'time-to-hire', text: 'Reduce time-to-hire' },
+    { id: 'applicants', text: 'Get more applicants' },
+    { id: 'warm', text: 'Keep candidates warm' },
+    { id: 'both', text: 'Both' },
   ];
 
   const handleGoalSelect = (goalId: string) => {
@@ -73,7 +71,7 @@ const GoalSelection: React.FC<GoalSelectionProps> = ({ onNavigate, navigationDir
                 alt="Logo"
               />
               <h1 className="page-title">
-                First things first — what's the main outcome you want from your nurture program?
+                What's your main goal?
               </h1>
             </div>
           </div>
