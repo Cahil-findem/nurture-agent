@@ -107,7 +107,7 @@ function extractBlogPostsFromPage(html: string, baseUrl: string): BlogPost[] {
   for (const selector of selectors) {
     const elements = doc.querySelectorAll(selector);
 
-    elements.forEach((element, index) => {
+    elements.forEach((element) => {
       if (posts.length >= 10) return; // Limit to prevent too many results
 
       const titleEl = element.querySelector('h1, h2, h3, .title, [class*="title"]');
@@ -158,6 +158,7 @@ async function extractLogoWithBrandfetch(baseUrl: string): Promise<{logo_url: st
 }
 
 // Keep the old function as fallback
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function extractLogo(baseUrl: string, html: string): Promise<string> {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');

@@ -3,7 +3,6 @@ import FormField from '../components/FormField';
 import ColorPalette from '../components/ColorPalette';
 import BrandAssets from '../components/BrandAssets';
 import TextArea from '../components/TextArea';
-import ChipSelector from '../components/ChipSelector';
 import EmailPreview from '../components/EmailPreview';
 import './Recipe2.css';
 

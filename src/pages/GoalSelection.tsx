@@ -40,7 +40,7 @@ const GoalSelection: React.FC<GoalSelectionProps> = ({ onNavigate, navigationDir
       setTransitionDirection('forward');
       setIsTransitioning(true);
       setTimeout(() => {
-        onNavigate?.('segments', 'forward');
+        onNavigate?.('segments');
       }, 600);
     }
   };
@@ -49,7 +49,7 @@ const GoalSelection: React.FC<GoalSelectionProps> = ({ onNavigate, navigationDir
     setTransitionDirection('backward');
     setIsTransitioning(true);
     setTimeout(() => {
-      onNavigate?.('onboarding-step2', 'backward');
+      onNavigate?.('onboarding-step2');
     }, 600);
   };
 

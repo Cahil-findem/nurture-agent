@@ -18,15 +18,15 @@ interface Recipe2_2Props {
 }
 
 const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
-  const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [logoUrl, setLogoUrl] = useState<string>('/Logo.png');
+  // const [logoFile, setLogoFile] = useState<File | null>(null);
+  // const [logoUrl, setLogoUrl] = useState<string>('/Logo.png');
   const [colors, setColors] = useState<ColorSwatch[]>([
     { color: '#4552F6', hex: '#4599FA' },
     { color: '#A9D1FF', hex: '#A9D1FF' },
     { color: '#6ED69B', hex: '#6ED69B' },
     { color: '#8BEFB6', hex: '#8BEFB6' }
   ]);
-  const [brandAssets, setBrandAssets] = useState<BrandAsset[]>([
+  const [brandAssets] = useState<BrandAsset[]>([
     { id: 'asset-1', url: '/Brand%20Asset%2001.png', name: 'Woman in red beanie' },
     { id: 'asset-2', url: '/Brand%20Asset%2002.png', name: 'Mountain landscape' },
     { id: 'asset-3', url: '/Brand%20Asset%2003.png', name: 'Coastal cliffs' },
@@ -38,7 +38,7 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
   const [toneOfVoice, setToneOfVoice] = useState(
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer malesuada, lacus vel tristique fermentum, orci augue elementum nisi, ac porttitor mauris est non risus. Aenean sit amet sapien vitae lectus cursus iaculis at ac neque. Sed non leo euismod, sagittis libero eget, sollicitudin nulla.'
   );
-  const [previewMode, setPreviewMode] = useState<'preview' | 'edit'>('preview');
+  // const [previewMode, setPreviewMode] = useState<'preview' | 'edit'>('preview');
   const [liveContentSources, setLiveContentSources] = useState(4);
   const [showBlogPostsPopover, setShowBlogPostsPopover] = useState(false);
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
@@ -56,12 +56,12 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
           console.log('Recipe2_2 - Crawled data:', crawledData);
 
           // Update logo if available
-          if (crawledData.logo_url) {
-            console.log('Recipe2_2 - Setting logo URL:', crawledData.logo_url);
-            setLogoUrl(crawledData.logo_url);
-          } else {
-            console.log('Recipe2_2 - No logo URL found in crawled data');
-          }
+          // if (crawledData.logo_url) {
+          //   console.log('Recipe2_2 - Setting logo URL:', crawledData.logo_url);
+          //   setLogoUrl(crawledData.logo_url);
+          // } else {
+          //   console.log('Recipe2_2 - No logo URL found in crawled data');
+          // }
 
           // Update color palette if brand colors are available
           if (crawledData.brand_colors && crawledData.brand_colors.length > 0) {
@@ -109,26 +109,26 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
   }, []);
 
 
-  const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setLogoFile(file);
-    }
-  };
+  // const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     setLogoFile(file);
+  //   }
+  // };
 
-  const handleContinue = () => {
-    const recipeData = {
-      logo: logoFile,
-      colors,
-      brandAssets,
-      companyDescription,
-      toneOfVoice,
-      timestamp: Date.now()
-    };
+  // const handleContinue = () => {
+  //   const recipeData = {
+  //     logo: logoFile,
+  //     colors,
+  //     brandAssets,
+  //     companyDescription,
+  //     toneOfVoice,
+  //     timestamp: Date.now()
+  //   };
 
-    console.log('Recipe 2.2 data:', recipeData);
-    alert('Content generation completed! (This will be replaced with navigation)');
-  };
+  //   console.log('Recipe 2.2 data:', recipeData);
+  //   alert('Content generation completed! (This will be replaced with navigation)');
+  // };
 
   const handleRestartDemo = () => {
     // Navigate back to DemoSetup page
