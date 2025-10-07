@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap');
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  height: 28px;
+  box-sizing: border-box;
+}
+
+.chip-label {
+  color: #374151;
+  font-size: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.chip-remove-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.chip-remove-button:hover {
+  background: rgba(107, 114, 128, 0.1);
+}
+
+.chip-remove-icon {
+  color: #6B7280;
+  font-size: 14px;
+  font-family: 'Material Icons Round', sans-serif;
+  font-weight: 400;
+}

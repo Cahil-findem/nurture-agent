@@ -1,0 +1,269 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap');
+
+.demo-setup {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: white;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+
+.demo-setup-container {
+  width: 500px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.demo-setup-content {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+/* Header Section */
+.demo-setup-header {
+  align-self: stretch;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #DCDFEA;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.demo-setup-title {
+  align-self: stretch;
+  color: #101828;
+  font-size: 24px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+  line-height: 32px;
+  margin: 0;
+  text-align: left;
+}
+
+.demo-setup-subtitle {
+  align-self: stretch;
+  color: #465366;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0;
+  text-align: left;
+}
+
+/* Form Section */
+.demo-setup-form {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.form-field {
+  align-self: stretch;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.field-label-container {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.field-label {
+  align-self: stretch;
+  color: #101828;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 19.6px;
+  text-align: left;
+}
+
+.field-input-container {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.field-input-wrapper {
+  align-self: stretch;
+  padding: 8px 12px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #DCDFEA;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  transition: border-color 0.2s ease;
+}
+
+.field-input-wrapper:focus-within {
+  border-color: #4599FA;
+  outline: none;
+}
+
+.field-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #101828;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 19.6px;
+}
+
+.field-input::placeholder {
+  color: #465366;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 19.6px;
+}
+
+/* Actions Section */
+.demo-setup-actions {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.save-button {
+  align-self: stretch;
+  padding: 8px 12px;
+  background: #4599FA;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.save-button:hover {
+  background: #3280E8;
+}
+
+.save-button:active {
+  background: #2563EB;
+}
+
+.save-button:disabled {
+  background: #9CA3AF;
+  cursor: not-allowed;
+}
+
+.save-button:disabled:hover {
+  background: #9CA3AF;
+}
+
+.save-button-text {
+  text-align: center;
+  color: white;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .demo-setup-container {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .demo-setup-content {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .demo-setup-container {
+    width: 95%;
+    padding: 16px;
+  }
+
+  .demo-setup-title {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+
+/* Restart Demo Button */
+.restart-demo-button {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  height: 40px;
+  padding: 8px 16px;
+  background: white;
+  border: 1px solid #DCDFEA;
+  border-radius: 8px;
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.restart-demo-button:hover {
+  background: #F9FAFB;
+  border-color: #98A2B3;
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.restart-demo-button:active {
+  background: #F2F4F7;
+  border-color: #667085;
+}
+
+.restart-demo-button .material-icons-round {
+  color: #667085;
+  font-size: 16px;
+}
+
+.restart-text {
+  color: #344054;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  line-height: 20px;
+}

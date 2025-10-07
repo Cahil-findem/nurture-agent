@@ -1,0 +1,294 @@
+.onboarding-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  background: white;
+}
+
+/* Fade up animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade out and up animation */
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-32px);
+  }
+}
+
+/* Fade out and down animation */
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+}
+
+/* Fade in from above animation */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation classes */
+.animate-fade-up {
+  animation: fadeUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.animate-fade-out-up {
+  animation: fadeOutUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.animate-fade-out-down {
+  animation: fadeOutDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.animate-delay-1 {
+  animation-delay: 0.1s;
+}
+
+.animate-delay-2 {
+  animation-delay: 0.2s;
+}
+
+.animate-delay-3 {
+  animation-delay: 0.3s;
+}
+
+/* Progress Bar - positioned over header bottom stroke */
+.progress-bar {
+  width: 100vw;
+  height: 4px;
+  background: #f1f5f9;
+  position: fixed;
+  top: 56px; /* Position over header bottom stroke */
+  left: 0;
+  z-index: 100;
+}
+
+.progress-fill {
+  height: 100%;
+  background: rgba(69, 153, 250, 0.4);
+  transition: width 0.3s ease;
+}
+
+/* Main Content */
+.onboarding-content {
+  width: 100%;
+  height: 100%;
+  padding-bottom: 120px;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  display: flex;
+}
+
+.content-inner {
+  max-width: 666px;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  display: flex;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+}
+
+.greeting-section {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  display: flex;
+}
+
+.greeting-header {
+  align-self: stretch;
+  overflow: hidden;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  display: inline-flex;
+}
+
+.greeting-title {
+  color: #101828;
+  font-size: 28px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  line-height: 40.32px;
+  word-wrap: break-word;
+  text-align: left;
+}
+
+.greeting-body {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+}
+
+.welcome-message-container {
+  align-self: stretch;
+  overflow: hidden;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  display: inline-flex;
+}
+
+.welcome-message {
+  flex: 1 1 0;
+  color: #465366;
+  font-size: 28px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  line-height: 40.32px;
+  word-wrap: break-word;
+  text-align: left;
+}
+
+.button-wrapper {
+  display: flex;
+  align-self: flex-start;
+  width: fit-content;
+}
+
+.buttons-container {
+  display: flex;
+  gap: 12px;
+  align-self: flex-start;
+  width: fit-content;
+}
+
+/* Button Base Styles */
+.btn {
+  padding: 8px 12px;
+  overflow: hidden;
+  border-radius: 6px;
+  justify-content: center;
+  align-items: center;
+  display: inline-flex;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: center;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 1;
+  word-wrap: break-word;
+}
+
+/* Dark Button Variant */
+.btn-dark {
+  background: #101828;
+  color: white;
+  padding: 10px 12px;
+}
+
+.btn-dark:hover {
+  background: #1f2937;
+}
+
+.btn-dark:active {
+  background: #0f172a;
+}
+
+/* Secondary Button Variant */
+.btn-secondary {
+  background: transparent;
+  color: #101828;
+  border: 1px solid #e5e7eb;
+  padding: 10px 12px;
+}
+
+.btn-secondary:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.btn-secondary:active {
+  background: #f3f4f6;
+}
+
+/* Legacy continue button class for backward compatibility */
+.continue-button {
+  padding: 8px 12px;
+  background: #101828;
+  overflow: hidden;
+  border-radius: 6px;
+  justify-content: center;
+  align-items: center;
+  display: inline-flex;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: center;
+  color: white;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 1;
+  word-wrap: break-word;
+}
+
+
+.continue-button:hover {
+  background: #1f2937;
+}
+
+.continue-button:active {
+  background: #0f172a;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .content-inner {
+    padding: 0 40px;
+  }
+
+  .onboarding-content {
+    padding-bottom: 60px;
+  }
+
+  .greeting-title,
+  .welcome-message {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}

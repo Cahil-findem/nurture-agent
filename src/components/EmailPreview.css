@@ -1,0 +1,475 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap');
+
+.email-preview {
+  flex: 1;
+  height: 850px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Minimal Role Navigation Overlay */
+.role-navigation-overlay {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  height: 36px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3));
+  backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 8px 32px rgba(31, 38, 135, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.2);
+  z-index: 100;
+}
+
+.nav-arrow-minimal {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #64748B;
+}
+
+.nav-arrow-minimal:hover {
+  background: rgba(148, 163, 184, 0.1);
+  color: #475569;
+}
+
+.nav-arrow-minimal:active {
+  background: rgba(148, 163, 184, 0.2);
+  transform: scale(0.9);
+}
+
+.nav-arrow-minimal .material-icons-round {
+  font-size: 16px;
+}
+
+.current-role-label {
+  padding: 0 12px;
+  color: #1E293B;
+  font-size: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  white-space: nowrap;
+  text-align: center;
+  min-width: 120px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body {
+  background-color: white !important;
+  margin: 0;
+  padding: 0;
+}
+
+.email-container {
+  width: 100%;
+  flex: 1;
+  position: relative;
+  background:
+    radial-gradient(ellipse 80.98% 135.48% at 100% 65.63%, rgba(74, 46, 223, 0.06) 0%, rgba(74, 46, 223, 0) 100%),
+    linear-gradient(128deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 100%),
+    radial-gradient(ellipse 147.33% 85.88% at -5% -10.94%, rgba(50, 225, 112, 0.03) 0%, rgba(50, 225, 112, 0) 100%),
+    white;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 8px 8px -4px rgba(16, 24, 40, 0.03);
+}
+
+.email-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(135deg,
+    rgba(74, 46, 223, 0.3) 0%,
+    rgba(50, 225, 112, 0.25) 50%,
+    rgba(74, 46, 223, 0.2) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.email-avatar {
+  outline: 4px solid white;
+  border-radius: 12px;
+}
+
+.email-header {
+  padding-top: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.content-preview-badge {
+  padding: 4px 6px;
+  background: #F5F5F5;
+  border-radius: 2px;
+}
+
+.preview-text {
+  color: #5B5B5B;
+  font-size: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  text-align: center;
+}
+
+.company-logo {
+  width: 121px;
+  height: 27px;
+}
+
+.email-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.email-section {
+  padding: 20px 32px;
+  text-align: left;
+}
+
+.hero-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.hero-image {
+  width: 100%;
+  height: 215px;
+  border-radius: 12px;
+  object-fit: cover;
+  padding: 0 2px;
+}
+
+.logo-overlay {
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.content-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.email-title {
+  color: #101828;
+  font-size: 24px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+  line-height: 32px;
+  margin: 0;
+  text-align: left;
+}
+
+.section-title {
+  color: #101828;
+  font-size: 24px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+  line-height: 32px;
+  margin: 0;
+  text-align: left;
+}
+
+.email-body,
+.section-body {
+  color: #465366;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 26px;
+}
+
+.email-body h1 {
+  line-height: calc(1.2em + 6px);
+}
+
+.email-body p,
+.section-body p {
+  margin: 0 0 16px 0;
+}
+
+.email-body p:last-child,
+.section-body p:last-child {
+  margin-bottom: 0;
+}
+
+.cta-button {
+  width: 140px;
+  padding: 8px 20px;
+  background: #4599FA;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cta-button:hover {
+  background: #3280E8;
+}
+
+.email-divider {
+  padding: 0 60px;
+  display: flex;
+  align-items: center;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: #DCDFEA;
+  border-radius: 50px;
+}
+
+.media-cards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  padding: 0 28px;
+}
+
+.media-card {
+  width: 235px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.media-thumbnail {
+  width: 100%;
+  height: 143px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.video-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 100px;
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-button .material-icons-round {
+  color: white;
+  font-size: 38px;
+  font-family: 'Material Icons Round', sans-serif;
+  font-weight: 400;
+  margin-left: 2px;
+}
+
+.logo-circles {
+  width: 100%;
+  height: 100%;
+  background: white;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: #167FF9;
+}
+
+.circle-1 {
+  width: 284px;
+  height: 284px;
+  opacity: 0.2;
+  top: -70px;
+  left: -24px;
+}
+
+.circle-2 {
+  width: 214px;
+  height: 214px;
+  opacity: 0.4;
+  top: -35px;
+  left: 11px;
+}
+
+.circle-3 {
+  width: 152px;
+  height: 152px;
+  opacity: 0.7;
+  top: -4px;
+  left: 42px;
+}
+
+.circle-4 {
+  width: 100px;
+  height: 100px;
+  opacity: 1;
+  top: 22px;
+  left: 68px;
+}
+
+.logo-icon {
+  position: relative;
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-icon .material-icons-round {
+  color: white;
+  font-size: 36px;
+  font-family: 'Material Icons Round', sans-serif;
+  font-weight: 400;
+}
+
+.media-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.media-category {
+  color: #167FF9;
+  font-size: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.media-title {
+  color: #101828;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: left;
+}
+
+.media-description {
+  color: #465366;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: left;
+}
+
+.email-footer {
+  background: #101828;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.footer-logo img {
+  width: 120px;
+  height: 21px;
+}
+
+.footer-divider {
+  width: 100%;
+  height: 1px;
+  background: white;
+  opacity: 0.4;
+  border-radius: 50px;
+}
+
+.footer-text {
+  color: white;
+  font-size: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.footer-copyright {
+  color: white;
+  font-size: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 12px;
+}
+
+.fade-overlay {
+  position: absolute;
+  bottom: 0;
+  left: -7px;
+  width: 614px;
+  height: 119px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, white 77%);
+  pointer-events: none;
+}

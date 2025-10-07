@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap');
+
+.textarea-wrapper {
+  width: 100%;
+  padding: 8px 12px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #DCDFEA;
+  transition: all 0.2s ease;
+}
+
+.textarea-wrapper:focus-within {
+  border-color: #4599FA;
+  box-shadow: 0px 0px 0px 3px #E1EFFE;
+  outline: none;
+}
+
+.textarea-wrapper:hover:not(:focus-within) {
+  border-color: #B0B7C3;
+}
+
+.textarea-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #101828;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 19.6px;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.textarea-input::placeholder {
+  color: #465366;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 19.6px;
+}
+
+.textarea-input:disabled {
+  color: #6B7280;
+  cursor: not-allowed;
+}
+
+.textarea-wrapper:has(.textarea-input:disabled) {
+  background: #F9FAFB;
+  border-color: #E5E7EB;
+}

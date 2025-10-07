@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Icons+Round');
+
+.sidebar {
+  width: 66px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  background: #111827;
+  box-shadow: -2px 0px 4px rgba(0, 0, 0, 0.20) inset;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+  padding: 48px 12px 16px 12px;
+}
+
+/* Logo/Brand Section */
+.sidebar-header {
+  align-self: stretch;
+  padding-bottom: 48px;
+  padding-left: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.logo-container {
+  width: 151px;
+  height: 28px;
+  position: relative;
+}
+
+.logo-dot {
+  width: 5.99px;
+  height: 5.99px;
+  position: absolute;
+  left: 0;
+  top: 22.01px;
+  background: white;
+}
+
+.logo-line-long {
+  width: 27.69px;
+  height: 5.99px;
+  position: absolute;
+  left: 0;
+  top: 1.47px;
+  background: white;
+  border-radius: 46.5px;
+}
+
+.logo-line-short {
+  width: 18.95px;
+  height: 5.99px;
+  position: absolute;
+  left: 0;
+  top: 11.74px;
+  background: white;
+  border-radius: 46.5px;
+}
+
+/* Navigation Sections */
+.nav-section {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.nav-item {
+  width: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover .nav-item-content {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-item-content {
+  width: 42px;
+  height: 42px;
+  padding: 10px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.nav-item.active .nav-item-content {
+  background: linear-gradient(0deg, #31374E 0%, #31374E 100%);
+}
+
+.nav-item.default .nav-item-content {
+  background: transparent;
+}
+
+/* Navigation Icons */
+.nav-icon {
+  color: white;
+  font-size: 18px;
+  font-family: 'Material Icons Round', sans-serif;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.nav-icon.inactive {
+  opacity: 0.4;
+}
+
+.expand-icon {
+  display: none;
+}
+
+/* Active Indicator */
+.active-indicator {
+  display: none;
+}
+
+/* Divider */
+.nav-divider {
+  align-self: stretch;
+  height: 1px;
+  opacity: 0.2;
+  background: white;
+}
+
+/* Spacer */
+.sidebar-spacer {
+  align-self: stretch;
+  flex: 1;
+}
+
+/* User Profile */
+.user-profile {
+  align-self: stretch;
+  padding: 12px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.user-profile:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.user-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 21px;
+  object-fit: cover;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 66px;
+    padding: 24px 12px 16px 12px;
+  }
+}

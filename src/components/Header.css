@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap');
+
+.app-header {
+  width: calc(100% - 66px); /* Account for sidebar width */
+  position: fixed;
+  top: 0;
+  left: 66px;
+  z-index: 100;
+  background: white;
+  border-bottom: 1px solid #EAECF0;
+}
+
+.header-content {
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-title {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.title-text {
+  color: #101828;
+  font-size: 18px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.action-button {
+  height: 28px;
+  padding: 6px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.action-button:hover {
+  background: rgba(70, 83, 102, 0.1);
+}
+
+.help-button {
+  /* Transparent style */
+}
+
+.more-button {
+  width: 28px;
+  border-radius: 6px;
+}
+
+.action-button .material-icons-round {
+  color: #465366;
+  font-size: 18px;
+  font-family: 'Material Icons Round', sans-serif;
+  font-weight: 400;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .app-header {
+    width: calc(100% - 66px);
+    left: 66px;
+  }
+}
