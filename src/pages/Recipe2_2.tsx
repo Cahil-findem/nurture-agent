@@ -20,22 +20,22 @@ interface Recipe2_2Props {
 const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
   // const [logoFile, setLogoFile] = useState<File | null>(null);
   // const [logoUrl, setLogoUrl] = useState<string>('/Logo.png');
-  const [colors, setColors] = useState<ColorSwatch[]>([
+  const [_colors, setColors] = useState<ColorSwatch[]>([
     { color: '#4552F6', hex: '#4599FA' },
     { color: '#A9D1FF', hex: '#A9D1FF' },
     { color: '#6ED69B', hex: '#6ED69B' },
     { color: '#8BEFB6', hex: '#8BEFB6' }
   ]);
-  const [brandAssets] = useState<BrandAsset[]>([
+  const [_brandAssets] = useState<BrandAsset[]>([
     { id: 'asset-1', url: '/Brand%20Asset%2001.png', name: 'Woman in red beanie' },
     { id: 'asset-2', url: '/Brand%20Asset%2002.png', name: 'Mountain landscape' },
     { id: 'asset-3', url: '/Brand%20Asset%2003.png', name: 'Coastal cliffs' },
     { id: 'asset-4', url: '/Brand%20Asset%2004.png', name: 'Red surface texture' }
   ]);
-  const [companyDescription, setCompanyDescription] = useState(
+  const [_companyDescription, setCompanyDescription] = useState(
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer malesuada, lacus vel tristique fermentum, orci augue elementum nisi, ac porttitor mauris est non risus. Aenean sit amet sapien vitae lectus cursus iaculis at ac neque. Sed non leo euismod, sagittis libero eget, sollicitudin nulla.'
   );
-  const [toneOfVoice, setToneOfVoice] = useState(
+  const [_toneOfVoice, setToneOfVoice] = useState(
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer malesuada, lacus vel tristique fermentum, orci augue elementum nisi, ac porttitor mauris est non risus. Aenean sit amet sapien vitae lectus cursus iaculis at ac neque. Sed non leo euismod, sagittis libero eget, sollicitudin nulla.'
   );
   // const [previewMode, setPreviewMode] = useState<'preview' | 'edit'>('preview');

@@ -158,8 +158,7 @@ async function extractLogoWithBrandfetch(baseUrl: string): Promise<{logo_url: st
 }
 
 // Keep the old function as fallback
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function extractLogo(baseUrl: string, html: string): Promise<string> {
+async function _extractLogo(baseUrl: string, html: string): Promise<string> {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
 
