@@ -157,37 +157,6 @@ async function extractLogoWithBrandfetch(baseUrl: string): Promise<{logo_url: st
   }
 }
 
-// Keep the old function as fallback
-async function _extractLogo(baseUrl: string, html: string): Promise<string> {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-
-  // Common logo selectors
-  const logoSelectors = [
-    'img[alt*="logo" i]',
-    '.logo img',
-    '#logo img',
-    '[class*="logo"] img',
-    'header img:first-of-type',
-    '.navbar img:first-of-type',
-    '.header img:first-of-type'
-  ];
-
-  console.log('Extracting logo from:', baseUrl);
-
-  for (const selector of logoSelectors) {
-    const logoEl = doc.querySelector(selector) as HTMLImageElement;
-    if (logoEl?.src) {
-      const logoUrl = logoEl.src.startsWith('http') ? logoEl.src : new URL(logoEl.src, baseUrl).toString();
-      console.log('Found logo with selector:', selector, 'URL:', logoUrl);
-      return logoUrl;
-    }
-  }
-
-  console.log('No logo found with standard selectors');
-  return '';
-}
-
 function extractAboutText(html: string): string {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
