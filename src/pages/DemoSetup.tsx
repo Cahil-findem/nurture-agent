@@ -64,7 +64,7 @@ const DemoSetup: React.FC<DemoSetupProps> = ({ onNavigate }) => {
         <div className="demo-setup-content">
           {/* Header Section */}
           <div className="demo-setup-header">
-            <h1 className="demo-setup-title">Setup your demo</h1>
+            <h1 className="demo-setup-title">Setup Your Demo</h1>
             <p className="demo-setup-subtitle">
               Provide us with the details required to make the demo slap 👋
             </p>
