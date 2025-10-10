@@ -137,6 +137,34 @@
   flex: 1 1 0;
 }
 
+.segment-card-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.config-button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.config-button:hover {
+  background: #e5e7eb;
+}
+
+.config-button .material-icons-round {
+  font-size: 16px;
+  color: #6b7280;
+}
+
 .segment-card-checkbox {
   width: 20px;
   height: 20px;
@@ -153,9 +181,103 @@
   border-color: #167FF9;
 }
 
+.segment-card-checkbox.disabled {
+  background: #9ca3af;
+  border-color: #6b7280;
+  opacity: 0.8;
+}
+
+.segment-card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.segment-card.disabled:hover {
+  transform: none;
+  box-shadow: none;
+  background: white;
+  border-color: #e5e7eb;
+}
+
 .segment-card-icon {
   color: white;
   font-size: 14px;
+  font-family: 'Material Icons Round';
+  font-weight: 400;
+  line-height: 1;
+}
+
+/* Rejection Reasons Dropdown */
+.rejection-reasons-dropdown {
+  width: 100%;
+  max-width: 634px;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  animation: fadeInDown 0.3s ease;
+}
+
+.rejection-reasons-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.rejection-reasons-list {
+  padding: 8px 0;
+}
+
+.rejection-reason-item {
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.rejection-reason-item:hover {
+  background: #f9fafb;
+}
+
+.rejection-reason-item.selected {
+  background: rgba(225, 239, 255, 0.40);
+  color: #0F42BC;
+}
+
+.rejection-reason-text {
+  font-size: 14px;
+  color: #6b7280;
+  flex: 1;
+}
+
+.rejection-reason-item.selected .rejection-reason-text {
+  color: #0F42BC;
+}
+
+.rejection-reason-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.rejection-reason-checkbox.checked {
+  background: #167FF9;
+  border-color: #167FF9;
+}
+
+.rejection-reason-icon {
+  color: white;
+  font-size: 12px;
   font-family: 'Material Icons Round';
   font-weight: 400;
   line-height: 1;
