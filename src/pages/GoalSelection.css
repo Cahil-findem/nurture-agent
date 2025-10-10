@@ -51,6 +51,7 @@
 }
 
 .content-inner {
+  min-width: 634px;
   max-width: 634px;
   width: 100%;
   flex-direction: column;

@@ -144,10 +144,10 @@ const Segments: React.FC<SegmentsProps> = ({ onNavigate, navigationDirection = '
                 Before we kick this off, is there anyone we shouldn't contact?
               </h1>
             </div>
-            <p className="subtitle">Select all that apply:</p>
           </div>
 
           <div className={`segments-grid ${isTransitioning ? (transitionDirection === 'forward' ? 'animate-fade-out-up' : 'animate-fade-out-down') : (navigationDirection === 'backward' ? 'animate-fade-in-down animate-delay-1' : 'animate-fade-up animate-delay-1')}`}>
+            <p className="subtitle">Select all that apply:</p>
             {segments.map((segment, index) => {
               const isSelected = selectedSegments.includes(segment.id);
               const isDisabled = segment.disabled;
