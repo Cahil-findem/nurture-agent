@@ -4,11 +4,15 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3004;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Initialize OpenAI
 const openai = new OpenAI({
@@ -17,6 +21,11 @@ const openai = new OpenAI({
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the dist directory in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'dist')));
+}
 
 // Brandfetch logo endpoint
 app.get('/api/logo', async (req, res) => {
@@ -509,10 +518,18 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Catch-all handler: send back React's index.html file for any non-API routes
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  });
+}
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
   console.log('Available endpoints:');
   console.log(`- GET  /api/crawl?url=<website_url>`);
   console.log(`- POST /api/analyze-content`);
+  console.log(`- POST /api/chat`);
   console.log(`- GET  /api/health`);
 });
