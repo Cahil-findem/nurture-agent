@@ -22,6 +22,16 @@ const openai = new OpenAI({
 app.use(cors());
 app.use(express.json());
 
+// Request logging middleware
+app.use((req, res, next) => {
+  const timestamp = new Date().toISOString();
+  console.log(`📡 ${timestamp} - ${req.method} ${req.path}`);
+  if (req.method === 'POST' && req.body) {
+    console.log(`   Body keys: ${Object.keys(req.body)}`);
+  }
+  next();
+});
+
 // Serve static files from the dist directory in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'dist')));
@@ -370,6 +380,9 @@ IMPORTANT:
 
 // Chat endpoint for Cleo
 app.post('/api/chat', async (req, res) => {
+  console.log(`🗨️  Chat API called at ${new Date().toISOString()}`);
+  console.log(`   Request body keys: ${Object.keys(req.body)}`);
+  
   try {
     const { messages, candidateData, conversationStage } = req.body;
 
@@ -382,17 +395,17 @@ app.post('/api/chat', async (req, res) => {
     const createSystemPrompt = (candidateData, conversationStage) => {
       const candidateContext = candidateData ? `
 Current Candidate Profile:
-- Name: ${candidateData.name}
-- Job Titles: ${candidateData.jobPreferences.titles.join(', ')}
-- Locations: ${candidateData.jobPreferences.locations.join(', ')}
-- Level/Seniority: ${candidateData.jobPreferences.levelSeniority}
-- Job Specifics: ${candidateData.jobPreferences.jobSpecifics.join(', ') || 'None specified'}
-- Professional Interests: ${candidateData.professionalInterests.join(', ')}
-- Company: ${candidateData.jobPreferences.company}
+- Name: ${candidateData.name || 'Unknown'}
+- Job Titles: ${candidateData.jobPreferences?.titles?.join(', ') || 'Not specified'}
+- Locations: ${candidateData.jobPreferences?.locations?.join(', ') || 'Not specified'}
+- Level/Seniority: ${candidateData.jobPreferences?.levelSeniority || 'Not specified'}
+- Job Specifics: ${candidateData.jobPreferences?.jobSpecifics?.join(', ') || 'None specified'}
+- Professional Interests: ${candidateData.professionalInterests?.join(', ') || 'Not specified'}
+- Company: ${candidateData.jobPreferences?.company || 'Kong'}
 - Current Stage: ${conversationStage}
 ` : 'No candidate data available yet.';
 
-      return `You are Cleo, a personal talent advocate and insider at ${candidateData?.jobPreferences.company || 'Kong'}. You help candidates explore opportunities by understanding their preferences and professional interests.
+      return `You are Cleo, a personal talent advocate and insider at ${candidateData?.jobPreferences?.company || 'Kong'}. You help candidates explore opportunities by understanding their preferences and professional interests.
 
 ## Purpose
 Your primary objective is to understand the candidate's job preferences, as this profile will be used to send them relevant job opportunities when positions open up. Your secondary objective is to optionally learn about their professional interests, which will be used to send them interesting company updates and industry content. You maintain and update their profile through natural conversation to enable targeted job matching and relevant content sharing.
@@ -473,7 +486,7 @@ REQUIRED FORMAT for ALL summaries:
 - Don't move to next stage without confirmation
 - Don't make profile changes without being clear about what you're updating
 
-Remember: You're their advocate. Focus on understanding their goals and helping them find the right opportunities at ${candidateData?.jobPreferences.company || 'Kong'}.`;
+Remember: You're their advocate. Focus on understanding their goals and helping them find the right opportunities at ${candidateData?.jobPreferences?.company || 'Kong'}.`;
     };
 
     const systemPrompt = createSystemPrompt(candidateData, conversationStage || 'job_verification');
@@ -526,10 +539,21 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log('Available endpoints:');
-  console.log(`- GET  /api/crawl?url=<website_url>`);
-  console.log(`- POST /api/analyze-content`);
-  console.log(`- POST /api/chat`);
-  console.log(`- GET  /api/health`);
+  console.log('='.repeat(50));
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`📦 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔑 OpenAI API Key: ${process.env.OPENAI_API_KEY ? 'Configured ✅' : 'Missing ❌'}`);
+  console.log('📋 Available endpoints:');
+  console.log(`   - GET  /api/health`);
+  console.log(`   - GET  /api/logo?domain=<domain>`);
+  console.log(`   - GET  /api/crawl?url=<website_url>`);
+  console.log(`   - POST /api/analyze-content`);
+  console.log(`   - POST /api/generate-email`);
+  console.log(`   - POST /api/chat`);
+  
+  if (process.env.NODE_ENV === 'production') {
+    console.log(`   - GET  /* (serving static files from dist/)`);
+  }
+  
+  console.log('='.repeat(50));
 });
