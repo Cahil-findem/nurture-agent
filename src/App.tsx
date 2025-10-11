@@ -9,9 +9,10 @@ import Recipe1 from './pages/Recipe1';
 import RecipeLoader from './pages/RecipeLoader';
 import Recipe2 from './pages/Recipe2';
 import Recipe2_2 from './pages/Recipe2_2';
+import Chat from './pages/Chat';
 import './App.css';
 
-type CurrentPage = 'demo-setup' | 'onboarding' | 'onboarding-step2' | 'goal-selection' | 'segments' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'recipe2_2';
+type CurrentPage = 'demo-setup' | 'onboarding' | 'onboarding-step2' | 'goal-selection' | 'segments' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'recipe2_2' | 'chat';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<CurrentPage>('demo-setup');
@@ -51,6 +52,8 @@ function App() {
         return <Recipe2 onNavigate={navigateToPage} />;
       case 'recipe2_2':
         return <Recipe2_2 onNavigate={navigateToPage} />;
+      case 'chat':
+        return <Chat onNavigate={navigateToPage} />;
       default:
         return <DemoSetup onNavigate={navigateToPage} />;
     }
