@@ -4,7 +4,7 @@
   width: 100%;
   min-height: 100vh;
   background: white;
-  padding: 40px 2rem 0 2rem;
+  padding: 40px 2rem 80px 2rem;
   overflow-y: auto;
 }
 
@@ -59,7 +59,7 @@ body {
 .recipe2-preview {
   width: 100%;
   max-width: 800px;
-  height: 850px;
+  min-height: 850px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -244,7 +244,7 @@ body {
 
 @media (max-width: 768px) {
   .recipe2 {
-    padding: 40px 16px 16px 16px;
+    padding: 40px 16px 80px 16px;
   }
 
   .recipe2-container {
