@@ -14,7 +14,7 @@ interface BrandAsset {
 }
 
 interface Recipe2_2Props {
-  onNavigate?: (page: 'demo-setup' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'recipe2_2') => void;
+  onNavigate?: (page: 'demo-setup' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'recipe2_2' | 'chat') => void;
 }
 
 const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
@@ -135,6 +135,38 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
     onNavigate?.('demo-setup');
   };
 
+  const handleChatClick = () => {
+    // Store candidate information for the chat
+    const candidateData = {
+      name: 'Brandon Sanderson',
+      firstName: 'Brandon',
+      jobPreferences: {
+        titles: ['Software Engineer'],
+        locations: ['Austin, TX', 'Remote'],
+        levelSeniority: 'Senior',
+        jobSpecifics: [], // Ideally empty initially
+        company: 'Kong'
+      },
+      professionalInterests: [
+        'career development topics',
+        'back-end software engineering', 
+        'cloud computing',
+        'new java releases'
+      ],
+      timestamp: Date.now()
+    };
+
+    // Save candidate data to localStorage
+    try {
+      localStorage.setItem('candidateData', JSON.stringify(candidateData));
+    } catch (error) {
+      console.error('Error saving candidate data:', error);
+    }
+
+    // Navigate to Chat page
+    onNavigate?.('chat');
+  };
+
   return (
     <div className="recipe2">
       <div className="recipe2-container">
@@ -208,9 +240,8 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
                   <span className="material-icons-round">edit</span>
                   Edit Campaign
                 </button>
-                <button className="send-sample-button">
-                  <span className="material-icons-round">send</span>
-                  Send Sample
+                <button className="send-sample-button" onClick={handleChatClick}>
+                  Let's chat
                 </button>
               </div>
             </div>
