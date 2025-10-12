@@ -72,13 +72,13 @@ const EmailPreview: React.FC = () => {
       ];
 
       // Call the new API once and use the same email for all roles
-      const response = await fetch('https://kong-email-creator.vercel.app/generate-email', {
+      const response = await fetch('https://kong-email-creator.vercel.app/api/generate-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          candidate_id: "682fcd103bf7afa77700950c"
+          candidate_id: "68d193fecb73815f93cc0e45"
         })
       });
 
