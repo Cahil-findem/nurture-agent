@@ -35,6 +35,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     if (message.trim() && !isLoading && onSendMessage) {
       onSendMessage(message.trim());
       setMessage('');
+      // Keep focus on input after sending message
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
     }
   };
 

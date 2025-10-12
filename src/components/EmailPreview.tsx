@@ -71,31 +71,44 @@ const EmailPreview: React.FC = () => {
         { key: 'salesRepresentative', name: 'Sales Representative' }
       ];
 
-      const emailPromises = roles.map(async (role) => {
-        const response = await fetch('http://localhost:3004/api/generate-email', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            companyName: parsedData.companyName,
-            companyWebsite: parsedData.companyWebsite,
-            logoUrl: crawledData.logo_url,
-            blogPosts: crawledData.blog_posts || [],
-            companyDescription: crawledData.company_summary || crawledData.about_text || '',
-            toneOfVoice: crawledData.tone_of_voice_example || '',
-            userName: parsedData.userName,
-            targetRole: role.name
-          })
-        });
+      // Call the new API once and use the same email for all roles
+      const response = await fetch('https://kong-email-creator.vercel.app/api/generate-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          candidate_id: "68d193fecb73815f93cc0e45"
+        })
+      });
 
-        if (response.ok) {
-          const generatedEmail = await response.json();
-          return { role: role.key, email: { ...generatedEmail, role: role.name } };
-        } else {
-          console.error(`Failed to generate email for ${role.name}`);
-          return { role: role.key, email: null };
-        }
+      if (!response.ok) {
+        console.error('Failed to generate email from new API');
+        return;
+      }
+
+      const generatedEmailResponse = await response.json();
+      console.log('New API response:', generatedEmailResponse);
+
+      // Extract subject and body from the new API response format
+      const baseEmailData = {
+        subject: generatedEmailResponse.email.subject,
+        content: generatedEmailResponse.email.body,
+        preview_text: generatedEmailResponse.email.subject, // Use subject as preview for now
+        logoUrl: crawledData.logo_url, // Keep existing logo from crawled data
+        companyName: parsedData.companyName,
+        companyWebsite: parsedData.companyWebsite
+      };
+
+      // Use the same email data for all roles
+      const emailPromises = roles.map(async (role) => {
+        return { 
+          role: role.key, 
+          email: { 
+            ...baseEmailData, 
+            role: role.name 
+          } 
+        };
       });
 
       const results = await Promise.all(emailPromises);
