@@ -53,8 +53,10 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
             .replace(/\n/g, '<br>')
             .replace(/^/, '<p>')
             .replace(/$/, '</p>')
-            // Convert URLs to clickable links
-            .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color: #4599FA; text-decoration: underline;">$1</a>');
+            // Convert markdown-style links [text](url) to HTML links first
+            .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$1</a>')
+            // Then convert any remaining bare URLs to clickable links
+            .replace(/(^|[^"])(https?:\/\/[^\s<]+)(?![^<]*<\/a>)/g, '$1<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$2</a>');
 
           const baseEmailData = {
             subject: parsedPreGenerated.emailData.email.subject,
@@ -158,8 +160,10 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
         .replace(/\n/g, '<br>')       // Single line breaks become <br> tags
         .replace(/^/, '<p>')          // Add opening <p> tag at start
         .replace(/$/, '</p>')         // Add closing </p> tag at end
-        // Convert URLs to clickable links
-        .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color: #4599FA; text-decoration: underline;">$1</a>');
+        // Convert markdown-style links [text](url) to HTML links first
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$1</a>')
+        // Then convert any remaining bare URLs to clickable links
+        .replace(/(^|[^"])(https?:\/\/[^\s<]+)(?![^<]*<\/a>)/g, '$1<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$2</a>');
 
       const baseEmailData = {
         subject: generatedEmailResponse.email.subject,
