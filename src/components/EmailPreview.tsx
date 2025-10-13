@@ -12,9 +12,9 @@ interface EmailData {
 }
 
 interface RoleEmailData {
-  softwareEngineer: EmailData | null;
-  marketingManager: EmailData | null;
-  salesRepresentative: EmailData | null;
+  commissionsAnalyst: EmailData | null;
+  financialReportingManager: EmailData | null;
+  customerSuccessManager: EmailData | null;
 }
 
 interface EmailPreviewProps {
@@ -23,11 +23,11 @@ interface EmailPreviewProps {
 
 const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
   const [emailData, setEmailData] = useState<RoleEmailData>({
-    softwareEngineer: null,
-    marketingManager: null,
-    salesRepresentative: null
+    commissionsAnalyst: null,
+    financialReportingManager: null,
+    customerSuccessManager: null
   });
-  const [currentRole, setCurrentRole] = useState<'softwareEngineer' | 'marketingManager' | 'salesRepresentative'>('softwareEngineer');
+  const [currentRole, setCurrentRole] = useState<'commissionsAnalyst' | 'financialReportingManager' | 'customerSuccessManager'>('commissionsAnalyst');
   const [loading, setLoading] = useState(true);
   const [candidateInfo, setCandidateInfo] = useState<any>(null);
 
@@ -35,67 +35,150 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
     generateEmailContent();
   }, []);
 
+
   const generateEmailContent = async () => {
     try {
-      // Check for pre-generated email data from RecipeLoader
+      // Debug: Log what's in localStorage to understand the structure
       const preGeneratedData = localStorage.getItem('preGeneratedEmailData');
       if (preGeneratedData) {
+        const parsedData = JSON.parse(preGeneratedData);
+        console.log('EmailPreview - LocalStorage data structure check:', {
+          hasEmailData: !!parsedData.emailData,
+          hasRoleEmails: !!parsedData.roleEmails,
+          hasOldFormat: parsedData.emailData && !!parsedData.emailData.email,
+          hasNewFormat: parsedData.roleEmails && (!!parsedData.roleEmails.commissionsAnalyst || !!parsedData.roleEmails.financialReportingManager || !!parsedData.roleEmails.customerSuccessManager),
+          emailDataKeys: parsedData.emailData ? Object.keys(parsedData.emailData) : [],
+          roleEmailKeys: parsedData.roleEmails ? Object.keys(parsedData.roleEmails) : []
+        });
+        
+        // Only clear if it's definitely the old format (has email directly but no new structure)
+        if (parsedData.emailData && parsedData.emailData.email && 
+            !parsedData.roleEmails &&
+            !parsedData.candidates) { // Also check that we don't have the candidates object
+          console.log('EmailPreview - Clearing confirmed old format data');
+          localStorage.removeItem('preGeneratedEmailData');
+        } else {
+          console.log('EmailPreview - Data format is new or mixed, keeping data');
+        }
+      }
+      
+      // Check for pre-generated email data from RecipeLoader
+      const freshPreGeneratedData = localStorage.getItem('preGeneratedEmailData');
+      if (freshPreGeneratedData) {
         try {
-          const parsedPreGenerated = JSON.parse(preGeneratedData);
+          const parsedPreGenerated = JSON.parse(freshPreGeneratedData);
           console.log('EmailPreview - Using pre-generated email data from RecipeLoader:', parsedPreGenerated);
+          console.log('EmailPreview - parsedPreGenerated.emailData structure:', Object.keys(parsedPreGenerated.emailData || {}));
           
-          // Set candidate info
+          // Set candidate info (use primary candidate for backward compatibility)
           setCandidateInfo(parsedPreGenerated.candidate);
           
-          // Format the pre-generated email data
-          const formattedBody = parsedPreGenerated.emailData.email.body
-            .replace(/\n\n/g, '</p><p>')
-            .replace(/\n/g, '<br>')
-            .replace(/^/, '<p>')
-            .replace(/$/, '</p>')
-            // Convert markdown-style links [text](url) to HTML links first
-            .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$1</a>')
-            // Then convert any remaining bare URLs to clickable links
-            .replace(/(^|[^"])(https?:\/\/[^\s<]+)(?![^<]*<\/a>)/g, '$1<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$2</a>');
-
-          const baseEmailData = {
-            subject: parsedPreGenerated.emailData.email.subject,
-            content: formattedBody,
-            preview_text: parsedPreGenerated.emailData.email.subject,
-            logoUrl: '/Logo.png',
-            companyName: 'Kong',
-            companyWebsite: 'https://konghq.com'
-          };
-
-          // Use the same email data for all roles
-          const roles = [
-            { key: 'softwareEngineer', name: 'Software Engineer' },
-            { key: 'marketingManager', name: 'Marketing Manager' },
-            { key: 'salesRepresentative', name: 'Sales Representative' }
-          ];
-
-          const emailPromises = roles.map(async (role) => {
-            return { 
-              role: role.key, 
-              email: { 
-                ...baseEmailData, 
-                role: role.name 
-              } 
-            };
-          });
-
-          const results = await Promise.all(emailPromises);
           const newEmailData: RoleEmailData = {
-            softwareEngineer: null,
-            marketingManager: null,
-            salesRepresentative: null
+            commissionsAnalyst: null,
+            financialReportingManager: null,
+            customerSuccessManager: null
           };
 
-          results.forEach(result => {
-            if (result.email) {
-              newEmailData[result.role as keyof RoleEmailData] = result.email;
-            }
-          });
+          // Check if we have role-specific data (new format)
+          console.log('EmailPreview - Checking for role-specific data:', parsedPreGenerated.emailData);
+          
+          // If this is primary-only data, we need to fetch the other candidates
+          if (parsedPreGenerated.primaryOnly) {
+            console.log('EmailPreview - Primary-only data detected, fetching other candidates...');
+            
+            // Use primary data for commissionsAnalyst
+            const formattedBody = parsedPreGenerated.emailData.email.body
+              .replace(/\n\n/g, '</p><p>')
+              .replace(/\n/g, '<br>')
+              .replace(/^/, '<p>')
+              .replace(/$/, '</p>')
+              // Convert markdown-style links [text](url) to HTML links first
+              .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$1</a>')
+              // Then convert any remaining bare URLs to clickable links
+              .replace(/(^|[^"])(https?:\/\/[^\s<]+)(?![^<]*<\/a>)/g, '$1<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$2</a>');
+
+            newEmailData.commissionsAnalyst = {
+              subject: parsedPreGenerated.emailData.email.subject,
+              content: formattedBody,
+              preview_text: parsedPreGenerated.emailData.email.subject,
+              logoUrl: '/Logo.png',
+              companyName: 'Kong',
+              companyWebsite: 'https://konghq.com',
+              role: 'Sr. Commissions Analyst'
+            };
+            
+            // Set loading false - all data should be available from RecipeLoader
+            setEmailData(newEmailData);
+            setLoading(false);
+            return;
+          } else if (parsedPreGenerated.roleEmails && (parsedPreGenerated.roleEmails.commissionsAnalyst || parsedPreGenerated.roleEmails.financialReportingManager || parsedPreGenerated.roleEmails.customerSuccessManager)) {
+            console.log('EmailPreview - Using role-specific pre-generated data');
+            
+            const roles = [
+              { key: 'commissionsAnalyst', name: 'Sr. Commissions Analyst' },
+              { key: 'financialReportingManager', name: 'Financial Reporting Manager' },
+              { key: 'customerSuccessManager', name: 'Customer Success Operations Manager' }
+            ];
+
+            roles.forEach(role => {
+              const roleData = parsedPreGenerated.roleEmails[role.key];
+              if (roleData && roleData.email) {
+                const formattedBody = roleData.email.body
+                  .replace(/\n\n/g, '</p><p>')
+                  .replace(/\n/g, '<br>')
+                  .replace(/^/, '<p>')
+                  .replace(/$/, '</p>')
+                  // Convert markdown-style links [text](url) to HTML links first
+                  .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$1</a>')
+                  // Then convert any remaining bare URLs to clickable links
+                  .replace(/(^|[^"])(https?:\/\/[^\s<]+)(?![^<]*<\/a>)/g, '$1<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$2</a>');
+
+                newEmailData[role.key as keyof RoleEmailData] = {
+                  subject: roleData.email.subject,
+                  content: formattedBody,
+                  preview_text: roleData.email.subject,
+                  logoUrl: '/Logo.png',
+                  companyName: 'Kong',
+                  companyWebsite: 'https://konghq.com',
+                  role: role.name
+                };
+              }
+            });
+          } else {
+            // Fallback to old format - use same email for all roles
+            console.log('EmailPreview - Using legacy pre-generated data format');
+            const formattedBody = parsedPreGenerated.emailData.email.body
+              .replace(/\n\n/g, '</p><p>')
+              .replace(/\n/g, '<br>')
+              .replace(/^/, '<p>')
+              .replace(/$/, '</p>')
+              // Convert markdown-style links [text](url) to HTML links first
+              .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$1</a>')
+              // Then convert any remaining bare URLs to clickable links
+              .replace(/(^|[^"])(https?:\/\/[^\s<]+)(?![^<]*<\/a>)/g, '$1<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$2</a>');
+
+            const baseEmailData = {
+              subject: parsedPreGenerated.emailData.email.subject,
+              content: formattedBody,
+              preview_text: parsedPreGenerated.emailData.email.subject,
+              logoUrl: '/Logo.png',
+              companyName: 'Kong',
+              companyWebsite: 'https://konghq.com'
+            };
+
+            const roles = [
+              { key: 'commissionsAnalyst', name: 'Sr. Commissions Analyst' },
+              { key: 'financialReportingManager', name: 'Financial Reporting Manager' },
+              { key: 'customerSuccessManager', name: 'Customer Success Operations Manager' }
+            ];
+
+            roles.forEach(role => {
+              newEmailData[role.key as keyof RoleEmailData] = {
+                ...baseEmailData,
+                role: role.name
+              };
+            });
+          }
 
           setEmailData(newEmailData);
           setLoading(false);
@@ -105,108 +188,9 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
         }
       }
 
-      // Get demo data from localStorage (optional, for fallback logo/company info)
-      const demoData = localStorage.getItem('demoSetupData');
-      let parsedData = null;
-      let crawledData = null;
-      
-      if (demoData) {
-        parsedData = JSON.parse(demoData);
-        crawledData = parsedData.crawledData;
-        
-        // Check if emails were already generated with old system
-        if (parsedData.generatedEmails) {
-          console.log('EmailPreview - Using pre-generated emails:', parsedData.generatedEmails);
-          setEmailData(parsedData.generatedEmails);
-          setLoading(false);
-          return;
-        }
-      }
-
-      console.log('EmailPreview - Generating emails using Kong API (fallback)');
-
-      const roles = [
-        { key: 'softwareEngineer', name: 'Software Engineer' },
-        { key: 'marketingManager', name: 'Marketing Manager' },
-        { key: 'salesRepresentative', name: 'Sales Representative' }
-      ];
-
-      // Call the new API once and use the same email for all roles
-      const response = await fetch('https://kong-email-creator.vercel.app/api/generate-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          candidate_id: "68d193fecb73815f93cc0e45"
-        })
-      });
-
-      if (!response.ok) {
-        console.error('Failed to generate email from new API');
-        return;
-      }
-
-      const generatedEmailResponse = await response.json();
-      console.log('New API response:', generatedEmailResponse);
-
-      // Store candidate info for chat functionality
-      setCandidateInfo(generatedEmailResponse.candidate);
-
-      // Extract subject and body from the new API response format
-      // Convert plain text line breaks to HTML
-      const formattedBody = generatedEmailResponse.email.body
-        .replace(/\n\n/g, '</p><p>')  // Double line breaks become paragraph breaks
-        .replace(/\n/g, '<br>')       // Single line breaks become <br> tags
-        .replace(/^/, '<p>')          // Add opening <p> tag at start
-        .replace(/$/, '</p>')         // Add closing </p> tag at end
-        // Convert markdown-style links [text](url) to HTML links first
-        .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$1</a>')
-        // Then convert any remaining bare URLs to clickable links
-        .replace(/(^|[^"])(https?:\/\/[^\s<]+)(?![^<]*<\/a>)/g, '$1<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$2</a>');
-
-      const baseEmailData = {
-        subject: generatedEmailResponse.email.subject,
-        content: formattedBody,
-        preview_text: generatedEmailResponse.email.subject, // Use subject as preview for now
-        logoUrl: crawledData?.logo_url || '/Logo.png', // Fallback to default logo
-        companyName: parsedData?.companyName || 'Kong', // Fallback to Kong
-        companyWebsite: parsedData?.companyWebsite || 'https://konghq.com'
-      };
-
-      // Use the same email data for all roles
-      const emailPromises = roles.map(async (role) => {
-        return { 
-          role: role.key, 
-          email: { 
-            ...baseEmailData, 
-            role: role.name 
-          } 
-        };
-      });
-
-      const results = await Promise.all(emailPromises);
-      const newEmailData: RoleEmailData = {
-        softwareEngineer: null,
-        marketingManager: null,
-        salesRepresentative: null
-      };
-
-      results.forEach(result => {
-        if (result.email) {
-          newEmailData[result.role as keyof RoleEmailData] = result.email;
-        }
-      });
-
-      console.log('EmailPreview - Generated emails for all roles:', newEmailData);
-      setEmailData(newEmailData);
-
-      // Cache the generated emails
-      const updatedDemoData = {
-        ...parsedData,
-        generatedEmails: newEmailData
-      };
-      localStorage.setItem('demoSetupData', JSON.stringify(updatedDemoData));
+      // No pre-generated data available - show error
+      console.error('EmailPreview - No pre-generated email data found');
+      setLoading(false);
 
     } catch (error) {
       console.error('Error generating emails:', error);
@@ -237,9 +221,9 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
   const currentEmailData = emailData[currentRole];
 
   const roleLabels = {
-    softwareEngineer: 'Software Engineer',
-    marketingManager: 'Marketing Manager',
-    salesRepresentative: 'Sales Representative'
+    commissionsAnalyst: 'Sr. Commissions Analyst',
+    financialReportingManager: 'Financial Reporting Manager',
+    customerSuccessManager: 'Customer Success Operations Manager'
   };
 
   const roles = Object.keys(roleLabels) as Array<keyof typeof roleLabels>;
@@ -249,7 +233,11 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
     const newIndex = direction === 'next'
       ? (currentIndex + 1) % roles.length
       : (currentIndex - 1 + roles.length) % roles.length;
-    setCurrentRole(roles[newIndex]);
+    const newRole = roles[newIndex];
+    console.log('EmailPreview - Navigating to role:', newRole, 'from', currentRole);
+    console.log('EmailPreview - Available email data:', Object.keys(emailData));
+    console.log('EmailPreview - Email data for new role:', emailData[newRole]);
+    setCurrentRole(newRole);
   };
 
   if (!currentEmailData) {
