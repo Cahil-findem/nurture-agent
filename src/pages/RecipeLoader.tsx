@@ -47,6 +47,45 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
 
   const [showContinue, setShowContinue] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [emailDataFetched, setEmailDataFetched] = useState(false);
+
+  // Function to fetch email data from Kong API
+  const fetchEmailData = async () => {
+    if (emailDataFetched) return; // Prevent duplicate calls
+    
+    try {
+      console.log('RecipeLoader - Fetching email data from Kong API...');
+      
+      const response = await fetch('https://kong-email-creator.vercel.app/api/generate-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          candidate_id: "68d193fecb73815f93cc0e45"
+        })
+      });
+
+      if (response.ok) {
+        const emailResponse = await response.json();
+        console.log('RecipeLoader - Email data fetched:', emailResponse);
+
+        // Store the email response in localStorage for EmailPreview to use
+        const preGeneratedEmails = {
+          candidate: emailResponse.candidate,
+          emailData: emailResponse
+        };
+        
+        localStorage.setItem('preGeneratedEmailData', JSON.stringify(preGeneratedEmails));
+        setEmailDataFetched(true);
+        console.log('RecipeLoader - Email data stored in localStorage');
+      } else {
+        console.error('RecipeLoader - Failed to fetch email data');
+      }
+    } catch (error) {
+      console.error('RecipeLoader - Error fetching email data:', error);
+    }
+  };
 
   useEffect(() => {
     const showCard = (index: number) => {
@@ -54,6 +93,11 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
         setCards(prev => prev.map((card, i) =>
           i === index ? { ...card, visible: true } : card
         ));
+        
+        // Fetch email data when "Crafting your dynamic campaign content" card appears (index 1)
+        if (index === 1) {
+          fetchEmailData();
+        }
       }, index * 1000); // Stagger each card by 1 second
     };
 
