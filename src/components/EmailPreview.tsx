@@ -17,7 +17,11 @@ interface RoleEmailData {
   salesRepresentative: EmailData | null;
 }
 
-const EmailPreview: React.FC = () => {
+interface EmailPreviewProps {
+  onChatClick?: () => void;
+}
+
+const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
   const [emailData, setEmailData] = useState<RoleEmailData>({
     softwareEngineer: null,
     marketingManager: null,
@@ -261,6 +265,16 @@ const EmailPreview: React.FC = () => {
             <div className="divider-line"></div>
           </div>
 
+          {/* Feedback and Chat Section */}
+          <div className="email-feedback-section">
+            <p className="feedback-message">
+              I'm always here for feedback if this content isn't what you're looking for
+            </p>
+            <button className="chat-button" onClick={onChatClick}>
+              Let's Chat
+            </button>
+          </div>
+
           {/* Footer */}
           <div className="email-footer">
             <div className="footer-logo">
@@ -279,9 +293,6 @@ const EmailPreview: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Fade Overlay */}
-        <div className="fade-overlay"></div>
       </div>
     </div>
   );

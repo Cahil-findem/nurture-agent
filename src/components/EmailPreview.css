@@ -2,11 +2,11 @@
 
 .email-preview {
   flex: 1;
-  height: 850px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  overflow-y: auto;
 }
 
 /* Minimal Role Navigation Overlay */
@@ -81,7 +81,6 @@ body {
 
 .email-container {
   width: 100%;
-  flex: 1;
   position: relative;
   background:
     radial-gradient(ellipse 80.98% 135.48% at 100% 65.63%, rgba(74, 46, 223, 0.06) 0%, rgba(74, 46, 223, 0) 100%),
@@ -92,7 +91,6 @@ body {
   border: 1px solid transparent;
   background-clip: padding-box;
   position: relative;
-  overflow: visible;
   display: flex;
   flex-direction: column;
   box-shadow: 0px 8px 8px -4px rgba(16, 24, 40, 0.03);
@@ -148,8 +146,6 @@ body {
 }
 
 .email-content {
-  flex: 1;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
@@ -464,12 +460,38 @@ body {
   line-height: 12px;
 }
 
-.fade-overlay {
-  position: absolute;
-  bottom: 0;
-  left: -7px;
-  width: 614px;
-  height: 119px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, white 77%);
-  pointer-events: none;
+/* Email feedback and chat section */
+.email-feedback-section {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.feedback-message {
+  color: #465366;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  max-width: 400px;
+}
+
+.chat-button {
+  padding: 12px 24px;
+  background: #4599FA;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.chat-button:hover {
+  background: #3280E8;
 }

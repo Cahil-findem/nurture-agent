@@ -182,7 +182,7 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
         <div className="recipe2-content">
           {/* Email Preview Only */}
           <div className="recipe2-preview recipe2-preview-full">
-            <EmailPreview />
+            <EmailPreview onChatClick={handleChatClick} />
 
             {/* Bottom Controls */}
             <div className="bottom-controls">
@@ -239,9 +239,6 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
                 <button className="edit-button">
                   <span className="material-icons-round">edit</span>
                   Edit Campaign
-                </button>
-                <button className="send-sample-button" onClick={handleChatClick}>
-                  Let's chat
                 </button>
               </div>
             </div>
