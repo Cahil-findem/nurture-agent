@@ -18,7 +18,7 @@ interface RoleEmailData {
 }
 
 interface EmailPreviewProps {
-  onChatClick?: () => void;
+  onChatClick?: (candidateInfo: any) => void;
 }
 
 const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
@@ -29,6 +29,7 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
   });
   const [currentRole, setCurrentRole] = useState<'softwareEngineer' | 'marketingManager' | 'salesRepresentative'>('softwareEngineer');
   const [loading, setLoading] = useState(true);
+  const [candidateInfo, setCandidateInfo] = useState<any>(null);
 
   useEffect(() => {
     generateEmailContent();
@@ -80,6 +81,9 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
 
       const generatedEmailResponse = await response.json();
       console.log('New API response:', generatedEmailResponse);
+
+      // Store candidate info for chat functionality
+      setCandidateInfo(generatedEmailResponse.candidate);
 
       // Extract subject and body from the new API response format
       // Convert plain text line breaks to HTML
@@ -270,7 +274,7 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
             <p className="feedback-message">
               I'm always here for feedback if this content isn't what you're looking for
             </p>
-            <button className="chat-button" onClick={onChatClick}>
+            <button className="chat-button" onClick={() => onChatClick?.(candidateInfo)}>
               Let's Chat
             </button>
           </div>
