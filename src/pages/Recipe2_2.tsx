@@ -135,11 +135,15 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
     onNavigate?.('demo-setup');
   };
 
-  const handleChatClick = () => {
-    // Store candidate information for the chat
+  const handleChatClick = (candidateInfo: any) => {
+    // Parse first name from full name
+    const fullName = candidateInfo?.name || 'Unknown';
+    const firstName = fullName.split(' ')[0];
+
+    // Store candidate information for the chat using data from Kong API
     const candidateData = {
-      name: 'Brandon Sanderson',
-      firstName: 'Brandon',
+      name: fullName,
+      firstName: firstName,
       jobPreferences: {
         titles: ['Software Engineer'],
         locations: ['Austin, TX', 'Remote'],
@@ -155,6 +159,8 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
       ],
       timestamp: Date.now()
     };
+
+    console.log('Using dynamic candidate data:', candidateData);
 
     // Save candidate data to localStorage
     try {
@@ -182,7 +188,7 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
         <div className="recipe2-content">
           {/* Email Preview Only */}
           <div className="recipe2-preview recipe2-preview-full">
-            <EmailPreview />
+            <EmailPreview onChatClick={handleChatClick} />
 
             {/* Bottom Controls */}
             <div className="bottom-controls">
@@ -239,9 +245,6 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
                 <button className="edit-button">
                   <span className="material-icons-round">edit</span>
                   Edit Campaign
-                </button>
-                <button className="send-sample-button" onClick={handleChatClick}>
-                  Let's chat
                 </button>
               </div>
             </div>

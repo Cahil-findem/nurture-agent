@@ -17,7 +17,11 @@ interface RoleEmailData {
   salesRepresentative: EmailData | null;
 }
 
-const EmailPreview: React.FC = () => {
+interface EmailPreviewProps {
+  onChatClick?: (candidateInfo: any) => void;
+}
+
+const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
   const [emailData, setEmailData] = useState<RoleEmailData>({
     softwareEngineer: null,
     marketingManager: null,
@@ -25,6 +29,7 @@ const EmailPreview: React.FC = () => {
   });
   const [currentRole, setCurrentRole] = useState<'softwareEngineer' | 'marketingManager' | 'salesRepresentative'>('softwareEngineer');
   const [loading, setLoading] = useState(true);
+  const [candidateInfo, setCandidateInfo] = useState<any>(null);
 
   useEffect(() => {
     generateEmailContent();
@@ -32,38 +37,25 @@ const EmailPreview: React.FC = () => {
 
   const generateEmailContent = async () => {
     try {
-      // Get crawled data from localStorage
+      // Get demo data from localStorage (optional, for fallback logo/company info)
       const demoData = localStorage.getItem('demoSetupData');
-      if (!demoData) {
-        setLoading(false);
-        return;
+      let parsedData = null;
+      let crawledData = null;
+      
+      if (demoData) {
+        parsedData = JSON.parse(demoData);
+        crawledData = parsedData.crawledData;
+        
+        // Check if emails were already generated with old system
+        if (parsedData.generatedEmails) {
+          console.log('EmailPreview - Using pre-generated emails:', parsedData.generatedEmails);
+          setEmailData(parsedData.generatedEmails);
+          setLoading(false);
+          return;
+        }
       }
 
-      const parsedData = JSON.parse(demoData);
-      const { crawledData } = parsedData;
-
-      if (!crawledData) {
-        setLoading(false);
-        return;
-      }
-
-      // Check if emails were already generated
-      if (parsedData.generatedEmails) {
-        console.log('EmailPreview - Using pre-generated emails:', parsedData.generatedEmails);
-        setEmailData(parsedData.generatedEmails);
-        setLoading(false);
-        return;
-      }
-
-      console.log('EmailPreview - Generating emails for all roles with data:', {
-        companyName: parsedData.companyName,
-        companyWebsite: parsedData.companyWebsite,
-        logoUrl: crawledData.logo_url,
-        blogPosts: crawledData.blog_posts,
-        companyDescription: crawledData.company_summary || crawledData.about_text,
-        toneOfVoice: crawledData.tone_of_voice_example,
-        userName: parsedData.userName
-      });
+      console.log('EmailPreview - Generating emails using Kong API');
 
       const roles = [
         { key: 'softwareEngineer', name: 'Software Engineer' },
@@ -90,14 +82,24 @@ const EmailPreview: React.FC = () => {
       const generatedEmailResponse = await response.json();
       console.log('New API response:', generatedEmailResponse);
 
+      // Store candidate info for chat functionality
+      setCandidateInfo(generatedEmailResponse.candidate);
+
       // Extract subject and body from the new API response format
+      // Convert plain text line breaks to HTML
+      const formattedBody = generatedEmailResponse.email.body
+        .replace(/\n\n/g, '</p><p>')  // Double line breaks become paragraph breaks
+        .replace(/\n/g, '<br>')       // Single line breaks become <br> tags
+        .replace(/^/, '<p>')          // Add opening <p> tag at start
+        .replace(/$/, '</p>');        // Add closing </p> tag at end
+
       const baseEmailData = {
         subject: generatedEmailResponse.email.subject,
-        content: generatedEmailResponse.email.body,
+        content: formattedBody,
         preview_text: generatedEmailResponse.email.subject, // Use subject as preview for now
-        logoUrl: crawledData.logo_url, // Keep existing logo from crawled data
-        companyName: parsedData.companyName,
-        companyWebsite: parsedData.companyWebsite
+        logoUrl: crawledData?.logo_url || '/Logo.png', // Fallback to default logo
+        companyName: parsedData?.companyName || 'Kong', // Fallback to Kong
+        companyWebsite: parsedData?.companyWebsite || 'https://konghq.com'
       };
 
       // Use the same email data for all roles
@@ -267,6 +269,16 @@ const EmailPreview: React.FC = () => {
             <div className="divider-line"></div>
           </div>
 
+          {/* Feedback and Chat Section */}
+          <div className="email-feedback-section">
+            <p className="feedback-message">
+              I'm always here for feedback if this content isn't what you're looking for
+            </p>
+            <button className="chat-button" onClick={() => onChatClick?.(candidateInfo)}>
+              Let's Chat
+            </button>
+          </div>
+
           {/* Footer */}
           <div className="email-footer">
             <div className="footer-logo">
@@ -285,9 +297,6 @@ const EmailPreview: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Fade Overlay */}
-        <div className="fade-overlay"></div>
       </div>
     </div>
   );
