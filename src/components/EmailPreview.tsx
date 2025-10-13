@@ -32,38 +32,25 @@ const EmailPreview: React.FC = () => {
 
   const generateEmailContent = async () => {
     try {
-      // Get crawled data from localStorage
+      // Get demo data from localStorage (optional, for fallback logo/company info)
       const demoData = localStorage.getItem('demoSetupData');
-      if (!demoData) {
-        setLoading(false);
-        return;
+      let parsedData = null;
+      let crawledData = null;
+      
+      if (demoData) {
+        parsedData = JSON.parse(demoData);
+        crawledData = parsedData.crawledData;
+        
+        // Check if emails were already generated with old system
+        if (parsedData.generatedEmails) {
+          console.log('EmailPreview - Using pre-generated emails:', parsedData.generatedEmails);
+          setEmailData(parsedData.generatedEmails);
+          setLoading(false);
+          return;
+        }
       }
 
-      const parsedData = JSON.parse(demoData);
-      const { crawledData } = parsedData;
-
-      if (!crawledData) {
-        setLoading(false);
-        return;
-      }
-
-      // Check if emails were already generated
-      if (parsedData.generatedEmails) {
-        console.log('EmailPreview - Using pre-generated emails:', parsedData.generatedEmails);
-        setEmailData(parsedData.generatedEmails);
-        setLoading(false);
-        return;
-      }
-
-      console.log('EmailPreview - Generating emails for all roles with data:', {
-        companyName: parsedData.companyName,
-        companyWebsite: parsedData.companyWebsite,
-        logoUrl: crawledData.logo_url,
-        blogPosts: crawledData.blog_posts,
-        companyDescription: crawledData.company_summary || crawledData.about_text,
-        toneOfVoice: crawledData.tone_of_voice_example,
-        userName: parsedData.userName
-      });
+      console.log('EmailPreview - Generating emails using Kong API');
 
       const roles = [
         { key: 'softwareEngineer', name: 'Software Engineer' },
@@ -95,9 +82,9 @@ const EmailPreview: React.FC = () => {
         subject: generatedEmailResponse.email.subject,
         content: generatedEmailResponse.email.body,
         preview_text: generatedEmailResponse.email.subject, // Use subject as preview for now
-        logoUrl: crawledData.logo_url, // Keep existing logo from crawled data
-        companyName: parsedData.companyName,
-        companyWebsite: parsedData.companyWebsite
+        logoUrl: crawledData?.logo_url || '/Logo.png', // Fallback to default logo
+        companyName: parsedData?.companyName || 'Kong', // Fallback to Kong
+        companyWebsite: parsedData?.companyWebsite || 'https://konghq.com'
       };
 
       // Use the same email data for all roles
