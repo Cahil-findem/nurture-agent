@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './RecipeLoader.css';
 
 interface RecipeLoaderProps {
@@ -49,42 +49,98 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
   const [isComplete, setIsComplete] = useState(false);
   const [emailDataFetched, setEmailDataFetched] = useState(false);
   const [startTime] = useState(Date.now());
+  const [fetchInProgress, setFetchInProgress] = useState(false);
+  const fetchInitiated = useRef(false);
 
-  // Function to fetch email data from Kong API
+  // Function to fetch email data from Kong API for all three candidates
   const fetchEmailData = async () => {
-    if (emailDataFetched) return; // Prevent duplicate calls
+    if (emailDataFetched || fetchInProgress || fetchInitiated.current) return; // Prevent duplicate calls
+    
+    // Check if data already exists
+    const existingData = localStorage.getItem('preGeneratedEmailData');
+    if (existingData) {
+      console.log('RecipeLoader - Email data already exists, skipping fetch');
+      setEmailDataFetched(true);
+      return;
+    }
+    
+    fetchInitiated.current = true;
+    setFetchInProgress(true);
     
     try {
-      console.log('RecipeLoader - Fetching email data from Kong API...');
+      console.log('RecipeLoader - Fetching email data from Kong API for all candidates...');
       
-      const response = await fetch('https://kong-email-creator.vercel.app/api/generate-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          candidate_id: "68d193fecb73815f93cc0e45"
-        })
+      const candidateIds = {
+        commissionsAnalyst: '68d193fecb73815f93cc0e45',
+        financialReportingManager: '68e3ff4a389a44ae4034feb4', 
+        customerSuccessManager: '68d6bc9325d43c5a707e3d34'
+      };
+
+      const roles = [
+        { key: 'commissionsAnalyst', name: 'Sr. Commissions Analyst' },
+        { key: 'financialReportingManager', name: 'Financial Reporting Manager' },
+        { key: 'customerSuccessManager', name: 'Customer Success Operations Manager' }
+      ];
+
+      // Fetch email data for all three candidates in parallel
+      const emailPromises = roles.map(async (role) => {
+        const candidateId = candidateIds[role.key as keyof typeof candidateIds];
+        
+        console.log(`RecipeLoader - Making API call for ${role.name} with candidate_id: ${candidateId}`);
+        const response = await fetch('https://kong-email-creator.vercel.app/api/generate-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            candidate_id: candidateId
+          })
+        });
+        console.log(`RecipeLoader - API call completed for ${role.name}`);
+
+        if (response.ok) {
+          const emailResponse = await response.json();
+          console.log(`RecipeLoader - Email data fetched for ${role.name}:`, emailResponse);
+          return {
+            role: role.key,
+            candidateId: candidateId,
+            emailResponse: emailResponse
+          };
+        } else {
+          console.error(`RecipeLoader - Failed to fetch email data for ${role.name} (${candidateId})`);
+          return null;
+        }
       });
 
-      if (response.ok) {
-        const emailResponse = await response.json();
-        console.log('RecipeLoader - Email data fetched:', emailResponse);
+      const results = await Promise.all(emailPromises);
+      
+      // Store all email responses in localStorage for EmailPreview to use
+      const preGeneratedEmails = {
+        candidates: {},
+        roleEmails: {}  // Changed from emailData to avoid conflict
+      } as any;
 
-        // Store the email response in localStorage for EmailPreview to use
-        const preGeneratedEmails = {
-          candidate: emailResponse.candidate,
-          emailData: emailResponse
-        };
-        
-        localStorage.setItem('preGeneratedEmailData', JSON.stringify(preGeneratedEmails));
-        console.log('RecipeLoader - Email data stored in localStorage');
-        setEmailDataFetched(true); // This will trigger the useEffect to show continue button
-      } else {
-        console.error('RecipeLoader - Failed to fetch email data');
+      results.forEach(result => {
+        if (result) {
+          preGeneratedEmails.candidates[result.role] = result.emailResponse.candidate;
+          preGeneratedEmails.roleEmails[result.role] = result.emailResponse;
+        }
+      });
+
+      // Use the first candidate (commissionsAnalyst) as the primary candidate for backward compatibility
+      const primaryResult = results.find(r => r && r.role === 'commissionsAnalyst');
+      if (primaryResult) {
+        preGeneratedEmails.candidate = primaryResult.emailResponse.candidate;
+        preGeneratedEmails.emailData = primaryResult.emailResponse; // Keep for backward compatibility
       }
+        
+      localStorage.setItem('preGeneratedEmailData', JSON.stringify(preGeneratedEmails));
+      console.log('RecipeLoader - All email data stored in localStorage');
+      setEmailDataFetched(true); // This will trigger the useEffect to show continue button
     } catch (error) {
       console.error('RecipeLoader - Error fetching email data:', error);
+    } finally {
+      setFetchInProgress(false);
     }
   };
 

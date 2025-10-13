@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import EmailPreview from '../components/EmailPreview';
+import InteractionContract from '../components/InteractionContract';
 import './Recipe2_2.css';
 
 interface ColorSwatch {
@@ -179,15 +180,12 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
         {/* Header */}
         <div className="recipe2-header">
           <h1 className="recipe2-title">All set — I've tailored your nurture flow to each candidate.</h1>
-          <p className="recipe2-subtitle">
-            Each candidate will experience your voice and fresh content, tailored just for them.
-          </p>
         </div>
 
         {/* Content */}
         <div className="recipe2-content">
-          {/* Email Preview Only */}
-          <div className="recipe2-preview recipe2-preview-full">
+          {/* Email Preview - Left Column */}
+          <div className="recipe2-preview">
             <EmailPreview onChatClick={handleChatClick} />
 
             {/* Bottom Controls */}
@@ -249,6 +247,9 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
               </div>
             </div>
           </div>
+
+          {/* Interaction Contract - Right Column */}
+          <InteractionContract />
         </div>
       </div>
 
