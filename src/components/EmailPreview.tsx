@@ -78,9 +78,16 @@ const EmailPreview: React.FC = () => {
       console.log('New API response:', generatedEmailResponse);
 
       // Extract subject and body from the new API response format
+      // Convert plain text line breaks to HTML
+      const formattedBody = generatedEmailResponse.email.body
+        .replace(/\n\n/g, '</p><p>')  // Double line breaks become paragraph breaks
+        .replace(/\n/g, '<br>')       // Single line breaks become <br> tags
+        .replace(/^/, '<p>')          // Add opening <p> tag at start
+        .replace(/$/, '</p>');        // Add closing </p> tag at end
+
       const baseEmailData = {
         subject: generatedEmailResponse.email.subject,
-        content: generatedEmailResponse.email.body,
+        content: formattedBody,
         preview_text: generatedEmailResponse.email.subject, // Use subject as preview for now
         logoUrl: crawledData?.logo_url || '/Logo.png', // Fallback to default logo
         companyName: parsedData?.companyName || 'Kong', // Fallback to Kong
