@@ -37,6 +37,70 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
 
   const generateEmailContent = async () => {
     try {
+      // Check for pre-generated email data from RecipeLoader
+      const preGeneratedData = localStorage.getItem('preGeneratedEmailData');
+      if (preGeneratedData) {
+        try {
+          const parsedPreGenerated = JSON.parse(preGeneratedData);
+          console.log('EmailPreview - Using pre-generated email data from RecipeLoader:', parsedPreGenerated);
+          
+          // Set candidate info
+          setCandidateInfo(parsedPreGenerated.candidate);
+          
+          // Format the pre-generated email data
+          const formattedBody = parsedPreGenerated.emailData.email.body
+            .replace(/\n\n/g, '</p><p>')
+            .replace(/\n/g, '<br>')
+            .replace(/^/, '<p>')
+            .replace(/$/, '</p>');
+
+          const baseEmailData = {
+            subject: parsedPreGenerated.emailData.email.subject,
+            content: formattedBody,
+            preview_text: parsedPreGenerated.emailData.email.subject,
+            logoUrl: '/Logo.png',
+            companyName: 'Kong',
+            companyWebsite: 'https://konghq.com'
+          };
+
+          // Use the same email data for all roles
+          const roles = [
+            { key: 'softwareEngineer', name: 'Software Engineer' },
+            { key: 'marketingManager', name: 'Marketing Manager' },
+            { key: 'salesRepresentative', name: 'Sales Representative' }
+          ];
+
+          const emailPromises = roles.map(async (role) => {
+            return { 
+              role: role.key, 
+              email: { 
+                ...baseEmailData, 
+                role: role.name 
+              } 
+            };
+          });
+
+          const results = await Promise.all(emailPromises);
+          const newEmailData: RoleEmailData = {
+            softwareEngineer: null,
+            marketingManager: null,
+            salesRepresentative: null
+          };
+
+          results.forEach(result => {
+            if (result.email) {
+              newEmailData[result.role as keyof RoleEmailData] = result.email;
+            }
+          });
+
+          setEmailData(newEmailData);
+          setLoading(false);
+          return;
+        } catch (parseError) {
+          console.error('Error parsing pre-generated email data:', parseError);
+        }
+      }
+
       // Get demo data from localStorage (optional, for fallback logo/company info)
       const demoData = localStorage.getItem('demoSetupData');
       let parsedData = null;
@@ -55,7 +119,7 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
         }
       }
 
-      console.log('EmailPreview - Generating emails using Kong API');
+      console.log('EmailPreview - Generating emails using Kong API (fallback)');
 
       const roles = [
         { key: 'softwareEngineer', name: 'Software Engineer' },

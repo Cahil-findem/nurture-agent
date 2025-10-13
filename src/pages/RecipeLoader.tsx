@@ -47,6 +47,46 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
 
   const [showContinue, setShowContinue] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [emailDataFetched, setEmailDataFetched] = useState(false);
+  const [startTime] = useState(Date.now());
+
+  // Function to fetch email data from Kong API
+  const fetchEmailData = async () => {
+    if (emailDataFetched) return; // Prevent duplicate calls
+    
+    try {
+      console.log('RecipeLoader - Fetching email data from Kong API...');
+      
+      const response = await fetch('https://kong-email-creator.vercel.app/api/generate-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          candidate_id: "68d193fecb73815f93cc0e45"
+        })
+      });
+
+      if (response.ok) {
+        const emailResponse = await response.json();
+        console.log('RecipeLoader - Email data fetched:', emailResponse);
+
+        // Store the email response in localStorage for EmailPreview to use
+        const preGeneratedEmails = {
+          candidate: emailResponse.candidate,
+          emailData: emailResponse
+        };
+        
+        localStorage.setItem('preGeneratedEmailData', JSON.stringify(preGeneratedEmails));
+        console.log('RecipeLoader - Email data stored in localStorage');
+        setEmailDataFetched(true); // This will trigger the useEffect to show continue button
+      } else {
+        console.error('RecipeLoader - Failed to fetch email data');
+      }
+    } catch (error) {
+      console.error('RecipeLoader - Error fetching email data:', error);
+    }
+  };
 
   useEffect(() => {
     const showCard = (index: number) => {
@@ -54,6 +94,11 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
         setCards(prev => prev.map((card, i) =>
           i === index ? { ...card, visible: true } : card
         ));
+        
+        // Fetch email data when "Crafting your dynamic campaign content" card appears (index 1)
+        if (index === 1) {
+          fetchEmailData();
+        }
       }, index * 1000); // Stagger each card by 1 second
     };
 
@@ -62,12 +107,38 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
       showCard(index);
     });
 
-    // Show continue button 4 seconds after the last card appears
-    setTimeout(() => {
-      setShowContinue(true);
-      setIsComplete(true);
-    }, (cards.length * 1000) + 4000);
+    // Show continue button 2 seconds after the last card appears OR when email data is fetched
+    const showContinueTimer = setTimeout(() => {
+      // Only show continue if email data is fetched, otherwise wait for it
+      if (emailDataFetched) {
+        setShowContinue(true);
+        setIsComplete(true);
+      }
+    }, (cards.length * 1000) + 2000);
+
+    // Cleanup timer on unmount
+    return () => clearTimeout(showContinueTimer);
   }, []);
+
+  // Watch for email data fetch completion
+  useEffect(() => {
+    if (emailDataFetched && !showContinue) {
+      // Small delay to ensure all cards are visible before showing continue
+      const minDisplayTime = cards.length * 1000;
+      const currentTime = Date.now();
+      const elapsedTime = currentTime - startTime;
+      
+      if (elapsedTime >= minDisplayTime) {
+        setShowContinue(true);
+        setIsComplete(true);
+      } else {
+        setTimeout(() => {
+          setShowContinue(true);
+          setIsComplete(true);
+        }, minDisplayTime - elapsedTime);
+      }
+    }
+  }, [emailDataFetched, showContinue, startTime, cards.length]);
 
   const handleContinue = () => {
     onNavigate?.('recipe2_2');
