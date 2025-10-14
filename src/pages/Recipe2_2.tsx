@@ -173,9 +173,9 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
             
             // Parse the interests text (format: "• Interest 1\n• Interest 2\n...")
             const interestLines = interestsText.split('\n')
-              .filter(line => line.trim().startsWith('•'))
-              .map(line => line.replace('•', '').trim())
-              .filter(line => line.length > 0);
+              .filter((line: string) => line.trim().startsWith('•'))
+              .map((line: string) => line.replace('•', '').trim())
+              .filter((line: string) => line.length > 0);
             
             if (interestLines.length > 0) {
               professionalInterests = interestLines;
@@ -192,11 +192,11 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
             const lines = jobPrefText.split('\n');
             const parsedJobPrefs = { ...jobPreferences }; // start with fallback
             
-            lines.forEach(line => {
+            lines.forEach((line: string) => {
               const trimmed = line.trim();
               if (trimmed.startsWith('Job Titles:')) {
                 const titlesText = trimmed.replace('Job Titles:', '').trim();
-                const titles = titlesText.split(',').map(t => t.trim()).filter(t => t.length > 0);
+                const titles = titlesText.split(',').map((t: string) => t.trim()).filter((t: string) => t.length > 0);
                 if (titles.length > 0) {
                   parsedJobPrefs.titles = titles;
                 }
@@ -222,9 +222,9 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
           if (parsedData.interests) {
             const interestsText = parsedData.interests;
             const interestLines = interestsText.split('\n')
-              .filter(line => line.trim().startsWith('•'))
-              .map(line => line.replace('•', '').trim())
-              .filter(line => line.length > 0);
+              .filter((line: string) => line.trim().startsWith('•'))
+              .map((line: string) => line.replace('•', '').trim())
+              .filter((line: string) => line.length > 0);
             
             if (interestLines.length > 0) {
               professionalInterests = interestLines;
@@ -239,11 +239,11 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
             const lines = jobPrefText.split('\n');
             const parsedJobPrefs = { ...jobPreferences };
             
-            lines.forEach(line => {
+            lines.forEach((line: string) => {
               const trimmed = line.trim();
               if (trimmed.startsWith('Job Titles:')) {
                 const titlesText = trimmed.replace('Job Titles:', '').trim();
-                const titles = titlesText.split(',').map(t => t.trim()).filter(t => t.length > 0);
+                const titles = titlesText.split(',').map((t: string) => t.trim()).filter((t: string) => t.length > 0);
                 if (titles.length > 0) {
                   parsedJobPrefs.titles = titles;
                 }

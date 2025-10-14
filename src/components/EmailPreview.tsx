@@ -18,7 +18,7 @@ interface RoleEmailData {
 }
 
 interface EmailPreviewProps {
-  onChatClick?: (candidateInfo: any) => void;
+  onChatClick?: (candidateInfo: any, currentRole?: string) => void;
 }
 
 const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
