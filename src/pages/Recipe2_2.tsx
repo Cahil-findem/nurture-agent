@@ -136,28 +136,145 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
     onNavigate?.('demo-setup');
   };
 
-  const handleChatClick = (candidateInfo: any) => {
+  const handleChatClick = (candidateInfo: any, currentRole?: string) => {
     // Parse first name from full name
     const fullName = candidateInfo?.name || 'Unknown';
     const firstName = fullName.split(' ')[0];
+
+    // Get interests and job preferences from the stored email data (from Kong API) for the current role
+    let professionalInterests = [
+      'career development topics',
+      'back-end software engineering', 
+      'cloud computing',
+      'new java releases'
+    ]; // fallback
+
+    let jobPreferences = {
+      titles: ['Software Engineer'],
+      locations: ['Austin, TX', 'Remote'],
+      levelSeniority: 'Senior',
+      jobSpecifics: [], // Ideally empty initially
+      company: 'Kong'
+    }; // fallback
+
+    try {
+      const preGeneratedData = localStorage.getItem('preGeneratedEmailData');
+      if (preGeneratedData) {
+        const parsedData = JSON.parse(preGeneratedData);
+        
+        // Try to get data from role-specific data for the current role
+        if (parsedData.roleEmails && currentRole && parsedData.roleEmails[currentRole]) {
+          const roleData = parsedData.roleEmails[currentRole];
+          
+          // Parse interests
+          if (roleData.interests) {
+            const interestsText = roleData.interests;
+            console.log(`Getting interests for role ${currentRole}:`, interestsText);
+            
+            // Parse the interests text (format: "• Interest 1\n• Interest 2\n...")
+            const interestLines = interestsText.split('\n')
+              .filter(line => line.trim().startsWith('•'))
+              .map(line => line.replace('•', '').trim())
+              .filter(line => line.length > 0);
+            
+            if (interestLines.length > 0) {
+              professionalInterests = interestLines;
+              console.log(`Using API interests for ${currentRole} in chat:`, professionalInterests);
+            }
+          }
+
+          // Parse job preferences
+          if (roleData.job_preferences) {
+            const jobPrefText = roleData.job_preferences;
+            console.log(`Getting job preferences for role ${currentRole}:`, jobPrefText);
+            
+            // Parse job preferences text (format: "Job Titles: X, Y\nLocation: Z\nSeniority: W")
+            const lines = jobPrefText.split('\n');
+            const parsedJobPrefs = { ...jobPreferences }; // start with fallback
+            
+            lines.forEach(line => {
+              const trimmed = line.trim();
+              if (trimmed.startsWith('Job Titles:')) {
+                const titlesText = trimmed.replace('Job Titles:', '').trim();
+                const titles = titlesText.split(',').map(t => t.trim()).filter(t => t.length > 0);
+                if (titles.length > 0) {
+                  parsedJobPrefs.titles = titles;
+                }
+              } else if (trimmed.startsWith('Location:')) {
+                const locationText = trimmed.replace('Location:', '').trim();
+                if (locationText.length > 0) {
+                  parsedJobPrefs.locations = [locationText];
+                }
+              } else if (trimmed.startsWith('Seniority:')) {
+                const seniorityText = trimmed.replace('Seniority:', '').trim();
+                if (seniorityText.length > 0) {
+                  parsedJobPrefs.levelSeniority = seniorityText;
+                }
+              }
+            });
+            
+            jobPreferences = parsedJobPrefs;
+            console.log(`Using API job preferences for ${currentRole} in chat:`, jobPreferences);
+          }
+        }
+        // Fallback to primary candidate data if no role-specific data
+        else {
+          if (parsedData.interests) {
+            const interestsText = parsedData.interests;
+            const interestLines = interestsText.split('\n')
+              .filter(line => line.trim().startsWith('•'))
+              .map(line => line.replace('•', '').trim())
+              .filter(line => line.length > 0);
+            
+            if (interestLines.length > 0) {
+              professionalInterests = interestLines;
+              console.log('Using fallback API interests for chat:', professionalInterests);
+            }
+          }
+
+          if (parsedData.job_preferences) {
+            const jobPrefText = parsedData.job_preferences;
+            console.log('Getting fallback job preferences:', jobPrefText);
+            
+            const lines = jobPrefText.split('\n');
+            const parsedJobPrefs = { ...jobPreferences };
+            
+            lines.forEach(line => {
+              const trimmed = line.trim();
+              if (trimmed.startsWith('Job Titles:')) {
+                const titlesText = trimmed.replace('Job Titles:', '').trim();
+                const titles = titlesText.split(',').map(t => t.trim()).filter(t => t.length > 0);
+                if (titles.length > 0) {
+                  parsedJobPrefs.titles = titles;
+                }
+              } else if (trimmed.startsWith('Location:')) {
+                const locationText = trimmed.replace('Location:', '').trim();
+                if (locationText.length > 0) {
+                  parsedJobPrefs.locations = [locationText];
+                }
+              } else if (trimmed.startsWith('Seniority:')) {
+                const seniorityText = trimmed.replace('Seniority:', '').trim();
+                if (seniorityText.length > 0) {
+                  parsedJobPrefs.levelSeniority = seniorityText;
+                }
+              }
+            });
+            
+            jobPreferences = parsedJobPrefs;
+            console.log('Using fallback API job preferences for chat:', jobPreferences);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing data from API:', error);
+    }
 
     // Store candidate information for the chat using data from Kong API
     const candidateData = {
       name: fullName,
       firstName: firstName,
-      jobPreferences: {
-        titles: ['Software Engineer'],
-        locations: ['Austin, TX', 'Remote'],
-        levelSeniority: 'Senior',
-        jobSpecifics: [], // Ideally empty initially
-        company: 'Kong'
-      },
-      professionalInterests: [
-        'career development topics',
-        'back-end software engineering', 
-        'cloud computing',
-        'new java releases'
-      ],
+      jobPreferences: jobPreferences,
+      professionalInterests: professionalInterests,
       timestamp: Date.now()
     };
 
