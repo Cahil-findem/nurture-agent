@@ -56,14 +56,6 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
   const fetchEmailData = async () => {
     if (emailDataFetched || fetchInProgress || fetchInitiated.current) return; // Prevent duplicate calls
     
-    // Check if data already exists
-    const existingData = localStorage.getItem('preGeneratedEmailData');
-    if (existingData) {
-      console.log('RecipeLoader - Email data already exists, skipping fetch');
-      setEmailDataFetched(true);
-      return;
-    }
-    
     fetchInitiated.current = true;
     setFetchInProgress(true);
     

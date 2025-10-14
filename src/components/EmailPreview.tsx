@@ -18,7 +18,7 @@ interface RoleEmailData {
 }
 
 interface EmailPreviewProps {
-  onChatClick?: (candidateInfo: any) => void;
+  onChatClick?: (candidateInfo: any, currentRole?: string) => void;
 }
 
 const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
@@ -334,7 +334,7 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
             <p className="feedback-message">
               I'm always here for feedback if this content isn't what you're looking for
             </p>
-            <button className="chat-button" onClick={() => onChatClick?.(candidateInfo)}>
+            <button className="chat-button" onClick={() => onChatClick?.(candidateInfo, currentRole)}>
               Let's Chat
             </button>
           </div>
