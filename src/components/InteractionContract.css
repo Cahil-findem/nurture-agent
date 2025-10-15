@@ -3,64 +3,66 @@
 .interaction-contract {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   width: 100%;
 }
 
 .contract-card {
   background: white;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 20px;
+  border: 1px solid #DCDFEA;
+  border-radius: 20px;
+  padding: 21px 17px;
   display: flex;
   gap: 12px;
   transition: all 0.2s ease;
-  box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1);
-}
-
-.contract-card:hover {
-  border-color: #CBD5E0;
-  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .card-icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: #F1F5F9;
-  border-radius: 10px;
   flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  background: #F6F4FF;
+  border-radius: 8px;
 }
 
 .card-icon {
-  color: #64748B;
-  font-size: 20px;
+  color: #4A2EDF !important;
+  font-size: 18px;
   font-family: 'Material Icons Round', sans-serif;
   font-weight: 400;
+  line-height: 18px;
+  height: 18px;
+  text-decoration: none;
+  border: none;
+  outline: none;
+  overflow: hidden;
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
 .card-content {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0px;
   flex: 1;
   text-align: left;
 }
 
 .card-title {
-  color: #1E293B;
+  color: #101828;
   font-size: 16px;
   font-family: 'Roboto', sans-serif;
-  font-weight: 600;
-  line-height: 24px;
+  font-weight: 500;
+  line-height: 22px;
   margin: 0;
   text-align: left;
 }
 
 .card-description {
-  color: #64748B;
+  color: #465366;
   font-size: 14px;
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
@@ -69,14 +71,19 @@
   text-align: left;
 }
 
+.card-description strong {
+  font-weight: 700;
+  color: #465366;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1200px) {
   .interaction-contract {
     width: 100%;
     max-width: 100%;
   }
-  
+
   .contract-card {
-    padding: 16px;
+    padding: 21px 17px;
   }
 }

@@ -113,7 +113,7 @@ const GoalSelection: React.FC<GoalSelectionProps> = ({ onNavigate, navigationDir
 
             <div className="button-wrapper">
               <div
-                className={`btn btn-dark ${!selectedGoal ? 'disabled' : ''}`}
+                className={`btn btn-blue ${!selectedGoal ? 'disabled' : ''}`}
                 onClick={handleContinue}
               >
                 Continue

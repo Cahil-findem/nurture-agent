@@ -358,6 +358,21 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
           </div>
         </div>
       </div>
+
+      {/* Action Buttons - Below Email Container */}
+      <div className="email-action-buttons">
+        <button className="request-changes-btn">
+          <img
+            className="ai-logo-small"
+            src="/AI%20Loader.gif"
+            alt="AI"
+          />
+          <span>Request Changes</span>
+        </button>
+        <button className="activate-btn">
+          Activate Cleo
+        </button>
+      </div>
     </div>
   );
 };

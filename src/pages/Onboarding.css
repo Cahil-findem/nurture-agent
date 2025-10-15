@@ -246,6 +246,21 @@
   background: #f3f4f6;
 }
 
+/* Blue Button Variant */
+.btn-blue {
+  background: #4599FA;
+  color: white;
+  padding: 10px 12px;
+}
+
+.btn-blue:hover {
+  background: #3280E8;
+}
+
+.btn-blue:active {
+  background: #2563EB;
+}
+
 /* Legacy continue button class for backward compatibility */
 .continue-button {
   padding: 8px 12px;

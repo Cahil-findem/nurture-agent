@@ -156,7 +156,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onNavigate, initialStep = 1, na
 
             <div className="button-wrapper">
               <div
-                className="btn btn-dark"
+                className="btn btn-blue"
                 data-dark-mode="False"
                 data-has-icon-end="false"
                 data-has-icon-start="false"
@@ -164,7 +164,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onNavigate, initialStep = 1, na
                 data-show-label="true"
                 data-size="Medium"
                 data-state="Idle"
-                data-style="Primary - Dark"
+                data-style="Primary - Blue"
                 data-variant="Text Only"
                 data-version-2-0="False"
                 onClick={handleContinue}

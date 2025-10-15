@@ -296,7 +296,14 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
       <div className="recipe2-container">
         {/* Header */}
         <div className="recipe2-header">
-          <h1 className="recipe2-title">All set — I've tailored your nurture flow to each candidate.</h1>
+          <div className="title-with-logo">
+            <img
+              className="x-logo"
+              src="/AI%20Loader.gif"
+              alt="Logo"
+            />
+            <h1 className="recipe2-title">All set! Ready for me to take it from here and keep things moving?</h1>
+          </div>
         </div>
 
         {/* Content */}
@@ -304,65 +311,6 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
           {/* Email Preview - Left Column */}
           <div className="recipe2-preview">
             <EmailPreview onChatClick={handleChatClick} />
-
-            {/* Bottom Controls */}
-            <div className="bottom-controls">
-              {/* Live Content Sources Chip - Bottom Left */}
-              <div
-                className="content-sources-chip"
-                onMouseEnter={() => {
-                  console.log('Mouse enter - showing popover, blogPosts length:', blogPosts.length);
-                  setShowBlogPostsPopover(true);
-                }}
-                onMouseLeave={() => {
-                  console.log('Mouse leave - hiding popover');
-                  setShowBlogPostsPopover(false);
-                }}
-              >
-                <div className="active-badge"></div>
-                <span className="content-sources-text">
-                  {liveContentSources} live content sources integrated
-                </span>
-
-                {/* Blog Posts Popover */}
-                {showBlogPostsPopover && blogPosts.length > 0 && (
-                  <div className="blog-posts-popover">
-                    <div className="popover-header">Recent Blog Posts</div>
-                    <div className="popover-content">
-                      {blogPosts.map((post, index) => (
-                        <div key={index} className="blog-post-item">
-                          <div className="blog-post-title">{post.title}</div>
-                          <div className="blog-post-date">{post.publish_date}</div>
-                          {post.summary && (
-                            <div className="blog-post-summary">
-                              {post.summary.slice(0, 100)}...
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Debug info */}
-                {showBlogPostsPopover && blogPosts.length === 0 && (
-                  <div className="blog-posts-popover">
-                    <div className="popover-header">Debug Info</div>
-                    <div className="popover-content">
-                      <div className="blog-post-item">No blog posts available</div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Action Buttons - Bottom Right */}
-              <div className="action-buttons">
-                <button className="edit-button">
-                  <span className="material-icons-round">edit</span>
-                  Edit Campaign
-                </button>
-              </div>
-            </div>
           </div>
 
           {/* Interaction Contract - Right Column */}

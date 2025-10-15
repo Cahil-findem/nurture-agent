@@ -346,6 +346,20 @@
   background: #f3f4f6;
 }
 
+/* Blue Button Variant */
+.btn-blue {
+  background: #4599FA;
+  color: white;
+}
+
+.btn-blue:hover {
+  background: #3280E8;
+}
+
+.btn-blue:active {
+  background: #2563EB;
+}
+
 /* Animation classes */
 .animate-fade-up {
   animation: fadeUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;

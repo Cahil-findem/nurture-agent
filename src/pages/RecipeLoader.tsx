@@ -11,36 +11,46 @@ interface LoadingCard {
   title: string;
   text: string;
   visible: boolean;
+  isImageCard?: boolean;
+}
+
+interface ImageState {
+  image1: boolean;
+  image2: boolean;
+  image3: boolean;
+  image4: boolean;
+  image5: boolean;
 }
 
 const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
   const [cards, setCards] = useState<LoadingCard[]>([
     {
       id: 1,
-      icon: 'search',
-      title: 'Scanning your company\'s content sources',
-      text: 'Selecting the most relevant, high-performing, and up-to-date content.',
-      visible: false
+      icon: 'article',
+      title: 'Gathering recent blog posts',
+      text: 'www.kong.com/blog',
+      visible: false,
+      isImageCard: true
     },
     {
       id: 2,
       icon: 'draw',
-      title: 'Crafting your dynamic campaign content',
-      text: "We're tailoring content to match your brand voice and approved messaging.",
+      title: 'Crafting personalized content',
+      text: '',
       visible: false
     },
     {
       id: 3,
-      icon: 'schedule',
-      title: 'Applying communication restrictions',
-      text: 'We will not contact candidates more than twice every 30 days.',
+      icon: 'event',
+      title: 'Reviewing communication cadance',
+      text: '',
       visible: false
     },
     {
       id: 4,
       icon: 'verified_user',
-      title: 'Reviewing compliance requirements',
-      text: 'All campaigns align with GDPR, EEO, and unsubscribe requirements.',
+      title: 'Reviewing compliance standards',
+      text: '',
       visible: false
     }
   ]);
@@ -51,6 +61,13 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
   const [startTime] = useState(Date.now());
   const [fetchInProgress, setFetchInProgress] = useState(false);
   const fetchInitiated = useRef(false);
+  const [imageStates, setImageStates] = useState<ImageState>({
+    image1: false,
+    image2: false,
+    image3: false,
+    image4: false,
+    image5: false
+  });
 
   // Function to fetch email data from Kong API for all three candidates
   const fetchEmailData = async () => {
@@ -142,12 +159,20 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
         setCards(prev => prev.map((card, i) =>
           i === index ? { ...card, visible: true } : card
         ));
-        
+
+        // Show images sequentially for the first card (left to right)
+        if (index === 0) {
+          // Show images one by one from left to right
+          setTimeout(() => setImageStates(prev => ({ ...prev, image1: true })), 300);  // Left image
+          setTimeout(() => setImageStates(prev => ({ ...prev, image3: true })), 800);  // Center image
+          setTimeout(() => setImageStates(prev => ({ ...prev, image2: true })), 1300); // Right image
+        }
+
         // Fetch email data when "Crafting your dynamic campaign content" card appears (index 1)
         if (index === 1) {
           fetchEmailData();
         }
-      }, index * 1000); // Stagger each card by 1 second
+      }, index * 1800); // Stagger each card by 1.8 seconds
     };
 
     // Show each card with a delay
@@ -162,7 +187,7 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
         setShowContinue(true);
         setIsComplete(true);
       }
-    }, (cards.length * 1000) + 2000);
+    }, (cards.length * 1800) + 2000);
 
     // Cleanup timer on unmount
     return () => clearTimeout(showContinueTimer);
@@ -172,10 +197,10 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
   useEffect(() => {
     if (emailDataFetched && !showContinue) {
       // Small delay to ensure all cards are visible before showing continue
-      const minDisplayTime = cards.length * 1000;
+      const minDisplayTime = cards.length * 1800;
       const currentTime = Date.now();
       const elapsedTime = currentTime - startTime;
-      
+
       if (elapsedTime >= minDisplayTime) {
         setShowContinue(true);
         setIsComplete(true);
@@ -200,18 +225,18 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
   return (
     <div className="recipe-loader">
       <div className="recipe-loader-container">
-        {/* Loading Chip Header */}
-        <div className="loading-chip">
-          {isComplete ? (
-            <div className="loading-complete">
-              <span className="material-icons-round">check_circle</span>
-            </div>
-          ) : (
-            <div className="loading-spinner"></div>
-          )}
-          <span className="loading-chip-text">
-            {isComplete ? 'Content creation complete!' : 'Creating your nurture content...'}
-          </span>
+        {/* Header with Logo */}
+        <div className="title-section">
+          <div className="title-with-logo">
+            <img
+              className="x-logo"
+              src="/AI%20Loader.gif"
+              alt="Logo"
+            />
+            <h1 className="page-title">
+              {isComplete ? 'All done, hit continue when you are ready' : 'Great - hang tight while I pull together your campaign preview'}
+            </h1>
+          </div>
         </div>
 
         {/* Loading Cards */}
@@ -221,14 +246,28 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
               key={card.id}
               className={`loading-card ${card.visible ? 'visible' : ''}`}
             >
-              <div className={`card-icon ${isComplete ? 'completed' : ''}`}>
-                <span className="material-icons-round">
-                  {isComplete ? 'check' : card.icon}
-                </span>
-              </div>
+              {card.isImageCard ? (
+                <div className="image-card-icon">
+                  <div className={`stacked-image image-back-left ${imageStates.image1 ? 'visible' : ''}`}>
+                    <img src="/Left.png" alt="" />
+                  </div>
+                  <div className={`stacked-image image-back-right ${imageStates.image2 ? 'visible' : ''}`}>
+                    <img src="/Right.png" alt="" />
+                  </div>
+                  <div className={`stacked-image image-center ${imageStates.image3 ? 'visible' : ''}`}>
+                    <img src="/Center.png" alt="" />
+                  </div>
+                </div>
+              ) : (
+                <div className="card-icon">
+                  <span className="material-icons-round">
+                    {card.icon}
+                  </span>
+                </div>
+              )}
               <div className="card-content">
                 <h3 className="card-title">{card.title}</h3>
-                <p className="card-text">{card.text}</p>
+                {card.text && <p className="card-text">{card.text}</p>}
               </div>
             </div>
           ))}
