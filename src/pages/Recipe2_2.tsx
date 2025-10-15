@@ -40,9 +40,6 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer malesuada, lacus vel tristique fermentum, orci augue elementum nisi, ac porttitor mauris est non risus. Aenean sit amet sapien vitae lectus cursus iaculis at ac neque. Sed non leo euismod, sagittis libero eget, sollicitudin nulla.'
   );
   // const [previewMode, setPreviewMode] = useState<'preview' | 'edit'>('preview');
-  const [liveContentSources, setLiveContentSources] = useState(4);
-  const [showBlogPostsPopover, setShowBlogPostsPopover] = useState(false);
-  const [blogPosts, setBlogPosts] = useState<any[]>([]);
 
   // Load crawled data on component mount
   useEffect(() => {
@@ -88,15 +85,6 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
           if (crawledData.tone_of_voice_example) {
             console.log('Recipe2_2 - Setting tone of voice:', crawledData.tone_of_voice_example);
             setToneOfVoice(crawledData.tone_of_voice_example);
-          }
-
-          // Update content sources based on blog posts
-          if (crawledData.blog_posts && crawledData.blog_posts.length > 0) {
-            setLiveContentSources(crawledData.blog_posts.length);
-            setBlogPosts(crawledData.blog_posts.slice(0, 4)); // Store first 4 blog posts
-            console.log('Recipe2_2 - Setting blog posts for popover:', crawledData.blog_posts.slice(0, 4));
-          } else {
-            console.log('Recipe2_2 - No blog posts found for popover');
           }
         } else {
           console.log('Recipe2_2 - No crawled data found');
