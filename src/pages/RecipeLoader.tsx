@@ -80,18 +80,16 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
       console.log('RecipeLoader - Fetching email data from Kong API for all candidates...');
       
       const candidateIds = {
-        commissionsAnalyst: '68d193fecb73815f93cc0e45',
-        financialReportingManager: '68e3ff4a389a44ae4034feb4', 
-        customerSuccessManager: '68d6bc9325d43c5a707e3d34'
+        jacobWang: 'pub_hola_5c7d24bb19976ca87e8f8bbb',
+        kristinaWong: 'pub_5d984bc378b4d04f623a7b2f'
       };
 
       const roles = [
-        { key: 'commissionsAnalyst', name: 'Sr. Commissions Analyst' },
-        { key: 'financialReportingManager', name: 'Financial Reporting Manager' },
-        { key: 'customerSuccessManager', name: 'Customer Success Operations Manager' }
+        { key: 'jacobWang', name: 'Jacob Wang - Senior Software Engineer' },
+        { key: 'kristinaWong', name: 'Kristina Wong - Senior Product Designer' }
       ];
 
-      // Fetch email data for all three candidates in parallel
+      // Fetch email data for both candidates in parallel
       const emailPromises = roles.map(async (role) => {
         const candidateId = candidateIds[role.key as keyof typeof candidateIds];
         
@@ -136,8 +134,8 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
         }
       });
 
-      // Use the first candidate (commissionsAnalyst) as the primary candidate for backward compatibility
-      const primaryResult = results.find(r => r && r.role === 'commissionsAnalyst');
+      // Use the first candidate (jacobWang) as the primary candidate for backward compatibility
+      const primaryResult = results.find(r => r && r.role === 'jacobWang');
       if (primaryResult) {
         preGeneratedEmails.candidate = primaryResult.emailResponse.candidate;
         preGeneratedEmails.emailData = primaryResult.emailResponse; // Keep for backward compatibility

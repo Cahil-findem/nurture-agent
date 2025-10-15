@@ -12,9 +12,8 @@ interface EmailData {
 }
 
 interface RoleEmailData {
-  commissionsAnalyst: EmailData | null;
-  financialReportingManager: EmailData | null;
-  customerSuccessManager: EmailData | null;
+  jacobWang: EmailData | null;
+  kristinaWong: EmailData | null;
 }
 
 interface EmailPreviewProps {
@@ -23,11 +22,10 @@ interface EmailPreviewProps {
 
 const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
   const [emailData, setEmailData] = useState<RoleEmailData>({
-    commissionsAnalyst: null,
-    financialReportingManager: null,
-    customerSuccessManager: null
+    jacobWang: null,
+    kristinaWong: null
   });
-  const [currentRole, setCurrentRole] = useState<'commissionsAnalyst' | 'financialReportingManager' | 'customerSuccessManager'>('commissionsAnalyst');
+  const [currentRole, setCurrentRole] = useState<'jacobWang' | 'kristinaWong'>('jacobWang');
   const [loading, setLoading] = useState(true);
   const [candidateInfo, setCandidateInfo] = useState<any>(null);
 
@@ -46,7 +44,7 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
           hasEmailData: !!parsedData.emailData,
           hasRoleEmails: !!parsedData.roleEmails,
           hasOldFormat: parsedData.emailData && !!parsedData.emailData.email,
-          hasNewFormat: parsedData.roleEmails && (!!parsedData.roleEmails.commissionsAnalyst || !!parsedData.roleEmails.financialReportingManager || !!parsedData.roleEmails.customerSuccessManager),
+          hasNewFormat: parsedData.roleEmails && (!!parsedData.roleEmails.jacobWang || !!parsedData.roleEmails.kristinaWong),
           emailDataKeys: parsedData.emailData ? Object.keys(parsedData.emailData) : [],
           roleEmailKeys: parsedData.roleEmails ? Object.keys(parsedData.roleEmails) : []
         });
@@ -74,9 +72,8 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
           setCandidateInfo(parsedPreGenerated.candidate);
           
           const newEmailData: RoleEmailData = {
-            commissionsAnalyst: null,
-            financialReportingManager: null,
-            customerSuccessManager: null
+            jacobWang: null,
+            kristinaWong: null
           };
 
           // Check if we have role-specific data (new format)
@@ -86,7 +83,7 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
           if (parsedPreGenerated.primaryOnly) {
             console.log('EmailPreview - Primary-only data detected, fetching other candidates...');
             
-            // Use primary data for commissionsAnalyst
+            // Use primary data for jacobWang
             const formattedBody = parsedPreGenerated.emailData.email.body
               .replace(/\n\n/g, '</p><p>')
               .replace(/\n/g, '<br>')
@@ -97,27 +94,26 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
               // Then convert any remaining bare URLs to clickable links
               .replace(/(^|[^"])(https?:\/\/[^\s<]+)(?![^<]*<\/a>)/g, '$1<a href="$2" target="_blank" style="color: #4599FA; text-decoration: underline;">$2</a>');
 
-            newEmailData.commissionsAnalyst = {
+            newEmailData.jacobWang = {
               subject: parsedPreGenerated.emailData.email.subject,
               content: formattedBody,
               preview_text: parsedPreGenerated.emailData.email.subject,
               logoUrl: '/Logo.png',
               companyName: 'Kong',
               companyWebsite: 'https://konghq.com',
-              role: 'Sr. Commissions Analyst'
+              role: 'Jacob Wang - Senior Software Engineer'
             };
             
             // Set loading false - all data should be available from RecipeLoader
             setEmailData(newEmailData);
             setLoading(false);
             return;
-          } else if (parsedPreGenerated.roleEmails && (parsedPreGenerated.roleEmails.commissionsAnalyst || parsedPreGenerated.roleEmails.financialReportingManager || parsedPreGenerated.roleEmails.customerSuccessManager)) {
+          } else if (parsedPreGenerated.roleEmails && (parsedPreGenerated.roleEmails.jacobWang || parsedPreGenerated.roleEmails.kristinaWong)) {
             console.log('EmailPreview - Using role-specific pre-generated data');
-            
+
             const roles = [
-              { key: 'commissionsAnalyst', name: 'Sr. Commissions Analyst' },
-              { key: 'financialReportingManager', name: 'Financial Reporting Manager' },
-              { key: 'customerSuccessManager', name: 'Customer Success Operations Manager' }
+              { key: 'jacobWang', name: 'Jacob Wang - Senior Software Engineer' },
+              { key: 'kristinaWong', name: 'Kristina Wong - Senior Product Designer' }
             ];
 
             roles.forEach(role => {
@@ -167,9 +163,8 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
             };
 
             const roles = [
-              { key: 'commissionsAnalyst', name: 'Sr. Commissions Analyst' },
-              { key: 'financialReportingManager', name: 'Financial Reporting Manager' },
-              { key: 'customerSuccessManager', name: 'Customer Success Operations Manager' }
+              { key: 'jacobWang', name: 'Jacob Wang - Senior Software Engineer' },
+              { key: 'kristinaWong', name: 'Kristina Wong - Senior Product Designer' }
             ];
 
             roles.forEach(role => {
@@ -221,9 +216,8 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ onChatClick }) => {
   const currentEmailData = emailData[currentRole];
 
   const roleLabels = {
-    commissionsAnalyst: 'Sr. Commissions Analyst',
-    financialReportingManager: 'Financial Reporting Manager',
-    customerSuccessManager: 'Customer Success Operations Manager'
+    jacobWang: 'Jacob Wang - Senior Software Engineer',
+    kristinaWong: 'Kristina Wong - Senior Product Designer'
   };
 
   const roles = Object.keys(roleLabels) as Array<keyof typeof roleLabels>;

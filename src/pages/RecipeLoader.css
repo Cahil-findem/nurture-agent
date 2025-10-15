@@ -12,12 +12,11 @@
 }
 
 .recipe-loader-container {
-  max-width: 634px;
+  width: 634px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 100%;
 }
 
 /* Title Section with Spinning Logo */
@@ -64,14 +63,14 @@
   display: flex;
   align-items: center;
   gap: 18px;
-  padding: 12px 20px;
-  background: white;
+  padding: 8px;
   border-radius: 12px;
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.6s ease;
   text-align: left;
   position: relative;
+  border: 1px solid #EAECF0;
 }
 
 .loading-card:not(:last-child)::after {
@@ -91,17 +90,17 @@
   transform: translateY(0);
 }
 
-.card-icon {
-  width: 64px;
-  height: 64px;
-  background: #E1EFFF;
-  border: 8px solid white;
-  border-radius: 15px;
+.loading-card .card-icon {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #F6F4FF !important;
   flex-shrink: 0;
-}
+  border: 8px solid white;
+ }
 
 /* Image Card Icon */
 .image-card-icon {
@@ -109,6 +108,8 @@
   height: 64px;
   position: relative;
   flex-shrink: 0;
+  background: #F2F4F7;
+  border-radius: 15px;
 }
 
 .stacked-image {
@@ -152,18 +153,18 @@
   z-index: 3;
 }
 
-.card-icon .material-icons-round {
-  color: #0F42BC;
-  font-size: 26px;
+.loading-card .card-icon .material-icons-round {
+  color: #4A2EDF;
+  font-size: 20px;
   font-family: 'Material Icons Round', sans-serif;
   font-weight: 400;
 }
 
-.card-icon.completed {
-  background: #DCFCE7;
+.loading-card .card-icon.completed {
+  background: #DCFCE7 !important;
 }
 
-.card-icon.completed .material-icons-round {
+.loading-card .card-icon.completed .material-icons-round {
   color: #15803D;
 }
 
@@ -263,13 +264,13 @@
     gap: 16px;
   }
 
-  .card-icon {
-    width: 40px;
-    height: 40px;
+  .loading-card .card-icon {
+    width: 64px !important;
+    height: 64px !important;
   }
 
-  .card-icon .material-icons-round {
-    font-size: 20px;
+  .loading-card .card-icon .material-icons-round {
+    font-size: 26px;
   }
 
   .card-text {

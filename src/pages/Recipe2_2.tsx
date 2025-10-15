@@ -150,24 +150,28 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
       if (preGeneratedData) {
         const parsedData = JSON.parse(preGeneratedData);
         
+        // Map role keys to user-friendly names for backward compatibility
+        const roleName = currentRole === 'jacobWang' ? 'Jacob Wang' :
+                        currentRole === 'kristinaWong' ? 'Kristina Wong' : currentRole;
+
         // Try to get data from role-specific data for the current role
         if (parsedData.roleEmails && currentRole && parsedData.roleEmails[currentRole]) {
           const roleData = parsedData.roleEmails[currentRole];
-          
+
           // Parse interests
           if (roleData.interests) {
             const interestsText = roleData.interests;
             console.log(`Getting interests for role ${currentRole}:`, interestsText);
-            
+
             // Parse the interests text (format: "• Interest 1\n• Interest 2\n...")
             const interestLines = interestsText.split('\n')
               .filter((line: string) => line.trim().startsWith('•'))
               .map((line: string) => line.replace('•', '').trim())
               .filter((line: string) => line.length > 0);
-            
+
             if (interestLines.length > 0) {
               professionalInterests = interestLines;
-              console.log(`Using API interests for ${currentRole} in chat:`, professionalInterests);
+              console.log(`Using API interests for ${roleName} in chat:`, professionalInterests);
             }
           }
 
@@ -175,11 +179,11 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
           if (roleData.job_preferences) {
             const jobPrefText = roleData.job_preferences;
             console.log(`Getting job preferences for role ${currentRole}:`, jobPrefText);
-            
+
             // Parse job preferences text (format: "Job Titles: X, Y\nLocation: Z\nSeniority: W")
             const lines = jobPrefText.split('\n');
             const parsedJobPrefs = { ...jobPreferences }; // start with fallback
-            
+
             lines.forEach((line: string) => {
               const trimmed = line.trim();
               if (trimmed.startsWith('Job Titles:')) {
@@ -200,9 +204,9 @@ const Recipe2_2: React.FC<Recipe2_2Props> = ({ onNavigate }) => {
                 }
               }
             });
-            
+
             jobPreferences = parsedJobPrefs;
-            console.log(`Using API job preferences for ${currentRole} in chat:`, jobPreferences);
+            console.log(`Using API job preferences for ${roleName} in chat:`, jobPreferences);
           }
         }
         // Fallback to primary candidate data if no role-specific data
