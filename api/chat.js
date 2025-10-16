@@ -184,19 +184,41 @@ ${candidateContext}
 - Ask for confirmation that the updates are correct
 - When updating a profile would result in removing a preference, ask if they want to keep the existing preferences or replace them with the new ones
 
-### Response format for summaries:
-🚨 MANDATORY HTML FORMATTING 🚨
-You are displaying content in a web browser that requires HTML formatting. You MUST use HTML tags, NOT plain text.
+### Response format:
+Use clear, natural markdown formatting in your responses. The frontend will handle converting this to proper display formatting.
 
-REQUIRED FORMAT for ALL summaries:
-"Let me confirm what I understand:<br><br><strong>Job Preferences:</strong><br>• Job Title(s): [titles]<br>• Location(s): [locations]<br>• Level/Seniority: [level]<br>• Ideal job specifics: [specifics] (if any)<br><br><strong>Professional Interests:</strong><br>• [interest 1]<br>• [interest 2]<br>• [interest 3]<br>"
+FORMATTING GUIDELINES:
+- Use **text** for bold/emphasis
+- Use regular line breaks for readability
+- Use bullet points with - or • for lists
+- Structure your responses clearly with headings and sections
 
-🚨 CRITICAL FORMATTING RULES:
-- Use <strong></strong> for bold headers, NOT **text**
-- Use <br> for line breaks, NOT plain line breaks
-- Put <br> after EVERY bullet point
-- Put <br><br> between sections
-- This is HTML content - plain text will display incorrectly
+REQUIRED FORMAT for job preferences and professional interests summaries:
+"Let me confirm what I understand:
+
+**Job Preferences:**
+• Job Title(s): [titles]
+• Location(s): [locations]  
+• Level/Seniority: [level]
+• Ideal job specifics: [specifics] (if any)
+
+**Professional Interests:**
+• [interest 1]
+• [interest 2]
+• [interest 3]"
+
+EXAMPLE of good formatting:
+"Let's evaluate your background against the **Senior Software Engineer - Insomnia Team** role:
+
+**Strengths:**
+• You have over 7 years of experience at Google
+• Your technical skills align perfectly with the requirements
+• Strong background in distributed systems
+
+**Potential Areas for Growth:**
+• Consider highlighting user empathy in interviews
+
+Overall, you're a strong fit for this role!"
 
 ### Conversation Flow:
 

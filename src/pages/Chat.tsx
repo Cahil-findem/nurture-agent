@@ -81,7 +81,7 @@ const Chat: React.FC<ChatProps> = ({ onNavigate }) => {
         {
           id: '1',
           type: 'ai',
-          content: `Hi ${candidateData.firstName}, my name is Cleo. You can think of me as your personal advocate on the inside here at ${candidateData.jobPreferences.company}. ${jobPosting ? `I have a specific job opening I'd love to discuss with you - the ${jobPosting.position} role on our ${jobPosting.employment?.department} team.` : `My goal is to understand the types of opportunities you'd be interested in at ${candidateData.jobPreferences.company} as well as your professional interests.`}`,
+          content: `Hi ${candidateData.firstName}, my name is Cleo. You can think of me as your personal advocate on the inside here at ${candidateData.jobPreferences.company}. ${jobPosting ? `I see you were sent a note about the <strong>${jobPosting.position}</strong> role on our team.` : `My goal is to understand the types of opportunities you'd be interested in at ${candidateData.jobPreferences.company} as well as your professional interests.`}`,
           timestamp: Date.now()
         },
         {
@@ -119,6 +119,19 @@ const Chat: React.FC<ChatProps> = ({ onNavigate }) => {
     return createCurrentSummary(candidate) + "<br><br>Does this sound right, or is there anything you'd like me to update?";
   };
 
+  // Helper function to convert markdown to HTML
+  const markdownToHtml = (text: string): string => {
+    return text
+      // Convert **text** to <strong>text</strong>
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      // Convert line breaks to <br> tags
+      .replace(/\n/g, '<br>')
+      // Convert bullet points (• or -) to proper format
+      .replace(/^[•-]\s/gm, '• ')
+      // Add some spacing after bullet points
+      .replace(/• (.*?)(<br>|$)/g, '• $1<br>');
+  };
+
   // Helper function to create current summary with proper formatting
   const createCurrentSummary = (candidate: CandidateData | null): string => {
     if (!candidate) return '';
@@ -138,13 +151,15 @@ const Chat: React.FC<ChatProps> = ({ onNavigate }) => {
       interest.charAt(0).toUpperCase() + interest.slice(1)
     );
 
-    return `Let me confirm what I understand:<br>
-<br>
-<strong>Job Preferences:</strong><br>
-${jobBullets.map(bullet => `• ${bullet}`).join('<br>')}<br>
-<br>
-<strong>Professional Interests:</strong><br>
-${professionalBullets.map(bullet => `• ${bullet}`).join('<br>')}`;
+    const markdownText = `Let me confirm what I understand:
+
+**Job Preferences:**
+${jobBullets.map(bullet => `• ${bullet}`).join('\n')}
+
+**Professional Interests:**
+${professionalBullets.map(bullet => `• ${bullet}`).join('\n')}`;
+
+    return markdownToHtml(markdownText);
   };
 
   // Function to call OpenAI API
@@ -337,11 +352,11 @@ ${professionalBullets.map(bullet => `• ${bullet}`).join('<br>')}`;
       const newStage = updateConversationStage(aiResponse);
       setConversationStage(newStage as any);
       
-      // Add AI response
+      // Add AI response with markdown conversion
       const cleoResponse: Message = {
         id: (Date.now() + Math.random()).toString(),
         type: 'ai',
-        content: aiResponse,
+        content: markdownToHtml(aiResponse),
         timestamp: Date.now()
       };
       
