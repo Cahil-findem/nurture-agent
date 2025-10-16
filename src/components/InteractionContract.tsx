@@ -36,7 +36,7 @@ const InteractionContract: React.FC = () => {
       title: 'Cadance',
       description: (
         <>
-          Reach out every <strong>2 weeks</strong> with content from your blog and new openings in your ATS.
+          Reach out at least every <strong>3 months</strong> with content from your blog and new openings in your ATS.
         </>
       )
     },

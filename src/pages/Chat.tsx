@@ -31,48 +31,88 @@ const Chat: React.FC<ChatProps> = ({ onNavigate }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [candidateData, setCandidateData] = useState<CandidateData | null>(null);
-  const [conversationStage, setConversationStage] = useState<'initial' | 'job_verification' | 'job_details' | 'professional_interests' | 'professional_verification' | 'awaiting_preference_choice' | 'awaiting_professional_choice' | 'complete'>('initial');
+  const [jobPosting, setJobPosting] = useState<any>(null);
+  const [candidateProfile, setCandidateProfile] = useState<any>(null);
+  const [conversationStage, setConversationStage] = useState<'initial' | 'job_questions' | 'job_services' | 'job_complete' | 'job_verification' | 'job_details' | 'professional_interests' | 'professional_verification' | 'awaiting_preference_choice' | 'awaiting_professional_choice' | 'complete'>('initial');
 
-  // Load candidate data and initialize conversation
+  // Load candidate data, job posting, and candidate profile files
   useEffect(() => {
+    // Load job posting and candidate profile from example files
+    const loadExampleData = async () => {
+      try {
+        // Load job posting
+        const jobResponse = await fetch('/jobPosting.json');
+        if (jobResponse.ok) {
+          const jobData = await jobResponse.json();
+          setJobPosting(jobData);
+          console.log('Loaded job posting:', jobData);
+        }
+
+        // Load candidate profile
+        const candidateResponse = await fetch('/candidateProfile.json');
+        if (candidateResponse.ok) {
+          const profileData = await candidateResponse.json();
+          setCandidateProfile(profileData);
+          console.log('Loaded candidate profile:', profileData);
+        }
+      } catch (error) {
+        console.error('Error loading example data files:', error);
+      }
+    };
+
+    loadExampleData();
+    
     const loadedCandidateData = localStorage.getItem('candidateData');
     if (loadedCandidateData) {
       try {
         const parsedCandidateData: CandidateData = JSON.parse(loadedCandidateData);
         setCandidateData(parsedCandidateData);
-        
-        // Create initial messages from Cleo
-        const initialMessages: Message[] = [
-          {
-            id: '1',
-            type: 'ai',
-            content: `Hi ${parsedCandidateData.firstName}, my name is Cleo. You can think of me as your personal advocate on the inside here at ${parsedCandidateData.jobPreferences.company}. My goal is to understand the types of opportunities you'd be interested in at ${parsedCandidateData.jobPreferences.company} as well as your professional interests.`,
-            timestamp: Date.now()
-          },
-          {
-            id: '2',
-            type: 'ai',
-            content: createInitialSummary(parsedCandidateData),
-            timestamp: Date.now() + 1
-          }
-        ];
-        
-        setMessages(initialMessages);
-        setConversationStage('job_verification');
       } catch (error) {
         console.error('Error loading candidate data:', error);
-        // Fallback message if no candidate data
-        setMessages([
-          {
-            id: '1',
-            type: 'ai',
-            content: "Hi there! I'm Cleo, your personal advocate here at Kong. Let me know how I can help you explore opportunities with us.",
-            timestamp: Date.now()
-          }
-        ]);
       }
     }
   }, []);
+
+  // Create initial messages after both candidate data and job posting are loaded
+  useEffect(() => {
+    if (candidateData && (jobPosting !== null || candidateProfile !== null)) {
+      // Create initial messages from Cleo
+      const initialMessages: Message[] = [
+        {
+          id: '1',
+          type: 'ai',
+          content: `Hi ${candidateData.firstName}, my name is Cleo. You can think of me as your personal advocate on the inside here at ${candidateData.jobPreferences.company}. ${jobPosting ? `I have a specific job opening I'd love to discuss with you - the ${jobPosting.position} role on our ${jobPosting.employment?.department} team.` : `My goal is to understand the types of opportunities you'd be interested in at ${candidateData.jobPreferences.company} as well as your professional interests.`}`,
+          timestamp: Date.now()
+        },
+        {
+          id: '2',
+          type: 'ai',
+          content: jobPosting ? `Do you have any questions about this job posting?` : createInitialSummary(candidateData),
+          timestamp: Date.now() + 1
+        }
+      ];
+      
+      setMessages(initialMessages);
+      setConversationStage(jobPosting ? 'job_questions' : 'job_verification');
+    } else if (candidateData && jobPosting === null && candidateProfile === null) {
+      // Fallback if data fails to load but we have candidate data
+      setMessages([
+        {
+          id: '1',
+          type: 'ai',
+          content: `Hi ${candidateData.firstName}, my name is Cleo. You can think of me as your personal advocate on the inside here at ${candidateData.jobPreferences.company}. My goal is to understand the types of opportunities you'd be interested in at ${candidateData.jobPreferences.company} as well as your professional interests.`,
+          timestamp: Date.now()
+        },
+        {
+          id: '2',
+          type: 'ai',
+          content: createInitialSummary(candidateData),
+          timestamp: Date.now() + 1
+        }
+      ]);
+      setConversationStage('job_verification');
+    }
+  }, [candidateData, jobPosting, candidateProfile]);
 
   // Helper function to create initial summary
   const createInitialSummary = (candidate: CandidateData): string => {
@@ -122,12 +162,18 @@ ${professionalBullets.map(bullet => `• ${bullet}`).join('<br>')}`;
           }
         ],
         candidateData,
+        jobPosting,
+        candidateProfile,
         conversationStage
       };
 
       console.log('=== FRONTEND API CALL ===');
       console.log('Request URL:', '/api/chat');
-      console.log('Request Body:', JSON.stringify(requestBody, null, 2));
+      console.log('User Message:', userMessage);
+      console.log('Job Posting Available:', !!jobPosting);
+      console.log('Job Posting Compensation:', jobPosting?.compensation);
+      console.log('Request Body Keys:', Object.keys(requestBody));
+      console.log('Full Request Body:', JSON.stringify(requestBody, null, 2));
       console.log('========================');
 
       const response = await fetch('/api/chat', {
@@ -226,6 +272,20 @@ ${professionalBullets.map(bullet => `• ${bullet}`).join('<br>')}`;
   const updateConversationStage = (aiResponse: string): string => {
     const lowerResponse = aiResponse.toLowerCase();
     
+    // Job-specific flow transitions
+    if (conversationStage === 'job_questions') {
+      if (lowerResponse.includes('help you with') || lowerResponse.includes('can offer') || lowerResponse.includes('other services')) {
+        return 'job_services';
+      }
+    } else if (conversationStage === 'job_services') {
+      if (lowerResponse.includes('interested in other') || lowerResponse.includes('other opportunities')) {
+        return 'job_complete';
+      }
+    } else if (conversationStage === 'job_complete') {
+      return 'job_verification'; // Transition to general flow
+    }
+    
+    // General flow transitions (original logic)
     if (lowerResponse.includes('professional interests') && lowerResponse.includes('what topics')) {
       return 'professional_interests';
     } else if (lowerResponse.includes('thanks for confirming') || lowerResponse.includes('have everything i need')) {

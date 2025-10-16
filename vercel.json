@@ -4,5 +4,10 @@
   "outputDirectory": "dist",
   "env": {
     "NODE_ENV": "production"
+  },
+  "functions": {
+    "api/chat.js": {
+      "maxDuration": 30
+    }
   }
 }

@@ -9,9 +9,9 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': {
-        target: 'https://nurture-agent.vercel.app',
+        target: 'http://localhost:3004',
         changeOrigin: true,
-        secure: true
+        secure: false
       }
     }
   },
