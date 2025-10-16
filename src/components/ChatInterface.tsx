@@ -30,15 +30,28 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   }, [messages]);
 
+  // Maintain focus on input when loading state changes
+  useEffect(() => {
+    if (!isLoading) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 50);
+    }
+  }, [isLoading]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim() && !isLoading && onSendMessage) {
       onSendMessage(message.trim());
       setMessage('');
-      // Keep focus on input after sending message
+      // Keep focus on input after sending message - use multiple methods for reliability
+      inputRef.current?.focus();
       setTimeout(() => {
         inputRef.current?.focus();
-      }, 0);
+      }, 10);
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
     }
   };
 
@@ -46,6 +59,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
+      // Additional focus after key press
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
     }
   };
 
