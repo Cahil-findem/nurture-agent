@@ -296,6 +296,38 @@
   color: var(--gray-600);
 }
 
+.icon-button-with-label {
+  height: 32px;
+  padding: 6px 12px;
+  border-radius: 36px;
+  border: 1px solid #eaecf0;
+  background-color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.icon-button-with-label:hover {
+  background-color: var(--gray-50);
+  border-color: var(--gray-400);
+}
+
+.icon-button-with-label .material-icons {
+  font-size: 16px;
+  color: var(--gray-600);
+}
+
+.button-label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--gray-600);
+  line-height: 20px;
+}
+
 .send-button {
   height: 32px;
   width: 32px;

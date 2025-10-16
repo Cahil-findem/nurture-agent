@@ -192,11 +192,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
             <div className="action-row">
               <div className="left-actions">
-                <button type="button" className="icon-button" aria-label="Add">
-                  <span className="material-icons">add</span>
-                </button>
-                <button type="button" className="icon-button" aria-label="Settings">
-                  <span className="material-icons">tune</span>
+                <button
+                  type="button"
+                  className="icon-button-with-label"
+                  aria-label="Questions"
+                  onClick={() => setShowSuggestions(!showSuggestions)}
+                >
+                  <span className="material-icons">help</span>
+                  <span className="button-label">Questions</span>
                 </button>
               </div>
 
