@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import ChatInterface from '../components/ChatInterface';
+import Header from '../components/Header';
 import './Chat.css';
 
 interface Message {
@@ -441,39 +442,29 @@ ${professionalBullets.map(bullet => `• ${bullet}`).join('\n')}`;
     onNavigate?.('demo-setup');
   };
 
+  const handleBackClick = () => {
+    onNavigate?.('outreach-contract');
+  };
+
   return (
     <div className="chat-page">
       {/* Header */}
-      <div className="chat-header">
-        <h1 className="chat-title">
-          {candidateData ? `Chat with ${candidateData.firstName}` : 'Kong Talent Chat'}
-        </h1>
-        <p className="chat-subtitle">
-          {candidateData 
-            ? `Cleo is helping ${candidateData.firstName} explore opportunities at ${candidateData.jobPreferences.company}`
-            : 'Connect with candidates about their career interests'
-          }
-        </p>
-      </div>
+      <Header
+        title="Cleo Talent Agent"
+        showBackButton={true}
+        onBackClick={handleBackClick}
+        onRestart={handleRestartDemo}
+        variant="chat"
+      />
 
       {/* Chat Interface */}
       <div className="chat-content">
-        <ChatInterface 
+        <ChatInterface
           messages={messages}
           onSendMessage={handleSendMessage}
           isLoading={isLoading}
         />
       </div>
-
-      {/* Restart Demo Button */}
-      <button
-        className="restart-demo-button"
-        onClick={handleRestartDemo}
-        title="Restart Demo"
-      >
-        <span className="material-icons-round">refresh</span>
-        <span className="restart-text">Restart</span>
-      </button>
     </div>
   );
 };

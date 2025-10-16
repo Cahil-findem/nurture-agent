@@ -14,14 +14,29 @@ interface ChatInterfaceProps {
   isLoading?: boolean;
 }
 
-const ChatInterface: React.FC<ChatInterfaceProps> = ({ 
-  messages = [], 
+const ChatInterface: React.FC<ChatInterfaceProps> = ({
+  messages = [],
   onSendMessage,
-  isLoading = false 
+  isLoading = false
 }) => {
   const [message, setMessage] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [usedSuggestions, setUsedSuggestions] = useState<string[]>([]);
   const chatAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const allSuggestions = [
+    { text: 'Please summarise the job for me', icon: 'description' },
+    { text: 'Tell me why I\'m a good fit', icon: 'thumb_up' },
+    { text: 'Tell me why I\'m not a good fit', icon: 'thumb_down' },
+    { text: 'What does this job pay?', icon: 'attach_money' },
+    { text: 'Can you help me practice interviewing?', icon: 'psychology' }
+  ];
+
+  // Filter out used suggestions
+  const availableSuggestions = allSuggestions.filter(
+    (suggestion) => !usedSuggestions.includes(suggestion.text)
+  );
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -39,11 +54,36 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   }, [isLoading]);
 
+  const handleInputFocus = () => {
+    // Show suggestions every time if there are available suggestions
+    if (availableSuggestions.length > 0) {
+      setShowSuggestions(true);
+    }
+  };
+
+  const handleInputBlur = () => {
+    // Delay hiding to allow click events on suggestions to fire
+    setTimeout(() => {
+      setShowSuggestions(false);
+    }, 200);
+  };
+
+  const handleSuggestionClick = (questionText: string) => {
+    // Add to used suggestions
+    setUsedSuggestions((prev) => [...prev, questionText]);
+    setShowSuggestions(false);
+    if (onSendMessage) {
+      onSendMessage(questionText);
+      setMessage('');
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim() && !isLoading && onSendMessage) {
       onSendMessage(message.trim());
       setMessage('');
+      setShowSuggestions(false);
       // Keep focus on input after sending message - use multiple methods for reliability
       inputRef.current?.focus();
       setTimeout(() => {
@@ -98,6 +138,29 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
       {/* AI Input Component */}
       <div className="input-area">
+        {/* Suggestions Popover */}
+        {showSuggestions && availableSuggestions.length > 0 && (
+          <div className="suggestions-popover">
+            <div className="suggestions-header">
+              <span className="material-icons-round header-icon">auto_awesome</span>
+              <span className="suggestions-title">Cleo Assistant</span>
+            </div>
+            <div className="suggestions-list">
+              {availableSuggestions.map((question, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  className="suggestion-item"
+                  onClick={() => handleSuggestionClick(question.text)}
+                >
+                  <span className="material-icons-round suggestion-icon">{question.icon}</span>
+                  <span className="suggestion-text">{question.text}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="ai-input-card">
           <div className="ai-input-content">
             <div className="input-row">
@@ -107,6 +170,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
                 placeholder="Type your message here..."
                 className="ai-input-field"
                 disabled={isLoading}

@@ -10,6 +10,13 @@
   border-bottom: 1px solid #EAECF0;
 }
 
+.app-header.chat-variant {
+  width: 100%;
+  left: 0;
+  border-bottom: 1px solid #DCDFEA;
+  z-index: 1001;
+}
+
 .header-content {
   padding: 16px 24px;
   display: flex;
@@ -18,12 +25,16 @@
   gap: 12px;
 }
 
+.chat-variant .header-content {
+  padding: 20px 40px 20px 36px;
+}
+
 .header-title {
   flex: 1;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
 
 .title-text {
@@ -54,8 +65,22 @@
   transition: background-color 0.2s ease;
 }
 
+.chat-variant .action-button {
+  width: 32px;
+  height: 32px;
+  padding: 6px 8px;
+}
+
 .action-button:hover {
   background: rgba(70, 83, 102, 0.1);
+}
+
+.chat-variant .action-button:hover {
+  background: #F9FAFB;
+}
+
+.chat-variant .action-button:active {
+  background: #F2F4F7;
 }
 
 .help-button {
@@ -79,5 +104,15 @@
   .app-header {
     width: calc(100% - 66px);
     left: 66px;
+  }
+
+  .chat-variant .header-content {
+    padding: 16px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-variant .header-content {
+    padding: 12px 16px;
   }
 }
