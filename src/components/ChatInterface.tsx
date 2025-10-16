@@ -22,8 +22,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [message, setMessage] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [usedSuggestions, setUsedSuggestions] = useState<string[]>([]);
+  const [hasShownInitially, setHasShownInitially] = useState(false);
   const chatAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const isProgrammaticFocusRef = useRef(false);
 
   const allSuggestions = [
     { text: 'Please summarise the job for me', icon: 'description' },
@@ -49,16 +51,26 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   useEffect(() => {
     if (!isLoading) {
       setTimeout(() => {
+        isProgrammaticFocusRef.current = true;
         inputRef.current?.focus();
       }, 50);
     }
   }, [isLoading]);
 
   const handleInputFocus = () => {
-    // Show suggestions every time if there are available suggestions
+    // Only show suggestions if:
+    // 1. There are available suggestions AND
+    // 2. Either it's the first time OR it's a user-initiated focus (not programmatic)
     if (availableSuggestions.length > 0) {
-      setShowSuggestions(true);
+      if (!hasShownInitially) {
+        setShowSuggestions(true);
+        setHasShownInitially(true);
+      } else if (!isProgrammaticFocusRef.current) {
+        setShowSuggestions(true);
+      }
     }
+    // Reset the flag after handling
+    isProgrammaticFocusRef.current = false;
   };
 
   const handleInputBlur = () => {
