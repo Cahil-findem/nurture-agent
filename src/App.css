@@ -14,7 +14,7 @@
   margin-left: 66px; /* Width of sidebar */
   margin-top: 60px; /* Height of header */
   background: white;
-  overflow: visible;
+  overflow-y: auto;
   height: calc(100vh - 60px);
 }
 

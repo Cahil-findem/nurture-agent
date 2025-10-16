@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import './RecipeLoader.css';
 
 interface RecipeLoaderProps {
-  onNavigate?: (page: 'demo-setup' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'recipe2_2') => void;
+  onNavigate?: (page: 'demo-setup' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'outreach-contract') => void;
 }
 
 interface LoadingCard {
@@ -212,7 +212,7 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
   }, [emailDataFetched, showContinue, startTime, cards.length]);
 
   const handleContinue = () => {
-    onNavigate?.('recipe2_2');
+    onNavigate?.('outreach-contract');
   };
 
   const handleRestartDemo = () => {

@@ -11,7 +11,7 @@ interface DemoSetupData {
 }
 
 interface OnboardingProps {
-  onNavigate?: (page: 'demo-setup' | 'onboarding' | 'onboarding-step2' | 'goal-selection' | 'segments' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'recipe2_2', direction?: 'forward' | 'backward') => void;
+  onNavigate?: (page: 'demo-setup' | 'onboarding' | 'onboarding-step2' | 'goal-selection' | 'segments' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'outreach-contract', direction?: 'forward' | 'backward') => void;
   initialStep?: number;
   navigationDirection?: 'forward' | 'backward';
 }

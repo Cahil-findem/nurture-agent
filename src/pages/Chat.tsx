@@ -24,7 +24,7 @@ interface CandidateData {
 }
 
 interface ChatProps {
-  onNavigate?: (page: 'demo-setup' | 'onboarding' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'recipe2_2' | 'chat') => void;
+  onNavigate?: (page: 'demo-setup' | 'onboarding' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'outreach-contract' | 'chat') => void;
 }
 
 const Chat: React.FC<ChatProps> = ({ onNavigate }) => {
