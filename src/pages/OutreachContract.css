@@ -17,6 +17,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
+  overflow: visible;
 }
 
 /* Sticky Header Container */
@@ -130,6 +131,8 @@
   gap: 24px;
   width: 100%;
   padding-top: 32px;
+  align-items: flex-start;
+  overflow: visible;
 }
 
 .left-column {
@@ -476,6 +479,8 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow: visible;
+  max-height: none;
 }
 
 .contract-card {
