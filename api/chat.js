@@ -36,27 +36,83 @@ Current Candidate Profile:
 ${jobPosting ? `Available Job Posting:
 - Position: ${jobPosting.position}
 - Company: ${jobPosting.company}
-- Location: ${jobPosting.location?.city}, ${jobPosting.location?.country} (${jobPosting.location?.type})
-- Employment Type: ${jobPosting.employment?.type}
-- Department: ${jobPosting.employment?.department}
-- Salary Range: ${jobPosting.compensation?.range_formatted}
-- Currency: ${jobPosting.compensation?.currency}
-- Min Salary: ${jobPosting.compensation?.min}
-- Max Salary: ${jobPosting.compensation?.max}
+- Location: ${jobPosting.location_city}, ${jobPosting.location_country} (${jobPosting.location_type})
+- Employment Type: ${jobPosting.employment_type}
+- Department: ${jobPosting.department}
+- Salary Range: ${jobPosting.compensation_currency}$${(jobPosting.compensation_min / 1000).toFixed(1)}K – ${jobPosting.compensation_currency}$${(jobPosting.compensation_max / 1000).toFixed(1)}K
+- Min Salary: ${jobPosting.compensation_min}
+- Max Salary: ${jobPosting.compensation_max}
+- Currency: ${jobPosting.compensation_currency}
 - About Role: ${jobPosting.about_role}
-- Key Requirements: ${jobPosting.requirements?.must_have?.slice(0, 3)?.join('; ')}
-- Company Mission: ${jobPosting.about_company?.mission}` : 'No specific job posting available'}
+- Application Link: ${jobPosting.application_link}
+- Job ID: ${jobPosting.job_id}
+- Status: ${jobPosting.status}
+
+Job Requirements (parsed from JSON):
+${jobPosting.requirements ? (() => {
+  try {
+    const reqs = typeof jobPosting.requirements === 'string' ? JSON.parse(jobPosting.requirements) : jobPosting.requirements;
+    return `Must Have: ${reqs.must_have?.join('; ') || 'Not specified'}
+Nice to Have: ${reqs.nice_to_have?.join('; ') || 'Not specified'}`;
+  } catch (e) {
+    return `Requirements: ${jobPosting.requirements}`;
+  }
+})() : 'No requirements specified'}
+
+Responsibilities (parsed from JSON):
+${jobPosting.responsibilities ? (() => {
+  try {
+    const resps = typeof jobPosting.responsibilities === 'string' ? JSON.parse(jobPosting.responsibilities) : jobPosting.responsibilities;
+    return Array.isArray(resps) ? resps.join('\n- ') : resps;
+  } catch (e) {
+    return jobPosting.responsibilities;
+  }
+})() : 'No responsibilities specified'}
+
+Additional Company Info (from raw_job_data):
+${jobPosting.raw_job_data ? (() => {
+  try {
+    const rawData = typeof jobPosting.raw_job_data === 'string' ? JSON.parse(jobPosting.raw_job_data) : jobPosting.raw_job_data;
+    return `- Company Mission: ${rawData.about_company?.mission || 'Not specified'}
+- Company Description: ${rawData.about_company?.description || 'Not specified'}
+- Website: ${rawData.about_company?.website || 'Not specified'}
+- Benefits Notes: ${rawData.compensation?.notes?.join('; ') || 'Not specified'}`;
+  } catch (e) {
+    return 'Raw job data available but could not parse';
+  }
+})() : 'No additional company info available'}` : 'No specific job posting available'}
 
 ${candidateProfile ? `Detailed Candidate Profile:
-- Full Name: ${candidateProfile.personal_info?.full_name}
-- Current Title: ${candidateProfile.personal_info?.title}
-- Location: ${candidateProfile.personal_info?.location?.city}, ${candidateProfile.personal_info?.location?.state}, ${candidateProfile.personal_info?.location?.country}
-- Experience: ${candidateProfile.professional_experience?.[0]?.company} (${candidateProfile.professional_experience?.[0]?.title})
-- Education: ${candidateProfile.education?.[0]?.degree} in ${candidateProfile.education?.[0]?.major} from ${candidateProfile.education?.[0]?.school}
-- Technical Skills: ${candidateProfile.technical_skills?.programming_languages?.slice(0, 5)?.join(', ')}
-- Career Highlights: ${candidateProfile.career_highlights?.slice(0, 2)?.join('; ')}
-- Professional Interests: ${candidateProfile.professional_interests?.slice(0, 4)?.join(', ')}
-- Job Preferences: ${candidateProfile.job_preferences?.titles?.join(', ')} in ${candidateProfile.job_preferences?.locations?.join(', ')}` : 'No detailed candidate profile available'}
+- Full Name: ${candidateProfile.candidate?.full_name || 'Not specified'}
+- Current Title: ${candidateProfile.candidate?.title || 'Not specified'}
+- Location: ${candidateProfile.candidate?.location?.city || 'Not specified'}, ${candidateProfile.candidate?.location?.state || 'Not specified'}, ${candidateProfile.candidate?.location?.country || 'Not specified'}
+- LinkedIn: ${candidateProfile.candidate?.linkedin || 'Not provided'}
+
+About Me:
+${candidateProfile.candidate?.about_me || 'No description available'}
+
+Technical Skills:
+${candidateProfile.skills?.slice(0, 10)?.join(', ') || 'No skills specified'}
+
+Work Experience:
+${candidateProfile.workexp?.map((exp, index) => {
+  const company = exp.company?.name || 'Unknown Company';
+  const role = exp.projects?.[0]?.role_and_group?.title || 'Unknown Role';
+  const description = exp.projects?.[0]?.description || 'No description';
+  const startDate = exp.duration?.start_date ? new Date(exp.duration.start_date).getFullYear() : 'Unknown';
+  const endDate = exp.duration?.to_present ? 'Present' : (exp.duration?.end_date ? new Date(exp.duration.end_date).getFullYear() : 'Unknown');
+  return `${index + 1}. ${role} at ${company} (${startDate} - ${endDate}): ${description.replace(/\n/g, ' ').trim()}`;
+}).slice(0, 3).join('\n') || 'No work experience available'}
+
+Education:
+${candidateProfile.education?.map((edu, index) => {
+  const school = edu.school_info?.name || 'Unknown School';
+  const degree = edu.education_details?.degree?.[0] || 'Unknown Degree';
+  const major = edu.education_details?.major?.[0] || 'Unknown Major';
+  const startYear = edu.duration?.start_date ? new Date(edu.duration.start_date).getFullYear() : 'Unknown';
+  const endYear = edu.duration?.end_date ? new Date(edu.duration.end_date).getFullYear() : 'Unknown';
+  return `${index + 1}. ${degree} in${major} from ${school} (${startYear} - ${endYear})`;
+}).join('\n') || 'No education information available'}` : 'No detailed candidate profile available'}
 ` : 'No candidate data available yet.';
 
       return `You are Cleo, a personal talent advocate and insider at ${candidateData?.jobPreferences?.company || 'Kong'}. You help candidates 
@@ -76,19 +132,56 @@ When a candidate asks any of these specific questions, prioritize providing dire
 
 1. **"Summarize the job for me please"** - Provide a concise overview of the role, responsibilities, team, and key requirements from the job posting.
 
-2. **"Tell me why I'm a good fit"** - Compare their background from the candidate profile with job requirements, highlighting specific matching skills, experience, and qualifications.
+2. **"Tell me why I'm a good fit"** - Compare their background from the candidate profile with job requirements, highlighting specific matching skills, experience, and qualifications. ${candidateProfile ? `Use specific details from their profile: ${candidateProfile.candidate?.about_me ? candidateProfile.candidate.about_me.split('\n').slice(0, 3).join('; ') : 'their experience'}, their skills (${candidateProfile.skills?.slice(0, 5)?.join(', ') || 'various technical skills'}), and their work at ${candidateProfile.workexp?.[0]?.company?.name || 'their current company'}.` : 'Use general background information from context.'}
 
 3. **"Tell me why I'm not a good fit"** - Honestly assess potential gaps or areas where they might not align with the role requirements, while being constructive.
 
 4. **"Evaluate me for this role? Do you think I'm a good fit"** - Provide a balanced assessment weighing their strengths against the role requirements with specific examples.
 
-5. **"What does this job pay?"** or **"What's the salary?"** - Share the exact salary information from the job posting. ${jobPosting ? `For this ${jobPosting.position} role, the salary range is ${jobPosting.compensation?.range_formatted} (${jobPosting.compensation?.currency} ${jobPosting.compensation?.min} - ${jobPosting.compensation?.max}).` : 'Refer to the job posting compensation details in the context.'}
+5. **"What does this job pay?"** or **"What's the salary?"** - Share the exact salary information from the job posting. ${jobPosting ? `For this ${jobPosting.position} role, the salary range is ${jobPosting.compensation_currency}$${(jobPosting.compensation_min / 1000).toFixed(1)}K – ${jobPosting.compensation_currency}$${(jobPosting.compensation_max / 1000).toFixed(1)}K (${jobPosting.compensation_currency} ${jobPosting.compensation_min} - ${jobPosting.compensation_max}).` : 'Refer to the job posting compensation details in the context.'}
 
-6. **"Do you have any information on benefits?"** - Share benefits information from the job posting. If limited info is available, provide common benefits for similar roles at tech companies.
+6. **"Do you have any information on benefits?"** - Share benefits information from the job posting. ${jobPosting && jobPosting.raw_job_data ? `Based on the job posting, here are the benefits details: ${(() => {
+  try {
+    const rawData = typeof jobPosting.raw_job_data === 'string' ? JSON.parse(jobPosting.raw_job_data) : jobPosting.raw_job_data;
+    return rawData.compensation?.notes?.join(', ') || 'Standard tech company benefits package';
+  } catch (e) {
+    return 'Standard tech company benefits package';
+  }
+})()}` : 'If limited info is available, provide common benefits for similar roles at tech companies.'}
 
 7. **"What is the interview process like?"** - If no specific process is provided in context, share a typical interview process for Senior Software Engineer roles (e.g., initial screening, technical interview, system design, behavioral, final interview).
 
 8. **"Can you help me practice interviewing?"** - Follow the interview practice protocol detailed below.
+
+9. **"What are the job responsibilities?"** or **"What would I be doing?"** - Provide detailed responsibilities from the job posting. ${jobPosting && jobPosting.responsibilities ? `The key responsibilities include: ${(() => {
+  try {
+    const resps = typeof jobPosting.responsibilities === 'string' ? JSON.parse(jobPosting.responsibilities) : jobPosting.responsibilities;
+    return Array.isArray(resps) ? resps.join(', ') : resps;
+  } catch (e) {
+    return jobPosting.responsibilities;
+  }
+})()}` : 'Refer to the job responsibilities in the context.'}
+
+10. **"How can I apply?"** or **"What's the application process?"** - ${jobPosting ? `You can apply directly through this link: ${jobPosting.application_link}. The job ID is ${jobPosting.job_id}.` : 'Refer to the application information in the context.'}
+
+11. **"Tell me about the company"** or **"What does Kong do?"** - ${jobPosting && jobPosting.raw_job_data ? `${(() => {
+  try {
+    const rawData = typeof jobPosting.raw_job_data === 'string' ? JSON.parse(jobPosting.raw_job_data) : jobPosting.raw_job_data;
+    return `Kong is ${rawData.about_company?.description || 'a technology company'}. Their mission is to ${rawData.about_company?.mission || 'help organizations succeed'}. You can learn more at ${rawData.about_company?.website || 'www.konghq.com'}.`;
+  } catch (e) {
+    return 'Kong is a leading developer of cloud API technologies focused on helping organizations become API-first.';
+  }
+})()}` : 'Provide general information about Kong from your knowledge.'}
+
+12. **"What's the work location?"** or **"Is this remote?"** - ${jobPosting ? `This position is based in ${jobPosting.location_city}, ${jobPosting.location_country} and is ${jobPosting.location_type}.` : 'Refer to the location information in the context.'}
+
+13. **"How does my experience compare?"** or **"Do I have the right background?"** - ${candidateProfile ? `Analyze their specific background: they have ${candidateProfile.workexp?.length || 0} work experience entries, with most recent being ${candidateProfile.workexp?.[0]?.projects?.[0]?.role_and_group?.title || 'their current role'} at ${candidateProfile.workexp?.[0]?.company?.name || 'their company'}. Their technical skills include ${candidateProfile.skills?.slice(0, 8)?.join(', ') || 'various technologies'}.` : 'Compare their general background against the role requirements.'}
+
+14. **"What should I highlight in my application?"** or **"How should I position myself?"** - ${candidateProfile ? `Based on their profile, emphasize: ${candidateProfile.candidate?.about_me ? candidateProfile.candidate.about_me.split('\\n').filter(line => line.trim().startsWith('-')).slice(0, 3).join(' ') : 'their key strengths'}, their education from ${candidateProfile.education?.[0]?.school_info?.name || 'their university'}, and their ${candidateProfile.workexp?.[0]?.duration?.to_present ? 'current' : 'recent'} experience.` : 'Provide general advice on positioning for the role.'}
+
+15. **"What questions should I ask in the interview?"** - Provide thoughtful questions they should ask based on the job posting and their background, demonstrating their interest and understanding of the role.
+
+16. **"How can I prepare for this interview?"** - ${candidateProfile ? `Given their background in ${candidateProfile.candidate?.about_me?.split('\\n')?.[1]?.replace('- ', '') || 'their field'} and experience with ${candidateProfile.skills?.slice(0, 3)?.join(', ') || 'their skills'}, suggest specific preparation areas.` : 'Provide general interview preparation advice for the role.'}
 
 ## Interview Practice Protocol
 When a candidate asks for interview practice, follow this 5-step process:
@@ -133,10 +226,10 @@ For questions you cannot answer from the provided context, provide common exampl
   - Answer any questions they have about the specific job posting and the company
   - Compare the candidate's detailed profile with the job requirements to assess fit
   - Highlight strengths that align with the role and suggest areas for development
-  - Provide specific advice based on their background (e.g., their experience at Google, technical skills, education)
+  - Provide specific advice based on their comprehensive background data: ${candidateProfile ? `detailed work experience at ${candidateProfile.workexp?.map(exp => exp.company?.name).filter(Boolean).join(', ') || 'various companies'}, education from ${candidateProfile.education?.[0]?.school_info?.name || 'their university'}, technical skills in ${candidateProfile.skills?.slice(0, 5)?.join(', ') || 'various technologies'}, and their self-description: "${candidateProfile.candidate?.about_me?.split('\\n')?.[0] || 'their professional summary'}"` : 'their general background and preferences'}
   - Answer questions about the interview process and company culture
-  - Help candidates prepare for interviews and provide feedback on how their experience relates to this specific role
-  - Use their actual career history and achievements to tailor advice
+  - Help candidates prepare for interviews using their actual career history and achievements
+  - Provide personalized positioning advice based on their unique background and experience
 - Progress through conversation stages until the candidate is satisfied with the help you have provided. 
 
 ## Tone & Personality
@@ -262,7 +355,16 @@ You have a specific job posting for "${jobPosting.position}" at ${jobPosting.com
 - Provide job-specific interview preparation and advice
 - Reference the compensation, requirements, and role details from the job posting` : 'No specific job posting is available - focus on understanding their general preferences.'}
 
-${candidateProfile ? `You have access to their detailed professional background, so reference specific experiences, skills, and achievements when providing guidance.` : ''}`;
+${candidateProfile ? `🎯 **RICH CANDIDATE PROFILE AVAILABLE** 🎯
+You have comprehensive access to their professional background including:
+- Current role: ${candidateProfile.candidate?.title || 'Not specified'}
+- Location: ${candidateProfile.candidate?.location?.city || 'Not specified'}, ${candidateProfile.candidate?.location?.country || 'Not specified'}
+- Technical expertise: ${candidateProfile.skills?.slice(0, 8)?.join(', ') || 'Various skills'}
+- Work history: ${candidateProfile.workexp?.length || 0} detailed work experiences
+- Education: ${candidateProfile.education?.[0] ? `${candidateProfile.education[0].education_details?.degree?.[0] || 'Degree'} from ${candidateProfile.education[0].school_info?.name || 'University'}` : 'Not specified'}
+- Professional summary: "${candidateProfile.candidate?.about_me?.split('\\n')?.[0] || 'Available in profile'}"
+
+ALWAYS reference specific experiences, skills, achievements, and background details when providing guidance. Use their actual career history to make your advice highly personalized and relevant.` : ''}`;
     };
 
     const systemPrompt = createSystemPrompt(candidateData, jobPosting, candidateProfile, conversationStage || 'job_verification');
@@ -270,16 +372,33 @@ ${candidateProfile ? `You have access to their detailed professional background,
     console.log('=== CHAT API DEBUG ===');
     console.log('Conversation Stage:', conversationStage);
     console.log('Job Posting Available:', !!jobPosting);
-    console.log('Job Posting Compensation:', jobPosting?.compensation);
+    console.log('Job Posting Compensation Min:', jobPosting?.compensation_min);
+    console.log('Job Posting Compensation Max:', jobPosting?.compensation_max);
+    console.log('Job Posting Currency:', jobPosting?.compensation_currency);
     console.log('Candidate Profile Available:', !!candidateProfile);
+    if (candidateProfile) {
+      console.log('Candidate Profile Keys:', Object.keys(candidateProfile));
+      console.log('Candidate Profile Skills:', candidateProfile.skills || 'no skills');
+      console.log('Candidate Full Name:', candidateProfile.candidate?.full_name || 'no name');
+    }
     console.log('System Prompt Length:', systemPrompt.length);
     
+    // Debug: Check if candidate profile section is in system prompt
+    const candidateProfileInPrompt = systemPrompt.includes('Detailed Candidate Profile:');
+    console.log('System Prompt Contains Candidate Profile Section:', candidateProfileInPrompt);
+    if (candidateProfile && candidateProfileInPrompt) {
+      const profileStart = systemPrompt.indexOf('Detailed Candidate Profile:');
+      const profileSection = systemPrompt.substring(profileStart, profileStart + 500);
+      console.log('Profile section preview:', profileSection);
+    }
+    
     // Check if system prompt contains salary info
-    const hasSalaryInfo = systemPrompt.includes('CA$144.8K');
+    const hasSalaryInfo = systemPrompt.includes('144800') || systemPrompt.includes('144.8K');
     console.log('System Prompt Contains Salary Info:', hasSalaryInfo);
     
-    if (jobPosting && jobPosting.compensation) {
-      console.log('Salary should be:', jobPosting.compensation.range_formatted);
+    if (jobPosting && jobPosting.compensation_min && jobPosting.compensation_max) {
+      const salaryRange = `${jobPosting.compensation_currency}$${(jobPosting.compensation_min / 1000).toFixed(1)}K – ${jobPosting.compensation_currency}$${(jobPosting.compensation_max / 1000).toFixed(1)}K`;
+      console.log('Salary should be:', salaryRange);
     }
 
     const completion = await openai.chat.completions.create({

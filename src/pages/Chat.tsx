@@ -35,32 +35,91 @@ const Chat: React.FC<ChatProps> = ({ onNavigate }) => {
   const [candidateProfile, setCandidateProfile] = useState<any>(null);
   const [conversationStage, setConversationStage] = useState<'initial' | 'job_questions' | 'job_services' | 'job_complete' | 'job_verification' | 'job_details' | 'professional_interests' | 'professional_verification' | 'awaiting_preference_choice' | 'awaiting_professional_choice' | 'complete'>('initial');
 
-  // Load candidate data, job posting, and candidate profile files
+  // Load candidate data, job posting, and candidate profile from API data
   useEffect(() => {
-    // Load job posting and candidate profile from example files
-    const loadExampleData = async () => {
+    const loadAPIData = async () => {
       try {
-        // Load job posting
-        const jobResponse = await fetch('/jobPosting.json');
-        if (jobResponse.ok) {
-          const jobData = await jobResponse.json();
-          setJobPosting(jobData);
-          console.log('Loaded job posting:', jobData);
+        let jobData = null;
+        let profileData = null;
+
+        // Get data from the preGenerated API data
+        const preGeneratedData = localStorage.getItem('preGeneratedEmailData');
+        if (preGeneratedData) {
+          const parsedData = JSON.parse(preGeneratedData);
+          console.log('Loading data from API preGeneratedEmailData:', parsedData);
+
+          // Determine current candidate role key from candidateData
+          const loadedCandidateData = localStorage.getItem('candidateData');
+          let currentCandidateRoleKey = 'jacobWang'; // default fallback
+          
+          if (loadedCandidateData) {
+            try {
+              const candidateInfo = JSON.parse(loadedCandidateData);
+              // Map candidate names to role keys
+              if (candidateInfo.name?.includes('Jacob Wang')) {
+                currentCandidateRoleKey = 'jacobWang';
+              } else if (candidateInfo.name?.includes('Kristina Wong')) {
+                currentCandidateRoleKey = 'kristinaWong';
+              }
+              console.log('Determined current candidate role key:', currentCandidateRoleKey, 'for candidate:', candidateInfo.name);
+            } catch (e) {
+              console.error('Error parsing candidateData:', e);
+            }
+          }
+
+          // Try to get job data from job_matches[0] for the current candidate ONLY
+          if (parsedData.roleEmails?.[currentCandidateRoleKey]?.job_matches?.[0]) {
+            jobData = parsedData.roleEmails[currentCandidateRoleKey].job_matches[0];
+            console.log(`Using job data from API job_matches[0] for ${currentCandidateRoleKey}:`, jobData);
+          } else {
+            console.log(`No job matches found for candidate ${currentCandidateRoleKey}`);
+            // Do NOT fallback to main emailData - each candidate should only get their own job matches
+          }
+
+          // Get candidate profile from API data - from candidate_profile field for the current candidate
+          if (parsedData.roleEmails?.[currentCandidateRoleKey]?.candidate_profile) {
+            try {
+              const candidateProfileStr = parsedData.roleEmails[currentCandidateRoleKey].candidate_profile;
+              profileData = typeof candidateProfileStr === 'string' ? JSON.parse(candidateProfileStr) : candidateProfileStr;
+              console.log(`Using candidate profile from API candidate_profile field for ${currentCandidateRoleKey}:`, profileData);
+            } catch (e) {
+              console.error('Error parsing candidate_profile JSON:', e);
+            }
+          } else if (parsedData.emailData?.candidate_profile) {
+            // Fallback to main emailData candidate_profile structure
+            try {
+              const candidateProfileStr = parsedData.emailData.candidate_profile;
+              profileData = typeof candidateProfileStr === 'string' ? JSON.parse(candidateProfileStr) : candidateProfileStr;
+              console.log('Using candidate profile from main emailData candidate_profile:', profileData);
+            } catch (e) {
+              console.error('Error parsing main candidate_profile JSON:', e);
+            }
+          } else if (parsedData.candidates?.[currentCandidateRoleKey]) {
+            // Legacy fallback for specific candidate
+            profileData = parsedData.candidates[currentCandidateRoleKey];
+            console.log(`Using legacy candidate profile from API for ${currentCandidateRoleKey}:`, profileData);
+          } else if (parsedData.candidate) {
+            // Legacy fallback to main candidate structure
+            profileData = parsedData.candidate;
+            console.log('Using legacy candidate profile from main structure:', profileData);
+          }
+        } else {
+          console.log('No preGeneratedEmailData found in localStorage');
         }
 
-        // Load candidate profile
-        const candidateResponse = await fetch('/candidateProfile.json');
-        if (candidateResponse.ok) {
-          const profileData = await candidateResponse.json();
+        // Set the data
+        if (jobData) {
+          setJobPosting(jobData);
+        }
+        if (profileData) {
           setCandidateProfile(profileData);
-          console.log('Loaded candidate profile:', profileData);
         }
       } catch (error) {
-        console.error('Error loading example data files:', error);
+        console.error('Error loading API data:', error);
       }
     };
 
-    loadExampleData();
+    loadAPIData();
     
     const loadedCandidateData = localStorage.getItem('candidateData');
     if (loadedCandidateData) {
@@ -73,9 +132,9 @@ const Chat: React.FC<ChatProps> = ({ onNavigate }) => {
     }
   }, []);
 
-  // Create initial messages after both candidate data and job posting are loaded
+  // Create initial messages after candidate data is loaded and API data is processed
   useEffect(() => {
-    if (candidateData && (jobPosting !== null || candidateProfile !== null)) {
+    if (candidateData && (jobPosting || candidateProfile)) {
       // Create initial messages from Cleo
       const initialMessages: Message[] = [
         {
@@ -94,8 +153,8 @@ const Chat: React.FC<ChatProps> = ({ onNavigate }) => {
       
       setMessages(initialMessages);
       setConversationStage(jobPosting ? 'job_questions' : 'job_verification');
-    } else if (candidateData && jobPosting === null && candidateProfile === null) {
-      // Fallback if data fails to load but we have candidate data
+    } else if (candidateData) {
+      // If we have candidate data but no job/profile data from API, start with general flow
       setMessages([
         {
           id: '1',
