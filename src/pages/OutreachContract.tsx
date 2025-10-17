@@ -73,6 +73,18 @@ const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
               emailSubject: kristinaData.email.subject || ''
             });
           }
+
+          // Load Colin Farnan
+          if (parsedData.roleEmails.colinFarnan && parsedData.roleEmails.colinFarnan.email) {
+            const colinData = parsedData.roleEmails.colinFarnan;
+            loadedCandidates.push({
+              name: colinData.candidate?.name || "Colin Farnan",
+              role: colinData.candidate?.current_title || "Account Executive",
+              company: colinData.candidate?.company || "Datadog",
+              emailBody: colinData.email.body || '',
+              emailSubject: colinData.email.subject || ''
+            });
+          }
         }
 
         // If we successfully loaded candidates, use them
@@ -122,6 +134,18 @@ I was really impressed by your design systems work at Vanta and your extensive e
 Your expertise in Figma, accessibility, and creating design systems that drive consistency across products is exactly what we value. I noticed your focus on data-rich layouts and modern, clean interfaces - this aligns perfectly with some of the challenges we're tackling.
 
 I'd love to discuss some opportunities where your skills in visual design and design systems could make a real impact. Are you open to a conversation?`
+      },
+      {
+        name: "Colin Farnan",
+        role: "Account Executive",
+        company: "Datadog",
+        emailBody: `Hi Colin,
+
+I was impressed by your account executive experience at Datadog and your track record in managing major accounts. Your expertise in driving business growth and building strong client relationships really caught my attention.
+
+We're looking for talented sales professionals who understand the enterprise market and can help drive our business forward. Given your background in account management and your understanding of the tech industry, I thought you might be interested in exploring opportunities with us.
+
+I'd love to connect and discuss how your skills could contribute to our team's success. Would you be open to a conversation?`
       }
     ];
   };
@@ -158,7 +182,7 @@ I'd love to discuss some opportunities where your skills in visual design and de
     const firstName = fullName.split(' ')[0];
 
     // Get the current role key based on candidate index
-    const roleKeys = ['jacobWang', 'kristinaWong'];
+    const roleKeys = ['jacobWang', 'kristinaWong', 'colinFarnan'];
     const currentRoleKey = roleKeys[currentCandidateIndex];
 
     // Get interests and job preferences from the stored email data (from Kong API)
