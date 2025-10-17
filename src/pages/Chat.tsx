@@ -475,6 +475,7 @@ ${professionalBullets.map(bullet => `• ${bullet}`).join('\n')}`;
           messages={messages}
           onSendMessage={handleSendMessage}
           isLoading={isLoading}
+          hasJobPosting={!!jobPosting}
         />
       </div>
     </div>

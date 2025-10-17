@@ -12,12 +12,14 @@ interface ChatInterfaceProps {
   messages?: Message[];
   onSendMessage?: (message: string) => void;
   isLoading?: boolean;
+  hasJobPosting?: boolean;
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({
   messages = [],
   onSendMessage,
-  isLoading = false
+  isLoading = false,
+  hasJobPosting = false
 }) => {
   const [message, setMessage] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -28,13 +30,20 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const isProgrammaticFocusRef = useRef(false);
 
-  const allSuggestions = [
+  const jobSpecificSuggestions = [
     { text: 'Please summarise the job for me', icon: 'description' },
     { text: 'Tell me why I\'m a good fit', icon: 'thumb_up' },
     { text: 'Tell me why I\'m not a good fit', icon: 'thumb_down' },
-    { text: 'What does this job pay?', icon: 'attach_money' },
+    { text: 'What does this job pay?', icon: 'attach_money' }
+  ];
+
+  const generalSuggestions = [
     { text: 'Can you help me practice interviewing?', icon: 'psychology' }
   ];
+
+  const allSuggestions = hasJobPosting 
+    ? [...jobSpecificSuggestions, ...generalSuggestions]
+    : generalSuggestions;
 
   // Filter out used suggestions
   const availableSuggestions = allSuggestions.filter(
