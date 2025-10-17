@@ -30,11 +30,12 @@ interface ChatProps {
 
 const Chat: React.FC<ChatProps> = ({ onNavigate }) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [candidateData, setCandidateData] = useState<CandidateData | null>(null);
   const [jobPosting, setJobPosting] = useState<any>(null);
   const [candidateProfile, setCandidateProfile] = useState<any>(null);
   const [conversationStage, setConversationStage] = useState<'initial' | 'job_questions' | 'job_services' | 'job_complete' | 'job_verification' | 'job_details' | 'professional_interests' | 'professional_verification' | 'awaiting_preference_choice' | 'awaiting_professional_choice' | 'complete'>('initial');
+  const [hasShownInitialLoader, setHasShownInitialLoader] = useState(false);
 
   // Load candidate data, job posting, and candidate profile from API data
   useEffect(() => {
@@ -135,44 +136,53 @@ const Chat: React.FC<ChatProps> = ({ onNavigate }) => {
 
   // Create initial messages after candidate data is loaded and API data is processed
   useEffect(() => {
-    if (candidateData && (jobPosting || candidateProfile)) {
-      // Create initial messages from Cleo
-      const initialMessages: Message[] = [
-        {
-          id: '1',
-          type: 'ai',
-          content: `Hi ${candidateData.firstName}, my name is Cleo. You can think of me as your personal advocate on the inside here at ${candidateData.jobPreferences.company}. ${jobPosting ? `I see you were sent a note about the <strong>${jobPosting.position}</strong> role on our team.` : `My goal is to understand the types of opportunities you'd be interested in at ${candidateData.jobPreferences.company} as well as your professional interests.`}`,
-          timestamp: Date.now()
-        },
-        {
-          id: '2',
-          type: 'ai',
-          content: jobPosting ? `Do you have any questions about this job posting?` : createInitialSummary(candidateData),
-          timestamp: Date.now() + 1
-        }
-      ];
-      
-      setMessages(initialMessages);
-      setConversationStage(jobPosting ? 'job_questions' : 'job_verification');
-    } else if (candidateData) {
+    if (!hasShownInitialLoader && candidateData && (jobPosting || candidateProfile)) {
+      // Show thinking loader for 2 seconds before displaying initial messages
+      setTimeout(() => {
+        // Create initial messages from Cleo
+        const initialMessages: Message[] = [
+          {
+            id: '1',
+            type: 'ai',
+            content: `Hi ${candidateData.firstName}, my name is Cleo. You can think of me as your personal advocate on the inside here at ${candidateData.jobPreferences.company}. ${jobPosting ? `I see you were sent a note about the <strong>${jobPosting.position}</strong> role on our team.` : `My goal is to understand the types of opportunities you'd be interested in at ${candidateData.jobPreferences.company} as well as your professional interests.`}`,
+            timestamp: Date.now()
+          },
+          {
+            id: '2',
+            type: 'ai',
+            content: jobPosting ? `Do you have any questions about this job posting?` : createInitialSummary(candidateData),
+            timestamp: Date.now() + 1
+          }
+        ];
+
+        setMessages(initialMessages);
+        setConversationStage(jobPosting ? 'job_questions' : 'job_verification');
+        setIsLoading(false);
+        setHasShownInitialLoader(true);
+      }, 2000);
+    } else if (!hasShownInitialLoader && candidateData) {
       // If we have candidate data but no job/profile data from API, start with general flow
-      setMessages([
-        {
-          id: '1',
-          type: 'ai',
-          content: `Hi ${candidateData.firstName}, my name is Cleo. You can think of me as your personal advocate on the inside here at ${candidateData.jobPreferences.company}. My goal is to understand the types of opportunities you'd be interested in at ${candidateData.jobPreferences.company} as well as your professional interests.`,
-          timestamp: Date.now()
-        },
-        {
-          id: '2',
-          type: 'ai',
-          content: createInitialSummary(candidateData),
-          timestamp: Date.now() + 1
-        }
-      ]);
-      setConversationStage('job_verification');
+      setTimeout(() => {
+        setMessages([
+          {
+            id: '1',
+            type: 'ai',
+            content: `Hi ${candidateData.firstName}, my name is Cleo. You can think of me as your personal advocate on the inside here at ${candidateData.jobPreferences.company}. My goal is to understand the types of opportunities you'd be interested in at ${candidateData.jobPreferences.company} as well as your professional interests.`,
+            timestamp: Date.now()
+          },
+          {
+            id: '2',
+            type: 'ai',
+            content: createInitialSummary(candidateData),
+            timestamp: Date.now() + 1
+          }
+        ]);
+        setConversationStage('job_verification');
+        setIsLoading(false);
+        setHasShownInitialLoader(true);
+      }, 2000);
     }
-  }, [candidateData, jobPosting, candidateProfile]);
+  }, [candidateData, jobPosting, candidateProfile, hasShownInitialLoader]);
 
   // Helper function to create initial summary
   const createInitialSummary = (candidate: CandidateData): string => {
@@ -442,7 +452,7 @@ ${professionalBullets.map(bullet => `• ${bullet}`).join('\n')}`;
     onNavigate?.('demo-setup');
   };
 
-  const handleBackClick = () => {
+  const handleCloseClick = () => {
     onNavigate?.('outreach-contract');
   };
 
@@ -451,8 +461,8 @@ ${professionalBullets.map(bullet => `• ${bullet}`).join('\n')}`;
       {/* Header */}
       <Header
         title="Cleo Talent Agent"
-        showBackButton={true}
-        onBackClick={handleBackClick}
+        showCloseButton={true}
+        onCloseClick={handleCloseClick}
         onRestart={handleRestartDemo}
         variant="chat"
       />

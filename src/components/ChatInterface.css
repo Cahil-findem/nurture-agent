@@ -47,6 +47,13 @@
   max-width: 80%;
 }
 
+.ai-message .loading-gif {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
 .ai-message span:not(.wave-emoji) {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -117,9 +124,9 @@
 .suggestions-popover {
   position: absolute;
   bottom: 96%;
-  left: -70px;
+  left: 13px;
   right: 16px;
-  max-width: 680px;
+  max-width: 800px;
   margin: 0 auto 0 auto;
   background: white;
   border: 1px solid #E5E7EB;
@@ -208,7 +215,7 @@
 
 .ai-input-card {
   width: 100%;
-  max-width: 680px;
+  max-width: 800px;
   border-radius: 16px;
   border: 1px solid #dcdfea;
   background-color: var(--white);

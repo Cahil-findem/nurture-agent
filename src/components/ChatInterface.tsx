@@ -23,6 +23,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [usedSuggestions, setUsedSuggestions] = useState<string[]>([]);
   const [hasShownInitially, setHasShownInitially] = useState(false);
+  const [typingMessageId, setTypingMessageId] = useState<string | null>(null);
+  const [displayedText, setDisplayedText] = useState<{ [key: string]: string }>({});
   const chatAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const isProgrammaticFocusRef = useRef(false);
@@ -56,6 +58,64 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       }, 50);
     }
   }, [isLoading]);
+
+  // Typewriter effect for AI messages
+  useEffect(() => {
+    const aiMessages = messages.filter(msg => msg.type === 'ai');
+
+    // Find messages that haven't been typed yet
+    const untypedMessages = aiMessages.filter(msg => displayedText[msg.id] === undefined);
+
+    if (untypedMessages.length === 0) return;
+
+    // Type messages sequentially
+    let messageIndex = 0;
+    const typingSpeed = 10; // milliseconds per character
+    let isCancelled = false;
+    const timeouts: NodeJS.Timeout[] = [];
+
+    const typeMessage = (msg: Message) => {
+      if (isCancelled) return;
+
+      setTypingMessageId(msg.id);
+      let currentIndex = 0;
+      const fullText = msg.content;
+
+      const typeNextChar = () => {
+        if (isCancelled) return;
+
+        if (currentIndex <= fullText.length) {
+          setDisplayedText(prev => ({
+            ...prev,
+            [msg.id]: fullText.substring(0, currentIndex)
+          }));
+          currentIndex++;
+          const timeout = setTimeout(typeNextChar, typingSpeed);
+          timeouts.push(timeout);
+        } else {
+          // Finished typing this message
+          setTypingMessageId(null);
+          messageIndex++;
+          if (messageIndex < untypedMessages.length) {
+            // Small delay before starting next message
+            const timeout = setTimeout(() => typeMessage(untypedMessages[messageIndex]), 300);
+            timeouts.push(timeout);
+          }
+        }
+      };
+
+      typeNextChar();
+    };
+
+    // Start typing the first untyped message
+    typeMessage(untypedMessages[0]);
+
+    // Cleanup function
+    return () => {
+      isCancelled = true;
+      timeouts.forEach(timeout => clearTimeout(timeout));
+    };
+  }, [messages]);
 
   const handleInputFocus = () => {
     // Only show suggestions if:
@@ -122,27 +182,30 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     <div className="chat-section">
       {/* Chat Area */}
       <div className="chat-area" ref={chatAreaRef}>
-        {messages.length === 0 && (
-          <div style={{ 
-            textAlign: 'center', 
-            color: '#6b7280', 
-            padding: '40px 20px',
-            fontSize: '16px'
-          }}>
-            Start a conversation by typing a message below
-          </div>
-        )}
-        {messages.map((msg) => (
-          <div key={msg.id} className={msg.type === 'ai' ? 'ai-message' : 'user-message'}>
-            {msg.type === 'ai' ? (
-              <span dangerouslySetInnerHTML={{ __html: msg.content }}></span>
-            ) : (
-              <p>{msg.content}</p>
-            )}
-          </div>
-        ))}
+        {messages.map((msg) => {
+          // For AI messages, only show if they've started typing or if it's a user message
+          const shouldShow = msg.type === 'user' || displayedText[msg.id] !== undefined;
+          if (!shouldShow) return null;
+
+          return (
+            <div key={msg.id} className={msg.type === 'ai' ? 'ai-message' : 'user-message'}>
+              {msg.type === 'ai' ? (
+                <span dangerouslySetInnerHTML={{
+                  __html: displayedText[msg.id] || ''
+                }}></span>
+              ) : (
+                <p>{msg.content}</p>
+              )}
+            </div>
+          );
+        })}
         {isLoading && (
           <div className="ai-message loading">
+            <img
+              className="loading-gif"
+              src="/AI Loader.gif"
+              alt="Loading animation"
+            />
             <span>Thinking...</span>
           </div>
         )}

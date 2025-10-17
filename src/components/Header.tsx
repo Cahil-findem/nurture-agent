@@ -3,31 +3,22 @@ import './Header.css';
 interface HeaderProps {
   onRestart?: () => void;
   title?: string;
-  showBackButton?: boolean;
-  onBackClick?: () => void;
+  showCloseButton?: boolean;
+  onCloseClick?: () => void;
   variant?: 'default' | 'chat';
 }
 
 const Header: React.FC<HeaderProps> = ({
   onRestart,
   title = 'Nurture Agent',
-  showBackButton = false,
-  onBackClick,
+  showCloseButton = false,
+  onCloseClick,
   variant = 'default'
 }) => {
   return (
     <header className={`app-header ${variant === 'chat' ? 'chat-variant' : ''}`}>
       <div className="header-content">
         <div className="header-title">
-          {showBackButton && (
-            <button
-              className="action-button back-button"
-              onClick={onBackClick}
-              title="Back"
-            >
-              <span className="material-icons-round">west</span>
-            </button>
-          )}
           <div className="title-text">{title}</div>
         </div>
         <div className="header-actions">
@@ -38,6 +29,15 @@ const Header: React.FC<HeaderProps> = ({
           >
             <span className="material-icons-round">refresh</span>
           </button>
+          {showCloseButton && (
+            <button
+              className="action-button close-button"
+              onClick={onCloseClick}
+              title="Close"
+            >
+              <span className="material-icons-round">close</span>
+            </button>
+          )}
           {variant === 'default' && (
             <>
               <button className="action-button help-button">
