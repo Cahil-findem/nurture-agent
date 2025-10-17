@@ -62,6 +62,8 @@ const Chat: React.FC<ChatProps> = ({ onNavigate }) => {
                 currentCandidateRoleKey = 'jacobWang';
               } else if (candidateInfo.name?.includes('Kristina Wong')) {
                 currentCandidateRoleKey = 'kristinaWong';
+              } else if (candidateInfo.name?.includes('Colin Farnan')) {
+                currentCandidateRoleKey = 'colinFarnan';
               }
               console.log('Determined current candidate role key:', currentCandidateRoleKey, 'for candidate:', candidateInfo.name);
             } catch (e) {
