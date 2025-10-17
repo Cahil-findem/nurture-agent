@@ -23,7 +23,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [usedSuggestions, setUsedSuggestions] = useState<string[]>([]);
   const [hasShownInitially, setHasShownInitially] = useState(false);
-  const [typingMessageId, setTypingMessageId] = useState<string | null>(null);
   const [displayedText, setDisplayedText] = useState<{ [key: string]: string }>({});
   const chatAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -77,7 +76,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     const typeMessage = (msg: Message) => {
       if (isCancelled) return;
 
-      setTypingMessageId(msg.id);
       let currentIndex = 0;
       const fullText = msg.content;
 
@@ -94,7 +92,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           timeouts.push(timeout);
         } else {
           // Finished typing this message
-          setTypingMessageId(null);
           messageIndex++;
           if (messageIndex < untypedMessages.length) {
             // Small delay before starting next message
