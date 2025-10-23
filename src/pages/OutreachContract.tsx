@@ -86,15 +86,15 @@ const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
             });
           }
 
-          // Load Michael Pierce
-          if (parsedData.roleEmails.michaelPierce && parsedData.roleEmails.michaelPierce.email) {
-            const michaelData = parsedData.roleEmails.michaelPierce;
+          // Load Kevin Courtney
+          if (parsedData.roleEmails.kevinCourtney && parsedData.roleEmails.kevinCourtney.email) {
+            const kevinData = parsedData.roleEmails.kevinCourtney;
             loadedCandidates.push({
-              name: michaelData.candidate?.name || "Michael Pierce",
-              role: michaelData.candidate?.current_title || "Senior Associate, Corporate Sales Development",
-              company: michaelData.candidate?.company || "Workday",
-              emailBody: michaelData.email.body || '',
-              emailSubject: michaelData.email.subject || ''
+              name: kevinData.candidate?.name || "Kevin Courtney",
+              role: kevinData.candidate?.current_title || "Enterprise Account Executive",
+              company: kevinData.candidate?.company || "Ivo",
+              emailBody: kevinData.email.body || '',
+              emailSubject: kevinData.email.subject || ''
             });
           }
         }
@@ -160,16 +160,16 @@ We're looking for talented sales professionals who understand the enterprise mar
 I'd love to connect and discuss how your skills could contribute to our team's success. Would you be open to a conversation?`
       },
       {
-        name: "Michael Pierce",
-        role: "Senior Associate, Corporate Sales Development",
-        company: "Workday",
-        emailBody: `Hi Michael,
+        name: "Kevin Courtney",
+        role: "Enterprise Account Executive",
+        company: "Ivo",
+        emailBody: `Hi Kevin,
 
-I came across your profile and was impressed by your progression from Sales Development to Enterprise Account Strategist at Salesforce, and now your current role at Workday. Your experience working with UK Legal & Professional Services and High Growth segments demonstrates strong versatility.
+I came across your profile and was impressed by your extensive experience in enterprise SaaS sales, particularly your achievements at Lever where you made President's Club multiple years ('19, '21, '22) and your Top 10% performance at LinkedIn.
 
-Your multilingual capabilities (English, German, and Irish) combined with your international business education from University of Limerick and Technische Hochschule Ingolstadt give you a unique perspective in enterprise sales.
+Your track record of consistently exceeding quota (171% at LinkedIn, 160% at Insight Global) and your expertise in AI-powered contract solutions at Ivo demonstrates both strategic thinking and execution excellence. Your experience spanning Fortune 500 enterprises and global teams is particularly noteworthy.
 
-I'd love to discuss some opportunities where your expertise in corporate sales development and strategic account management could make a significant impact. Would you be open to a conversation?`
+I'd love to discuss some opportunities where your enterprise sales expertise and proven track record could make a significant impact. Would you be open to a conversation?`
       }
     ];
   };
@@ -206,7 +206,7 @@ I'd love to discuss some opportunities where your expertise in corporate sales d
     const firstName = fullName.split(' ')[0];
 
     // Get the current role key based on candidate index
-    const roleKeys = ['jacobWang', 'kristinaWong', 'colinFarnan', 'michaelPierce'];
+    const roleKeys = ['jacobWang', 'kristinaWong', 'colinFarnan', 'kevinCourtney'];
     const currentRoleKey = roleKeys[currentCandidateIndex];
 
     // Get interests and job preferences from the stored email data (from Kong API)
