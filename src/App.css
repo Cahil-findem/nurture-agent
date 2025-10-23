@@ -1,6 +1,6 @@
 .app {
   width: 100%;
-  height: calc(100vh - 60px);
+  height: 100vh;
   display: flex;
   align-items: center;
   background: white;
@@ -15,12 +15,17 @@
   margin-top: 60px; /* Height of header */
   background: white;
   overflow-y: auto;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 60px); /* Exact height to fit within viewport */
 }
 
-/* Custom scrollbar styling */
+/* Custom scrollbar styling - only shows when hovering over content */
 .main-content::-webkit-scrollbar {
-  width: 8px;
+  width: 0px; /* Hidden by default */
+  transition: width 0.3s ease;
+}
+
+.main-content:hover::-webkit-scrollbar {
+  width: 8px; /* Shows on hover */
 }
 
 .main-content::-webkit-scrollbar-track {
@@ -40,6 +45,11 @@
 
 /* Firefox scrollbar styling */
 .main-content {
+  scrollbar-width: none; /* Hidden by default */
+  scrollbar-color: transparent transparent;
+}
+
+.main-content:hover {
   scrollbar-width: thin;
   scrollbar-color: #e0e0e0 transparent;
 }
