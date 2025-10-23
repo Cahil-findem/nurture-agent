@@ -543,24 +543,28 @@
 }
 
 /* Job Role Card Spacing Adjustments */
-.email-body-text .job-card,
-.email-body-text div[style*="border"],
-.email-body-text div[style*="padding"] {
+.email-body-text div[style*="border"] {
   padding: 12px !important;
-  margin: 8px 0 !important;
-  gap: 8px !important;
+  margin: 12px 0 !important;
 }
 
-.email-body-text .job-card > *,
-.email-body-text div[style*="border"] > *,
-.email-body-text div[style*="padding"] > * {
-  margin: 4px 0 !important;
-  padding: 0 !important;
+.email-body-text div[style*="border"] h2 {
+  margin: 0 0 8px 0 !important;
 }
 
-.email-body-text .job-card p,
-.email-body-text div[style*="border"] p,
-.email-body-text div[style*="padding"] p {
-  margin: 4px 0 !important;
-  line-height: 1.4 !important;
+.email-body-text div[style*="border"] div {
+  margin-bottom: 6px !important;
+}
+
+.email-body-text div[style*="border"] p {
+  margin: 0 0 8px 0 !important;
+}
+
+/* Remove extra spacing from br tags in job cards */
+.email-body-text div[style*="border"] br {
+  display: none !important;
+}
+
+.email-body-text div[style*="border"] a[style*="display: inline-block"] {
+  margin-top: 8px !important;
 }
