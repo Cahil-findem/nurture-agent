@@ -22,21 +22,9 @@ I saw that you led the launch of Vanta's new design system last week — congrat
 
 I'd love to stay aligned on the types of opportunities that excite you. Are you looking to deepen your design systems work, or explore broader product design leadership?
 
-I thought these might resonate with you:
+<div style="margin: 0 0 12px 0;">I thought these might resonate with you:</div><div style="display: flex; gap: 12px; margin-bottom: 12px; align-items: center;"><img src="https://prd-mktg-konghq-com.imgix.net/images/2024/07/66856ea7-blog-bannerscover-design-system-at-kong.png?auto=format" alt="Lessons We Learned Implementing a Design System at Kong" style="width: 250px; height: 167px; object-fit: cover; border-radius: 12px; flex-shrink: 0;"><div style="flex: 1;"><a href="https://konghq.com/blog/engineering/lessons-learned-implementing-a-design-system" style="font-size: 14px; font-weight: 500; color: #101828; text-decoration: none; display: block; margin-bottom: 8px; line-height: 20px;">Lessons We Learned Implementing a Design System at Kong</a><p style="margin: 0; font-size: 14px; color: #6b7280; line-height: 20px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">A behind-the-scenes look at how Kong scaled a design system across multiple teams — something that mirrors your experience leading Vanta's launch.</p></div></div><div style="display: flex; gap: 12px; margin-bottom: 12px; align-items: center;"><img src="https://prd-mktg-konghq-com.imgix.net/images/2025/06/6862fcea-blog-headers-85.png?auto=format" alt="Kong's New Developer Portal: Modern UX Meets Developer Self-Service" style="width: 250px; height: 167px; object-fit: cover; border-radius: 12px; flex-shrink: 0;"><div style="flex: 1;"><a href="https://konghq.com/blog/product-releases/new-dev-portal-deep-dive" style="font-size: 14px; font-weight: 500; color: #101828; text-decoration: none; display: block; margin-bottom: 8px; line-height: 20px;">Kong's New Developer Portal: Modern UX Meets Developer Self-Service</a><p style="margin: 0; font-size: 14px; color: #6b7280; line-height: 20px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">An example of applying modern UX principles to developer tools — likely relevant to your interest in scalable, self-service design experiences.</p></div></div>
 
-<div style="margin-bottom: 24px;">
-  <img src="https://prd-mktg-konghq-com.imgix.net/images/2024/07/66856ea7-blog-bannerscover-design-system-at-kong.png?auto=format" alt="Lessons We Learned Implementing a Design System at Kong" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 12px;">
-  <a href="https://konghq.com/blog/engineering/lessons-learned-implementing-a-design-system" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none;">Lessons We Learned Implementing a Design System at Kong</a>
-  <p style="margin-top: 8px; font-size: 14px; color: #6b7280; line-height: 1.6;">A behind-the-scenes look at how Kong scaled a design system across multiple teams — something that mirrors your experience leading Vanta's launch.</p>
-</div>
-
-<div style="margin-bottom: 24px;">
-  <img src="https://prd-mktg-konghq-com.imgix.net/images/2025/06/6862fcea-blog-headers-85.png?auto=format" alt="Kong's New Developer Portal: Modern UX Meets Developer Self-Service" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 12px;">
-  <a href="https://konghq.com/blog/product-releases/new-dev-portal-deep-dive" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none;">Kong's New Developer Portal: Modern UX Meets Developer Self-Service</a>
-  <p style="margin-top: 8px; font-size: 14px; color: #6b7280; line-height: 1.6;">An example of applying modern UX principles to developer tools — likely relevant to your interest in scalable, self-service design experiences.</p>
-</div>
-
-Happy to chat if you're thinking about next steps, or just want to compare notes on how design systems are evolving across the industry.
+<div style="margin: 0;">Happy to chat if you're thinking about next steps, or just want to compare notes on how design systems are evolving across the industry.</div>
 
 Best,`
 };
