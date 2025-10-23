@@ -13,6 +13,34 @@ interface CandidateEmail {
   emailSubject?: string;
 }
 
+// Hardcoded email content for Kristina Wong
+const KRISTINA_HARDCODED_EMAIL = {
+  subject: "Checking in on your next move, Kristina",
+  body: `Hi Kristina,
+
+I saw that you led the launch of Vanta's new design system last week — congratulations on the release! The way you've scaled cohesive, intuitive patterns across teams really stood out.
+
+I'd love to stay aligned on the types of opportunities that excite you. Are you looking to deepen your design systems work, or explore broader product design leadership?
+
+I thought these might resonate with you:
+
+<div style="margin-bottom: 24px;">
+  <img src="https://konghq.com/assets/blog/design-system.jpg" alt="Lessons We Learned Implementing a Design System at Kong" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 12px;">
+  <a href="https://konghq.com/blog/design-system" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none;">Lessons We Learned Implementing a Design System at Kong</a>
+  <p style="margin-top: 8px; font-size: 14px; color: #6b7280; line-height: 1.6;">A behind-the-scenes look at how Kong scaled a design system across multiple teams — something that mirrors your experience leading Vanta's launch.</p>
+</div>
+
+<div style="margin-bottom: 24px;">
+  <img src="https://konghq.com/assets/blog/developer-portal.jpg" alt="Kong's New Developer Portal: Modern UX Meets Developer Self-Service" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 12px;">
+  <a href="https://konghq.com/blog/developer-portal" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none;">Kong's New Developer Portal: Modern UX Meets Developer Self-Service</a>
+  <p style="margin-top: 8px; font-size: 14px; color: #6b7280; line-height: 1.6;">An example of applying modern UX principles to developer tools — likely relevant to your interest in scalable, self-service design experiences.</p>
+</div>
+
+Happy to chat if you're thinking about next steps, or just want to compare notes on how design systems are evolving across the industry.
+
+Best,`
+};
+
 const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
   const [currentCandidateIndex, setCurrentCandidateIndex] = useState(0);
   const [candidates, setCandidates] = useState<CandidateEmail[]>([]);
@@ -62,17 +90,14 @@ const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
             });
           }
 
-          // Load Kristina Wong
-          if (parsedData.roleEmails.kristinaWong && parsedData.roleEmails.kristinaWong.email) {
-            const kristinaData = parsedData.roleEmails.kristinaWong;
-            loadedCandidates.push({
-              name: kristinaData.candidate?.name || "Kristina Wong",
-              role: kristinaData.candidate?.current_title || "Senior Product Designer",
-              company: kristinaData.candidate?.company || "Vanta",
-              emailBody: kristinaData.email.body || '',
-              emailSubject: kristinaData.email.subject || ''
-            });
-          }
+          // Load Kristina Wong - Always use hardcoded content for testing
+          loadedCandidates.push({
+            name: "Kristina Wong",
+            role: "Senior Product Designer",
+            company: "Vanta",
+            emailBody: KRISTINA_HARDCODED_EMAIL.body,
+            emailSubject: KRISTINA_HARDCODED_EMAIL.subject
+          });
 
           // Load Colin Farnan
           if (parsedData.roleEmails.colinFarnan && parsedData.roleEmails.colinFarnan.email) {
@@ -139,13 +164,8 @@ I'd love to connect and share more about what we're working on. Would you be ope
         name: "Kristina Wong",
         role: "Senior Product Designer",
         company: "Vanta",
-        emailBody: `Hi Kristina,
-
-I was really impressed by your design systems work at Vanta and your extensive experience leading UX design teams at companies like Medallia and Symantec.
-
-Your expertise in Figma, accessibility, and creating design systems that drive consistency across products is exactly what we value. I noticed your focus on data-rich layouts and modern, clean interfaces - this aligns perfectly with some of the challenges we're tackling.
-
-I'd love to discuss some opportunities where your skills in visual design and design systems could make a real impact. Are you open to a conversation?`
+        emailBody: KRISTINA_HARDCODED_EMAIL.body,
+        emailSubject: KRISTINA_HARDCODED_EMAIL.subject
       },
       {
         name: "Colin Farnan",
