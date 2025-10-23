@@ -86,15 +86,15 @@ const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
             });
           }
 
-          // Load Kevin Courtney
-          if (parsedData.roleEmails.kevinCourtney && parsedData.roleEmails.kevinCourtney.email) {
-            const kevinData = parsedData.roleEmails.kevinCourtney;
+          // Load Vijay Kethan
+          if (parsedData.roleEmails.vijayKethan && parsedData.roleEmails.vijayKethan.email) {
+            const vijayData = parsedData.roleEmails.vijayKethan;
             loadedCandidates.push({
-              name: kevinData.candidate?.name || "Kevin Courtney",
-              role: kevinData.candidate?.current_title || "Enterprise Account Executive",
-              company: kevinData.candidate?.company || "Ivo",
-              emailBody: kevinData.email.body || '',
-              emailSubject: kevinData.email.subject || ''
+              name: vijayData.candidate?.name || "Vijay Kethan",
+              role: vijayData.candidate?.current_title || "Senior Customer Success Manager",
+              company: vijayData.candidate?.company || "Epicor",
+              emailBody: vijayData.email.body || '',
+              emailSubject: vijayData.email.subject || ''
             });
           }
         }
@@ -160,16 +160,16 @@ We're looking for talented sales professionals who understand the enterprise mar
 I'd love to connect and discuss how your skills could contribute to our team's success. Would you be open to a conversation?`
       },
       {
-        name: "Kevin Courtney",
-        role: "Enterprise Account Executive",
-        company: "Ivo",
-        emailBody: `Hi Kevin,
+        name: "Vijay Kethan",
+        role: "Senior Customer Success Manager",
+        company: "Epicor",
+        emailBody: `Hi Vijay,
 
-I came across your profile and was impressed by your extensive experience in enterprise SaaS sales, particularly your achievements at Lever where you made President's Club multiple years ('19, '21, '22) and your Top 10% performance at LinkedIn.
+I came across your profile and was impressed by your extensive experience in Customer Success, particularly your achievements at hireEZ where you managed 70+ accounts and increased product adoption rates by 20% within the first 90 days.
 
-Your track record of consistently exceeding quota (171% at LinkedIn, 160% at Insight Global) and your expertise in AI-powered contract solutions at Ivo demonstrates both strategic thinking and execution excellence. Your experience spanning Fortune 500 enterprises and global teams is particularly noteworthy.
+Your track record of driving customer satisfaction and retention across multiple SaaS companies (Gem, hireEZ, Ooma) combined with your technical background (Master's in Computer Science) gives you a unique perspective in customer success. Your ability to collaborate cross-functionally and conduct impactful business reviews is particularly noteworthy.
 
-I'd love to discuss some opportunities where your enterprise sales expertise and proven track record could make a significant impact. Would you be open to a conversation?`
+I'd love to discuss some opportunities where your customer success expertise and proven track record could make a significant impact. Would you be open to a conversation?`
       }
     ];
   };
@@ -206,7 +206,7 @@ I'd love to discuss some opportunities where your enterprise sales expertise and
     const firstName = fullName.split(' ')[0];
 
     // Get the current role key based on candidate index
-    const roleKeys = ['jacobWang', 'kristinaWong', 'colinFarnan', 'kevinCourtney'];
+    const roleKeys = ['jacobWang', 'kristinaWong', 'colinFarnan', 'vijayKethan'];
     const currentRoleKey = roleKeys[currentCandidateIndex];
 
     // Get interests and job preferences from the stored email data (from Kong API)

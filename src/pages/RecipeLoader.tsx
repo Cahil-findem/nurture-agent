@@ -83,14 +83,14 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
         jacobWang: 'pub_hola_5c7d24bb19976ca87e8f8bbb',
         kristinaWong: 'pub_5d984bc378b4d04f623a7b2f',
         colinFarnan: 'pub_5c7baa020cadfda94cb36a7f',
-        kevinCourtney: 'pub_hola_5c7d34e419976ca87eafa376'
+        vijayKethan: 'pub_5c7bbb110cadfda94c27eb89'
       };
 
       const roles = [
         { key: 'jacobWang', name: 'Jacob Wang - Senior Software Engineer' },
         { key: 'kristinaWong', name: 'Kristina Wong - Senior Product Designer' },
         { key: 'colinFarnan', name: 'Colin Farnan - Account Executive' },
-        { key: 'kevinCourtney', name: 'Kevin Courtney - Enterprise Account Executive' }
+        { key: 'vijayKethan', name: 'Vijay Kethan - Senior Customer Success Manager' }
       ];
 
       // Fetch email data for all candidates in parallel
