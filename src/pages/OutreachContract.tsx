@@ -392,7 +392,9 @@ I'd love to discuss some opportunities where your customer success expertise and
 
                   {/* Email Text */}
                   <div className="email-text-section">
-                    <h2 className="email-heading">{currentCandidate.name.split(' ')[0]}, thought of you for this role</h2>
+                    <h2 className="email-heading">
+                      {currentCandidate.emailSubject || `${currentCandidate.name.split(' ')[0]}, thought of you for this role`}
+                    </h2>
                     <div
                       className="email-body-text"
                       dangerouslySetInnerHTML={{ __html: formattedEmailBody }}
