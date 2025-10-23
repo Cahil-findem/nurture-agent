@@ -471,7 +471,7 @@ I'd love to discuss some opportunities where your expertise in corporate sales d
               <div className="contract-content">
                 <p className="contract-title">Cadence</p>
                 <p className="contract-description">
-                  Reach out every <strong>2 weeks</strong> with content from your blog and new openings in your ATS.
+                  Reach out at least every <strong>3 months</strong> with content from your blog and new openings in your ATS.
                 </p>
               </div>
             </div>
