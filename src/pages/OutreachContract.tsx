@@ -25,14 +25,14 @@ I'd love to stay aligned on the types of opportunities that excite you. Are you 
 I thought these might resonate with you:
 
 <div style="margin-bottom: 24px;">
-  <img src="https://konghq.com/assets/blog/design-system.jpg" alt="Lessons We Learned Implementing a Design System at Kong" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 12px;">
-  <a href="https://konghq.com/blog/design-system" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none;">Lessons We Learned Implementing a Design System at Kong</a>
+  <img src="https://prd-mktg-konghq-com.imgix.net/images/2024/07/66856ea7-blog-bannerscover-design-system-at-kong.png?auto=format" alt="Lessons We Learned Implementing a Design System at Kong" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 12px;">
+  <a href="https://konghq.com/blog/engineering/lessons-learned-implementing-a-design-system" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none;">Lessons We Learned Implementing a Design System at Kong</a>
   <p style="margin-top: 8px; font-size: 14px; color: #6b7280; line-height: 1.6;">A behind-the-scenes look at how Kong scaled a design system across multiple teams — something that mirrors your experience leading Vanta's launch.</p>
 </div>
 
 <div style="margin-bottom: 24px;">
-  <img src="https://konghq.com/assets/blog/developer-portal.jpg" alt="Kong's New Developer Portal: Modern UX Meets Developer Self-Service" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 12px;">
-  <a href="https://konghq.com/blog/developer-portal" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none;">Kong's New Developer Portal: Modern UX Meets Developer Self-Service</a>
+  <img src="https://prd-mktg-konghq-com.imgix.net/images/2025/06/6862fcea-blog-headers-85.png?auto=format" alt="Kong's New Developer Portal: Modern UX Meets Developer Self-Service" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 12px;">
+  <a href="https://konghq.com/blog/product-releases/new-dev-portal-deep-dive" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none;">Kong's New Developer Portal: Modern UX Meets Developer Self-Service</a>
   <p style="margin-top: 8px; font-size: 14px; color: #6b7280; line-height: 1.6;">An example of applying modern UX principles to developer tools — likely relevant to your interest in scalable, self-service design experiences.</p>
 </div>
 
