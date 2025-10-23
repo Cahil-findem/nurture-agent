@@ -85,6 +85,18 @@ const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
               emailSubject: colinData.email.subject || ''
             });
           }
+
+          // Load Michael Pierce
+          if (parsedData.roleEmails.michaelPierce && parsedData.roleEmails.michaelPierce.email) {
+            const michaelData = parsedData.roleEmails.michaelPierce;
+            loadedCandidates.push({
+              name: michaelData.candidate?.name || "Michael Pierce",
+              role: michaelData.candidate?.current_title || "Senior Associate, Corporate Sales Development",
+              company: michaelData.candidate?.company || "Workday",
+              emailBody: michaelData.email.body || '',
+              emailSubject: michaelData.email.subject || ''
+            });
+          }
         }
 
         // If we successfully loaded candidates, use them
@@ -146,6 +158,18 @@ I was impressed by your account executive experience at Datadog and your track r
 We're looking for talented sales professionals who understand the enterprise market and can help drive our business forward. Given your background in account management and your understanding of the tech industry, I thought you might be interested in exploring opportunities with us.
 
 I'd love to connect and discuss how your skills could contribute to our team's success. Would you be open to a conversation?`
+      },
+      {
+        name: "Michael Pierce",
+        role: "Senior Associate, Corporate Sales Development",
+        company: "Workday",
+        emailBody: `Hi Michael,
+
+I came across your profile and was impressed by your progression from Sales Development to Enterprise Account Strategist at Salesforce, and now your current role at Workday. Your experience working with UK Legal & Professional Services and High Growth segments demonstrates strong versatility.
+
+Your multilingual capabilities (English, German, and Irish) combined with your international business education from University of Limerick and Technische Hochschule Ingolstadt give you a unique perspective in enterprise sales.
+
+I'd love to discuss some opportunities where your expertise in corporate sales development and strategic account management could make a significant impact. Would you be open to a conversation?`
       }
     ];
   };
@@ -182,7 +206,7 @@ I'd love to connect and discuss how your skills could contribute to our team's s
     const firstName = fullName.split(' ')[0];
 
     // Get the current role key based on candidate index
-    const roleKeys = ['jacobWang', 'kristinaWong', 'colinFarnan'];
+    const roleKeys = ['jacobWang', 'kristinaWong', 'colinFarnan', 'michaelPierce'];
     const currentRoleKey = roleKeys[currentCandidateIndex];
 
     // Get interests and job preferences from the stored email data (from Kong API)
