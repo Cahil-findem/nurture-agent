@@ -541,3 +541,26 @@
 .contract-description strong {
   font-weight: 700;
 }
+
+/* Job Role Card Spacing Adjustments */
+.email-body-text .job-card,
+.email-body-text div[style*="border"],
+.email-body-text div[style*="padding"] {
+  padding: 12px !important;
+  margin: 8px 0 !important;
+  gap: 8px !important;
+}
+
+.email-body-text .job-card > *,
+.email-body-text div[style*="border"] > *,
+.email-body-text div[style*="padding"] > * {
+  margin: 4px 0 !important;
+  padding: 0 !important;
+}
+
+.email-body-text .job-card p,
+.email-body-text div[style*="border"] p,
+.email-body-text div[style*="padding"] p {
+  margin: 4px 0 !important;
+  line-height: 1.4 !important;
+}
