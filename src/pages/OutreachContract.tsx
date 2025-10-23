@@ -412,13 +412,6 @@ I'd love to discuss some opportunities where your customer success expertise and
                   </div>
                 </div>
 
-                {/* Footer Dividers */}
-                <div className="footer-dividers">
-                  <div className="footer-divider"></div>
-                  <div className="footer-divider"></div>
-                  <div className="footer-divider"></div>
-                </div>
-
                 {/* Footer */}
                 <div className="email-footer">
                   <img src="/Kong_Footer_Logo.png" alt="Kong Logo" className="footer-logo" />
