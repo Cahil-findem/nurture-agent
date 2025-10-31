@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './OutreachContract.css';
+import { getCurrentBackend } from '../utils/backendConfig';
 
 interface OutreachContractProps {
   onNavigate?: (page: 'demo-setup' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'chat' | 'outreach-contract') => void;
@@ -30,10 +31,15 @@ Best,`
 };
 
 const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
+  const backend = getCurrentBackend();
   const [currentCandidateIndex, setCurrentCandidateIndex] = useState(0);
   const [candidates, setCandidates] = useState<CandidateEmail[]>([]);
   const [loading, setLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // Select hero image and footer logo based on backend
+  const heroImage = backend === 'natera' ? '/Natera%20Blog%20Hero.png' : '/Email%20image.png';
+  const footerLogo = backend === 'natera' ? '/natera-logo.svg' : '/Kong_Footer_Logo.png';
 
   useEffect(() => {
     loadEmailData();
@@ -359,7 +365,7 @@ I'd love to discuss some opportunities where your customer success expertise and
                   <div className="hero-container">
                     <div className="hero-image-wrapper">
                       <img
-                        src="/Email%20image.png"
+                        src={heroImage}
                         alt="Hero"
                         className="hero-image"
                       />
@@ -402,7 +408,7 @@ I'd love to discuss some opportunities where your customer success expertise and
 
                 {/* Footer */}
                 <div className="email-footer">
-                  <img src="/Kong_Footer_Logo.png" alt="Kong Logo" className="footer-logo" />
+                  <img src={footerLogo} alt={`${backend === 'natera' ? 'Natera' : 'Kong'} Logo`} className="footer-logo" />
                   <div className="footer-divider-line"></div>
                   <p className="footer-text">
                     This email was sent to you because you are subscribed to the career newsletter.
