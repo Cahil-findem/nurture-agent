@@ -1,11 +1,6 @@
 import { useState } from 'react';
 import './DemoSetup.css';
-
-interface DemoSetupData {
-  userName: string;
-  userEmail: string;
-  timestamp: number;
-}
+import { DemoSetupData } from '../types/demoData';
 
 interface DemoSetupProps {
   onNavigate?: (page: 'demo-setup' | 'onboarding' | 'recipe1' | 'recipe-loader' | 'recipe2') => void;
@@ -14,6 +9,7 @@ interface DemoSetupProps {
 const DemoSetup: React.FC<DemoSetupProps> = ({ onNavigate }) => {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [backend, setBackend] = useState<'kong' | 'natera'>('kong');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -41,6 +37,7 @@ const DemoSetup: React.FC<DemoSetupProps> = ({ onNavigate }) => {
     const demoData: DemoSetupData = {
       userName: userName.trim(),
       userEmail: userEmail.trim(),
+      backend: backend,
       timestamp: Date.now()
     };
 
@@ -106,6 +103,39 @@ const DemoSetup: React.FC<DemoSetupProps> = ({ onNavigate }) => {
                     onChange={(e) => setUserEmail(e.target.value)}
                     onKeyDown={handleKeyDown}
                   />
+                </div>
+              </div>
+            </div>
+
+            {/* Backend Selection */}
+            <div className="form-field">
+              <div className="field-label-container">
+                <label className="field-label">Backend</label>
+              </div>
+              <div className="field-input-container">
+                <div style={{ display: 'flex', gap: '20px', padding: '10px 0' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <input
+                      type="radio"
+                      name="backend"
+                      value="kong"
+                      checked={backend === 'kong'}
+                      onChange={(e) => setBackend(e.target.value as 'kong' | 'natera')}
+                      style={{ cursor: 'pointer' }}
+                    />
+                    <span style={{ color: '#E0E0E0', fontSize: '14px' }}>Kong</span>
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <input
+                      type="radio"
+                      name="backend"
+                      value="natera"
+                      checked={backend === 'natera'}
+                      onChange={(e) => setBackend(e.target.value as 'kong' | 'natera')}
+                      style={{ cursor: 'pointer' }}
+                    />
+                    <span style={{ color: '#E0E0E0', fontSize: '14px' }}>Natera</span>
+                  </label>
                 </div>
               </div>
             </div>

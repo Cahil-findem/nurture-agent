@@ -1,14 +1,6 @@
 import { useState, useEffect } from 'react';
 import './Onboarding.css';
-
-interface DemoSetupData {
-  userName: string;
-  userEmail: string;
-  companyName: string;
-  companyWebsite: string;
-  crawledData?: any;
-  timestamp: number;
-}
+import { DemoSetupData } from '../types/demoData';
 
 interface OnboardingProps {
   onNavigate?: (page: 'demo-setup' | 'onboarding' | 'onboarding-step2' | 'goal-selection' | 'segments' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'outreach-contract', direction?: 'forward' | 'backward') => void;

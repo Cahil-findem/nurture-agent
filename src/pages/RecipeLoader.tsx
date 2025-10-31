@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import './RecipeLoader.css';
+import { getCurrentBackend, getBackendConfig } from '../utils/backendConfig';
 
 interface RecipeLoaderProps {
   onNavigate?: (page: 'demo-setup' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'outreach-contract') => void;
@@ -23,12 +24,42 @@ interface ImageState {
 }
 
 const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
+  const backend = getCurrentBackend();
+  const config = getBackendConfig(backend);
+
+  // Clear any old email data when component mounts to force fresh fetch
+  useEffect(() => {
+    console.log('='.repeat(80));
+    console.log(`RecipeLoader - Initializing with backend: ${backend}`);
+    console.log(`RecipeLoader - API URL: ${config.apiUrl}`);
+    console.log(`RecipeLoader - Candidates:`, config.candidates);
+
+    // Debug: Check what's in localStorage
+    const storedData = localStorage.getItem('demoSetupData');
+    console.log('RecipeLoader - demoSetupData from localStorage:', storedData);
+
+    // Check if old email data exists
+    const oldEmailData = localStorage.getItem('preGeneratedEmailData');
+    if (oldEmailData) {
+      console.log('RecipeLoader - REMOVING old email data:', oldEmailData.substring(0, 200) + '...');
+    } else {
+      console.log('RecipeLoader - No old email data to remove');
+    }
+
+    if (backend === 'natera') {
+      alert(`✅ RecipeLoader loaded with NATERA backend!\n\nAPI: ${config.apiUrl}\nCandidate: ${config.candidates[0]?.name}\n\nWill fetch FRESH data...`);
+    }
+
+    localStorage.removeItem('preGeneratedEmailData');
+    console.log('='.repeat(80));
+  }, []);
+
   const [cards, setCards] = useState<LoadingCard[]>([
     {
       id: 1,
       icon: 'article',
-      title: 'Gathering recent blog posts',
-      text: 'www.kong.com/blog',
+      title: backend === 'kong' ? 'Gathering recent blog posts' : 'Gathering recent news articles',
+      text: config.branding.website,
       visible: false,
       isImageCard: true
     },
@@ -69,56 +100,49 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
     image5: false
   });
 
-  // Function to fetch email data from Kong API for all three candidates
+  // Function to fetch email data from backend API for all candidates
   const fetchEmailData = async () => {
     if (emailDataFetched || fetchInProgress || fetchInitiated.current) return; // Prevent duplicate calls
-    
+
     fetchInitiated.current = true;
     setFetchInProgress(true);
-    
-    try {
-      console.log('RecipeLoader - Fetching email data from Kong API for all candidates...');
-      
-      const candidateIds = {
-        jacobWang: 'pub_hola_5c7d24bb19976ca87e8f8bbb',
-        kristinaWong: 'pub_5d984bc378b4d04f623a7b2f',
-        colinFarnan: 'pub_5c7baa020cadfda94cb36a7f',
-        vijayKethan: 'pub_5c7bbb110cadfda94c27eb89'
-      };
 
-      const roles = [
-        { key: 'jacobWang', name: 'Jacob Wang - Senior Software Engineer' },
-        { key: 'kristinaWong', name: 'Kristina Wong - Senior Product Designer' },
-        { key: 'colinFarnan', name: 'Colin Farnan - Account Executive' },
-        { key: 'vijayKethan', name: 'Vijay Kethan - Senior Customer Success Manager' }
-      ];
+    try {
+      console.log(`RecipeLoader - Fetching email data from ${backend} API for all candidates...`);
+
+      // Use dynamic candidates from backend config
+      const candidates = config.candidates;
 
       // Fetch email data for all candidates in parallel
-      const emailPromises = roles.map(async (role) => {
-        const candidateId = candidateIds[role.key as keyof typeof candidateIds];
-        
-        console.log(`RecipeLoader - Making API call for ${role.name} with candidate_id: ${candidateId}`);
-        const response = await fetch('https://kong-email-creator.vercel.app/api/generate-email', {
+      const emailPromises = candidates.map(async (candidate, index) => {
+        console.log(`RecipeLoader - Making API call for ${candidate.name} with candidate_id: ${candidate.id}`);
+
+        // Different API formats for different backends
+        const requestBody = backend === 'natera'
+          ? { candidate: candidate.fullProfile?.candidate || {} } // Natera expects full candidate object
+          : { candidate_id: candidate.id }; // Kong expects just the ID
+
+        console.log(`RecipeLoader - Request body for ${backend}:`, requestBody);
+
+        const response = await fetch(config.apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            candidate_id: candidateId
-          })
+          body: JSON.stringify(requestBody)
         });
-        console.log(`RecipeLoader - API call completed for ${role.name}`);
+        console.log(`RecipeLoader - API call completed for ${candidate.name}`);
 
         if (response.ok) {
           const emailResponse = await response.json();
-          console.log(`RecipeLoader - Email data fetched for ${role.name}:`, emailResponse);
+          console.log(`RecipeLoader - Email data fetched for ${candidate.name}:`, emailResponse);
           return {
-            role: role.key,
-            candidateId: candidateId,
+            role: `candidate${index}`,
+            candidateId: candidate.id,
             emailResponse: emailResponse
           };
         } else {
-          console.error(`RecipeLoader - Failed to fetch email data for ${role.name} (${candidateId})`);
+          console.error(`RecipeLoader - Failed to fetch email data for ${candidate.name} (${candidate.id})`);
           return null;
         }
       });
@@ -138,8 +162,8 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
         }
       });
 
-      // Use the first candidate (jacobWang) as the primary candidate for backward compatibility
-      const primaryResult = results.find(r => r && r.role === 'jacobWang');
+      // Use the first candidate as the primary candidate for backward compatibility
+      const primaryResult = results.find(r => r && r.role === 'candidate0');
       if (primaryResult) {
         preGeneratedEmails.candidate = primaryResult.emailResponse.candidate;
         preGeneratedEmails.emailData = primaryResult.emailResponse; // Keep for backward compatibility
@@ -226,6 +250,11 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
 
   return (
     <div className="recipe-loader">
+      {/* Progress Bar */}
+      <div className="progress-bar">
+        <div className="progress-fill" style={{ width: '90%' }}></div>
+      </div>
+
       <div className="recipe-loader-container">
         {/* Header with Logo */}
         <div className="title-section">

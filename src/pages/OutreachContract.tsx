@@ -57,58 +57,33 @@ const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
   const loadEmailData = () => {
     try {
       const preGeneratedData = localStorage.getItem('preGeneratedEmailData');
+      console.log('OutreachContract - Raw preGeneratedEmailData:', preGeneratedData);
 
       if (preGeneratedData) {
         const parsedData = JSON.parse(preGeneratedData);
         console.log('OutreachContract - Loaded pre-generated data:', parsedData);
+        console.log('OutreachContract - roleEmails keys:', parsedData.roleEmails ? Object.keys(parsedData.roleEmails) : 'none');
 
         const loadedCandidates: CandidateEmail[] = [];
 
         // Check if we have role-specific email data
         if (parsedData.roleEmails) {
-          // Load Jacob Wang
-          if (parsedData.roleEmails.jacobWang && parsedData.roleEmails.jacobWang.email) {
-            const jacobData = parsedData.roleEmails.jacobWang;
-            loadedCandidates.push({
-              name: jacobData.candidate?.name || "Jacob Wang",
-              role: jacobData.candidate?.current_title || "Senior Software Engineer",
-              company: jacobData.candidate?.company || "Google",
-              emailBody: jacobData.email.body || '',
-              emailSubject: jacobData.email.subject || ''
-            });
-          }
+          // Load all candidates dynamically (candidate0, candidate1, candidate2, etc.)
+          let candidateIndex = 0;
+          while (parsedData.roleEmails[`candidate${candidateIndex}`]) {
+            const candidateData = parsedData.roleEmails[`candidate${candidateIndex}`];
 
-          // Load Kristina Wong - Always use hardcoded content for testing
-          loadedCandidates.push({
-            name: "Kristina Wong",
-            role: "Senior Product Designer",
-            company: "Vanta",
-            emailBody: KRISTINA_HARDCODED_EMAIL.body,
-            emailSubject: KRISTINA_HARDCODED_EMAIL.subject
-          });
+            if (candidateData && candidateData.email) {
+              loadedCandidates.push({
+                name: candidateData.candidate?.name || "Unknown",
+                role: candidateData.candidate?.current_title || "Unknown Role",
+                company: candidateData.candidate?.company || "",
+                emailBody: candidateData.email.body || '',
+                emailSubject: candidateData.email.subject || ''
+              });
+            }
 
-          // Load Colin Farnan
-          if (parsedData.roleEmails.colinFarnan && parsedData.roleEmails.colinFarnan.email) {
-            const colinData = parsedData.roleEmails.colinFarnan;
-            loadedCandidates.push({
-              name: colinData.candidate?.name || "Colin Farnan",
-              role: colinData.candidate?.current_title || "Account Executive",
-              company: colinData.candidate?.company || "Datadog",
-              emailBody: colinData.email.body || '',
-              emailSubject: colinData.email.subject || ''
-            });
-          }
-
-          // Load Vijay Kethan
-          if (parsedData.roleEmails.vijayKethan && parsedData.roleEmails.vijayKethan.email) {
-            const vijayData = parsedData.roleEmails.vijayKethan;
-            loadedCandidates.push({
-              name: vijayData.candidate?.name || "Vijay Kethan",
-              role: vijayData.candidate?.current_title || "Senior Customer Success Manager",
-              company: vijayData.candidate?.company || "Epicor",
-              emailBody: vijayData.email.body || '',
-              emailSubject: vijayData.email.subject || ''
-            });
+            candidateIndex++;
           }
         }
 
@@ -213,24 +188,22 @@ I'd love to discuss some opportunities where your customer success expertise and
     const fullName = currentCandidate?.name || 'Unknown';
     const firstName = fullName.split(' ')[0];
 
-    // Get the current role key based on candidate index
-    const roleKeys = ['jacobWang', 'kristinaWong', 'colinFarnan', 'vijayKethan'];
-    const currentRoleKey = roleKeys[currentCandidateIndex];
+    // Get the current role key dynamically (candidate0, candidate1, etc.)
+    const currentRoleKey = `candidate${currentCandidateIndex}`;
 
-    // Get interests and job preferences from the stored email data (from Kong API)
+    // Get interests and job preferences from the stored email data
     let professionalInterests = [
       'career development topics',
-      'back-end software engineering',
-      'cloud computing',
-      'new java releases'
+      'professional growth',
+      'industry trends'
     ]; // fallback
 
     let jobPreferences = {
-      titles: ['Software Engineer'],
-      locations: ['Austin, TX', 'Remote'],
+      titles: ['Open to new opportunities'],
+      locations: ['Remote', 'Flexible'],
       levelSeniority: 'Senior',
       jobSpecifics: [],
-      company: 'Kong'
+      company: ''
     }; // fallback
 
     try {
@@ -238,14 +211,14 @@ I'd love to discuss some opportunities where your customer success expertise and
       if (preGeneratedData) {
         const parsedData = JSON.parse(preGeneratedData);
 
-        // Try to get data from role-specific data for the current role
+        // Try to get data from role-specific data for the current candidate
         if (parsedData.roleEmails && currentRoleKey && parsedData.roleEmails[currentRoleKey]) {
           const roleData = parsedData.roleEmails[currentRoleKey];
 
           // Parse interests
           if (roleData.interests) {
             const interestsText = roleData.interests;
-            console.log(`Getting interests for role ${currentRoleKey}:`, interestsText);
+            console.log(`Getting interests for ${currentRoleKey}:`, interestsText);
 
             // Parse the interests text (format: "• Interest 1\n• Interest 2\n...")
             const interestLines = interestsText.split('\n')
@@ -262,7 +235,7 @@ I'd love to discuss some opportunities where your customer success expertise and
           // Parse job preferences
           if (roleData.job_preferences) {
             const jobPrefText = roleData.job_preferences;
-            console.log(`Getting job preferences for role ${currentRoleKey}:`, jobPrefText);
+            console.log(`Getting job preferences for ${currentRoleKey}:`, jobPrefText);
 
             const lines = jobPrefText.split('\n');
             const parsedJobPrefs = { ...jobPreferences };
@@ -297,7 +270,7 @@ I'd love to discuss some opportunities where your customer success expertise and
       console.error('Error parsing data from API:', error);
     }
 
-    // Store candidate information for the chat using data from Kong API
+    // Store candidate information for the chat
     const candidateData = {
       name: fullName,
       firstName: firstName,
@@ -340,6 +313,11 @@ I'd love to discuss some opportunities where your customer success expertise and
 
   return (
     <div className="outreach-contract">
+      {/* Progress Bar */}
+      <div className="progress-bar">
+        <div className="progress-fill" style={{ width: '95%' }}></div>
+      </div>
+
       <div className="content-wrapper">
         {/* Sticky Header Container */}
         <div className={`sticky-header ${isScrolled ? 'scrolled' : ''}`}>
