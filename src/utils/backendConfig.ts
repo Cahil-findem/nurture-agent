@@ -41,7 +41,7 @@ export const BACKENDS: Record<'kong' | 'natera', BackendConfig> = {
   },
   natera: {
     name: 'natera',
-    apiUrl: 'https://natera-blog-crawler.vercel.app/api/process-candidate',
+    apiUrl: 'https://natera-blog-crawler.vercel.app/api/generate-email',
     candidates: [
       {
         id: 'pub_5d984f6178b4d04f6244fa78',
