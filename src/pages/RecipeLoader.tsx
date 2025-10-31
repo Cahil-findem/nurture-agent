@@ -46,10 +46,6 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
       console.log('RecipeLoader - No old email data to remove');
     }
 
-    if (backend === 'natera') {
-      alert(`✅ RecipeLoader loaded with NATERA backend!\n\nAPI: ${config.apiUrl}\nCandidate: ${config.candidates[0]?.name}\n\nWill fetch FRESH data...`);
-    }
-
     localStorage.removeItem('preGeneratedEmailData');
     console.log('='.repeat(80));
   }, []);
