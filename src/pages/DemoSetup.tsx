@@ -7,8 +7,8 @@ interface DemoSetupProps {
 }
 
 const DemoSetup: React.FC<DemoSetupProps> = ({ onNavigate }) => {
-  const [userName, setUserName] = useState('');
-  const [userEmail, setUserEmail] = useState('');
+  const [userName, setUserName] = useState('Gemma');
+  const [userEmail, setUserEmail] = useState('gemma@gmail.com');
   const [backend, setBackend] = useState<'kong' | 'natera'>('kong');
   const [isLoading, setIsLoading] = useState(false);
 
