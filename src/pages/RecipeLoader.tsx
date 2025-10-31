@@ -119,7 +119,7 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
 
         // Different API formats for different backends
         const requestBody = backend === 'natera'
-          ? { candidate: candidate.fullProfile?.candidate || {} } // Natera expects full candidate object
+          ? candidate.fullProfile || {} // Natera expects full profile (includes ref and candidate)
           : { candidate_id: candidate.id }; // Kong expects just the ID
 
         console.log(`RecipeLoader - Request body for ${backend}:`, requestBody);
