@@ -41,7 +41,29 @@ Given your track record of impact at Amgen and your continued thought leadership
 
 I thought these might resonate with you:
 
-<div style="margin-bottom: 24px;"> <img src="https://via.placeholder.com/600x300/2563eb/ffffff?text=Blog+Post" alt="Natera to Report Third Quarter Results on November 6, 2025" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 12px;"> <a href="https://www.natera.com/investor-relations/" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none;">Natera to Report Third Quarter Results on November 6, 2025</a> <p style="margin-top: 8px; font-size: 14px; color: #6b7280; line-height: 1.6;">With your focus on strategic sales and evidence-driven healthcare, this update offers an interesting view into how Natera is framing growth in the precision medicine space.</p> </div> <div style="margin-bottom: 24px;"> <img src="https://via.placeholder.com/600x300/2563eb/ffffff?text=Blog+Post" alt="Natera Named to Fast Company's Next Big Things in Tech List" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 12px;"> <a href="https://www.fastcompany.com/next-big-things-in-tech" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none;">Natera Named to Fast Company's Next Big Things in Tech List</a> <p style="margin-top: 8px; font-size: 14px; color: #6b7280; line-height: 1.6;">A look at Natera's recognition for innovation — a natural complement to your own work advancing technology-enabled healthcare solutions.</p> </div>
+<div style="margin-bottom: 24px;">
+  <p style="margin: 0; padding: 0 0 12px 0; font-size: 16px; color: #1f2937; line-height: 1.6;">With your focus on strategic sales and evidence-driven healthcare, this update offers an interesting view into how Natera is framing growth in the precision medicine space.</p>
+  <div style="display: flex; gap: 16px; align-items: flex-start; margin: 0; padding: 0;">
+    <a href="https://www.natera.com/investor-relations/" style="flex-shrink: 0; display: block; line-height: 0;">
+      <img src="/Natera-social.webp" alt="Natera to Report Third Quarter Results on November 6, 2025" style="width: 200px; height: 120px; object-fit: cover; border-radius: 8px; display: block;">
+    </a>
+    <div style="flex: 1; min-width: 0;">
+      <a href="https://www.natera.com/investor-relations/" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none; display: block;">Natera to Report Third Quarter Results on November 6, 2025</a>
+    </div>
+  </div>
+</div>
+
+<div style="margin-bottom: 24px;">
+  <p style="margin: 0; padding: 0 0 12px 0; font-size: 16px; color: #1f2937; line-height: 1.6;">A look at Natera's recognition for innovation — a natural complement to your own work advancing technology-enabled healthcare solutions.</p>
+  <div style="display: flex; gap: 16px; align-items: flex-start; margin: 0; padding: 0;">
+    <a href="https://www.natera.com/company/news/natera-named-to-fast-companys-next-big-things-in-tech-list/" style="flex-shrink: 0; display: block; line-height: 0;">
+      <img src="/Natera-social.webp" alt="Natera Named to Fast Company's Next Big Things in Tech List" style="width: 200px; height: 120px; object-fit: cover; border-radius: 8px; display: block;">
+    </a>
+    <div style="flex: 1; min-width: 0;">
+      <a href="https://www.natera.com/company/news/natera-named-to-fast-companys-next-big-things-in-tech-list/" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none; display: block;">Natera Named to Fast Company's Next Big Things in Tech List</a>
+    </div>
+  </div>
+</div>
 
 Happy to chat if you're thinking about next steps or just want to swap perspectives on the evolving rare disease landscape.
 
@@ -278,7 +300,12 @@ I'd love to discuss some opportunities where your customer success expertise and
   };
 
   const formatEmailBody = (body: string): string => {
-    // Format email body similar to EmailPreview component
+    // If the email already contains HTML (like blog article cards), return as-is
+    if (body.includes('<div') || body.includes('<img')) {
+      return body;
+    }
+
+    // Otherwise, format plain text email body
     return body
       .replace(/\n\n/g, '</p><p>')  // Convert double newlines to paragraph breaks
       .replace(/\n/g, '<br>')        // Convert single newlines to line breaks
