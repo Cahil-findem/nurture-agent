@@ -140,6 +140,34 @@ const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
   };
 
   const getDefaultCandidates = (): CandidateEmail[] => {
+    // Return backend-specific default candidates
+    if (backend === 'natera') {
+      return [
+        {
+          name: "Ozgur Acar",
+          role: "Registered Nurse",
+          company: "Stanford Healthcare Hospital",
+          emailBody: `Hi Ozgur,
+
+Your journey from accounting to nursing, especially your expertise in cardiac and neurosurgery at Stanford Health Care, is truly inspiring.
+
+I came across some articles that might resonate with your work in healthcare innovation.
+
+Looking forward to connecting!
+
+Best,`
+        },
+        {
+          name: "Carol-Anne Weeks",
+          role: "Healthcare Specialist",
+          company: "Amgen",
+          emailBody: CAROLANNE_HARDCODED_EMAIL.body,
+          emailSubject: CAROLANNE_HARDCODED_EMAIL.subject
+        }
+      ];
+    }
+
+    // Kong default candidates
     return [
       {
         name: "Jacob Wang",
