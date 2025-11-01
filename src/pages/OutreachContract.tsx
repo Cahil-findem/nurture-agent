@@ -48,6 +48,60 @@ Happy to chat if you're thinking about next steps or just want to swap perspecti
 Best,`
 };
 
+// Hardcoded email content for Breanna Achenbach
+const BREANNA_HARDCODED_EMAIL = {
+  subject: "Opportunity at Natera - PRN Phlebotomist Role",
+  body: `Hi Breanna,
+
+I've been following your journey at Quest Diagnostics and really admire your dedication to patient care and precision in phlebotomy. Given your expertise in specimen collection and commitment to healthcare excellence, I thought you might be interested in exploring an opportunity with Natera.
+
+<div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin: 16px 0; background: #ffffff;">
+  <h2 style="margin: 0 0 8px 0; font-size: 18px; color: #1f2937; font-weight: 600;">
+    <a href="https://job-boards.greenhouse.io/natera/jobs/5635534004" style="color: #2563eb; text-decoration: none;">
+      PRN Phlebotomist (1099)
+    </a>
+  </h2>
+
+  <div style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
+    <strong style="color: #374151;">Natera</strong> • Denver, CO • Contract / PRN
+  </div>
+
+  <div style="color: #059669; font-size: 14px; font-weight: 600; margin-bottom: 10px;">
+    Competitive compensation
+  </div>
+
+  <p style="color: #374151; font-size: 15px; line-height: 1.5; margin: 0 0 10px 0;">
+    As a PRN Phlebotomist at Natera, you'll play a key role in advancing genetic testing and diagnostics by ensuring high-quality specimen collection and exceptional patient care. This mobile/field-based role focuses on supporting Natera's diagnostics programs across oncology, women's health, and organ health.
+  </p>
+
+  <ul style="color: #374151; font-size: 15px; line-height: 1.6; margin: 0 0 10px 20px; padding: 0;">
+    <li>Verify test orders and patient information, ensuring specimen integrity and proper documentation.</li>
+    <li>Collect and track blood samples via venipuncture following aseptic technique.</li>
+    <li>Handle PHI securely and comply with professional and regulatory standards (including JCAHO).</li>
+    <li>Utilize Natera's Skedulo system to log and track draws, courier pickups, and daily tallies.</li>
+    <li>Collaborate with logistics teams to manage specimen transport and reporting.</li>
+  </ul>
+
+  <p style="color: #374151; font-size: 15px; margin: 10px 0;">
+    Candidates should have at least 2 years of phlebotomy experience and a high school diploma (or equivalent). National certification and additional training are preferred.
+  </p>
+
+  <div style="margin-top: 12px;">
+    <a href="https://job-boards.greenhouse.io/natera/jobs/5635534004" style="display: inline-block; background: #2563eb; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">
+      View Full Details
+    </a>
+  </div>
+</div>
+
+Your background at Quest aligns well with what we're looking for, and this position could be a great way to expand into more lab-integrated practices while continuing to refine your phlebotomy expertise.
+
+If you have any questions about the role, feel free to reach out to me directly.
+
+Would you be open to a quick 15-minute chat this week to discuss?
+
+Best,`
+};
+
 const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
   const backend = getCurrentBackend();
   const [currentCandidateIndex, setCurrentCandidateIndex] = useState(0);
@@ -100,16 +154,29 @@ const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
             if (candidateData && candidateData.email) {
               const candidateName = candidateData.candidate?.name || "Unknown";
 
-              // Use hardcoded email for Carol-Anne Weeks (Natera candidate1)
+              // Use hardcoded emails for specific Natera candidates
               const isCarolAnne = candidateName.toLowerCase().includes('carol') ||
                                  candidateName.toLowerCase().includes('weeks');
+              const isBreanna = candidateName.toLowerCase().includes('breanna') ||
+                               candidateName.toLowerCase().includes('achenbach');
+
+              let emailBody = candidateData.email.body || '';
+              let emailSubject = candidateData.email.subject || '';
+
+              if (isCarolAnne) {
+                emailBody = CAROLANNE_HARDCODED_EMAIL.body;
+                emailSubject = CAROLANNE_HARDCODED_EMAIL.subject;
+              } else if (isBreanna) {
+                emailBody = BREANNA_HARDCODED_EMAIL.body;
+                emailSubject = BREANNA_HARDCODED_EMAIL.subject;
+              }
 
               loadedCandidates.push({
                 name: candidateName,
                 role: candidateData.candidate?.current_title || "Unknown Role",
                 company: candidateData.candidate?.company || "",
-                emailBody: isCarolAnne ? CAROLANNE_HARDCODED_EMAIL.body : (candidateData.email.body || ''),
-                emailSubject: isCarolAnne ? CAROLANNE_HARDCODED_EMAIL.subject : (candidateData.email.subject || '')
+                emailBody: emailBody,
+                emailSubject: emailSubject
               });
             }
 
@@ -168,15 +235,8 @@ Best,`
           name: "Breanna Achenbach",
           role: "Phlebotomist",
           company: "Quest Diagnostics",
-          emailBody: `Hi Breanna,
-
-Your dedication to patient care as a Phlebotomist at Quest Diagnostics is commendable. Your expertise in venipuncture and specimen collection plays a vital role in healthcare diagnostics.
-
-I came across some articles about innovations in diagnostic testing that might interest you.
-
-Looking forward to connecting!
-
-Best,`
+          emailBody: BREANNA_HARDCODED_EMAIL.body,
+          emailSubject: BREANNA_HARDCODED_EMAIL.subject
         }
       ];
     }
