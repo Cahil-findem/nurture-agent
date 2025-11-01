@@ -30,6 +30,24 @@ I'd love to stay aligned on the types of opportunities that excite you. Are you 
 Best,`
 };
 
+// Hardcoded email content for Carol-Anne Weeks
+const CAROLANNE_HARDCODED_EMAIL = {
+  subject: "Thinking of your next step, Carol-Anne",
+  body: `Hi Carol-Anne,
+
+I saw that your new paper on rare disease management was published last week — congratulations on the launch! The insights you shared on patient pathways and integrated care models really reinforce the depth of your expertise in the field.
+
+Given your track record of impact at Amgen and your continued thought leadership, I'm curious — are you looking to expand further into advisory or consulting roles, or does the specialty account leadership path still excite you most?
+
+I thought these might resonate with you:
+
+<div style="margin-bottom: 24px;"> <img src="https://via.placeholder.com/600x300/2563eb/ffffff?text=Blog+Post" alt="Natera to Report Third Quarter Results on November 6, 2025" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 12px;"> <a href="https://www.natera.com/investor-relations/" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none;">Natera to Report Third Quarter Results on November 6, 2025</a> <p style="margin-top: 8px; font-size: 14px; color: #6b7280; line-height: 1.6;">With your focus on strategic sales and evidence-driven healthcare, this update offers an interesting view into how Natera is framing growth in the precision medicine space.</p> </div> <div style="margin-bottom: 24px;"> <img src="https://via.placeholder.com/600x300/2563eb/ffffff?text=Blog+Post" alt="Natera Named to Fast Company's Next Big Things in Tech List" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 12px;"> <a href="https://www.fastcompany.com/next-big-things-in-tech" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none;">Natera Named to Fast Company's Next Big Things in Tech List</a> <p style="margin-top: 8px; font-size: 14px; color: #6b7280; line-height: 1.6;">A look at Natera's recognition for innovation — a natural complement to your own work advancing technology-enabled healthcare solutions.</p> </div>
+
+Happy to chat if you're thinking about next steps or just want to swap perspectives on the evolving rare disease landscape.
+
+Best,`
+};
+
 const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
   const backend = getCurrentBackend();
   const [currentCandidateIndex, setCurrentCandidateIndex] = useState(0);
@@ -80,12 +98,18 @@ const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
             const candidateData = parsedData.roleEmails[`candidate${candidateIndex}`];
 
             if (candidateData && candidateData.email) {
+              const candidateName = candidateData.candidate?.name || "Unknown";
+
+              // Use hardcoded email for Carol-Anne Weeks (Natera candidate1)
+              const isCarolAnne = candidateName.toLowerCase().includes('carol') ||
+                                 candidateName.toLowerCase().includes('weeks');
+
               loadedCandidates.push({
-                name: candidateData.candidate?.name || "Unknown",
+                name: candidateName,
                 role: candidateData.candidate?.current_title || "Unknown Role",
                 company: candidateData.candidate?.company || "",
-                emailBody: candidateData.email.body || '',
-                emailSubject: candidateData.email.subject || ''
+                emailBody: isCarolAnne ? CAROLANNE_HARDCODED_EMAIL.body : (candidateData.email.body || ''),
+                emailSubject: isCarolAnne ? CAROLANNE_HARDCODED_EMAIL.subject : (candidateData.email.subject || '')
               });
             }
 

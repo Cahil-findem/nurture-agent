@@ -91,6 +91,11 @@ export const BACKENDS: Record<'kong' | 'natera', BackendConfig> = {
             ]
           }
         }
+      },
+      {
+        id: 'pub_cs_677938b45911ed1d97316bc9',
+        name: 'Carol-Anne Weeks',
+        role: 'Healthcare Specialist at Amgen'
       }
     ],
     branding: {
