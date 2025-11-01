@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import './RecipeLoader.css';
-import { getCurrentBackend, getBackendConfig } from '../utils/backendConfig';
 
 interface RecipeLoaderProps {
   onNavigate?: (page: 'demo-setup' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'outreach-contract') => void;
@@ -24,38 +23,12 @@ interface ImageState {
 }
 
 const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
-  const backend = getCurrentBackend();
-  const config = getBackendConfig(backend);
-
-  // Clear any old email data when component mounts to force fresh fetch
-  useEffect(() => {
-    console.log('='.repeat(80));
-    console.log(`RecipeLoader - Initializing with backend: ${backend}`);
-    console.log(`RecipeLoader - API URL: ${config.apiUrl}`);
-    console.log(`RecipeLoader - Candidates:`, config.candidates);
-
-    // Debug: Check what's in localStorage
-    const storedData = localStorage.getItem('demoSetupData');
-    console.log('RecipeLoader - demoSetupData from localStorage:', storedData);
-
-    // Check if old email data exists
-    const oldEmailData = localStorage.getItem('preGeneratedEmailData');
-    if (oldEmailData) {
-      console.log('RecipeLoader - REMOVING old email data:', oldEmailData.substring(0, 200) + '...');
-    } else {
-      console.log('RecipeLoader - No old email data to remove');
-    }
-
-    localStorage.removeItem('preGeneratedEmailData');
-    console.log('='.repeat(80));
-  }, []);
-
   const [cards, setCards] = useState<LoadingCard[]>([
     {
       id: 1,
       icon: 'article',
-      title: backend === 'kong' ? 'Gathering recent blog posts' : 'Gathering recent news articles',
-      text: config.branding.website,
+      title: 'Gathering recent blog posts',
+      text: 'www.kong.com/blog',
       visible: false,
       isImageCard: true
     },
@@ -96,47 +69,56 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
     image5: false
   });
 
-  // Function to fetch email data from backend API for all candidates
+  // Function to fetch email data from Kong API for all three candidates
   const fetchEmailData = async () => {
     if (emailDataFetched || fetchInProgress || fetchInitiated.current) return; // Prevent duplicate calls
-
+    
     fetchInitiated.current = true;
     setFetchInProgress(true);
-
+    
     try {
-      console.log(`RecipeLoader - Fetching email data from ${backend} API for all candidates...`);
+      console.log('RecipeLoader - Fetching email data from Kong API for all candidates...');
+      
+      const candidateIds = {
+        jacobWang: 'pub_hola_5c7d24bb19976ca87e8f8bbb',
+        kristinaWong: 'pub_5d984bc378b4d04f623a7b2f',
+        colinFarnan: 'pub_5c7baa020cadfda94cb36a7f',
+        vijayKethan: 'pub_5c7bbb110cadfda94c27eb89'
+      };
 
-      // Use dynamic candidates from backend config
-      const candidates = config.candidates;
+      const roles = [
+        { key: 'jacobWang', name: 'Jacob Wang - Senior Software Engineer' },
+        { key: 'kristinaWong', name: 'Kristina Wong - Senior Product Designer' },
+        { key: 'colinFarnan', name: 'Colin Farnan - Account Executive' },
+        { key: 'vijayKethan', name: 'Vijay Kethan - Senior Customer Success Manager' }
+      ];
 
       // Fetch email data for all candidates in parallel
-      const emailPromises = candidates.map(async (candidate, index) => {
-        console.log(`RecipeLoader - Making API call for ${candidate.name} with candidate_id: ${candidate.id}`);
-
-        // Different API formats for different backends
-        const requestBody = { candidate_id: candidate.id };
-
-        console.log(`RecipeLoader - Request body for ${backend}:`, requestBody);
-
-        const response = await fetch(config.apiUrl, {
+      const emailPromises = roles.map(async (role) => {
+        const candidateId = candidateIds[role.key as keyof typeof candidateIds];
+        
+        console.log(`RecipeLoader - Making API call for ${role.name} with candidate_id: ${candidateId}`);
+        const response = await fetch('https://kong-email-creator.vercel.app/api/generate-email', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(requestBody)
+          body: JSON.stringify({
+            candidate_id: candidateId
+          })
         });
-        console.log(`RecipeLoader - API call completed for ${candidate.name}`);
+        console.log(`RecipeLoader - API call completed for ${role.name}`);
 
         if (response.ok) {
           const emailResponse = await response.json();
-          console.log(`RecipeLoader - Email data fetched for ${candidate.name}:`, emailResponse);
+          console.log(`RecipeLoader - Email data fetched for ${role.name}:`, emailResponse);
           return {
-            role: `candidate${index}`,
-            candidateId: candidate.id,
+            role: role.key,
+            candidateId: candidateId,
             emailResponse: emailResponse
           };
         } else {
-          console.error(`RecipeLoader - Failed to fetch email data for ${candidate.name} (${candidate.id})`);
+          console.error(`RecipeLoader - Failed to fetch email data for ${role.name} (${candidateId})`);
           return null;
         }
       });
@@ -156,8 +138,8 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
         }
       });
 
-      // Use the first candidate as the primary candidate for backward compatibility
-      const primaryResult = results.find(r => r && r.role === 'candidate0');
+      // Use the first candidate (jacobWang) as the primary candidate for backward compatibility
+      const primaryResult = results.find(r => r && r.role === 'jacobWang');
       if (primaryResult) {
         preGeneratedEmails.candidate = primaryResult.emailResponse.candidate;
         preGeneratedEmails.emailData = primaryResult.emailResponse; // Keep for backward compatibility
@@ -244,11 +226,6 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
 
   return (
     <div className="recipe-loader">
-      {/* Progress Bar */}
-      <div className="progress-bar">
-        <div className="progress-fill" style={{ width: '90%' }}></div>
-      </div>
-
       <div className="recipe-loader-container">
         {/* Header with Logo */}
         <div className="title-section">

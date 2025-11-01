@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import './OutreachContract.css';
-import { getCurrentBackend } from '../utils/backendConfig';
 
 interface OutreachContractProps {
   onNavigate?: (page: 'demo-setup' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'chat' | 'outreach-contract') => void;
@@ -30,98 +29,11 @@ I'd love to stay aligned on the types of opportunities that excite you. Are you 
 Best,`
 };
 
-// Hardcoded email content for Carol-Anne Weeks
-const CAROLANNE_HARDCODED_EMAIL = {
-  subject: "Thinking of your next step, Carol-Anne",
-  body: `Hi Carol-Anne,
-
-I saw that your new paper on rare disease management was published last week — congratulations on the launch! The insights you shared on patient pathways and integrated care models really reinforce the depth of your expertise in the field.
-
-Given your track record of impact at Amgen and your continued thought leadership, I'm curious — are you looking to expand further into advisory or consulting roles, or does the specialty account leadership path still excite you most?
-
-I thought these might resonate with you:
-
-<div style="margin-bottom: 24px;">
-  <p style="margin: 0; padding: 0 0 12px 0; font-size: 16px; color: #1f2937; line-height: 1.6;">With your focus on strategic sales and evidence-driven healthcare, this update offers an interesting view into how Natera is framing growth in the precision medicine space.</p>
-  <div style="display: flex; gap: 16px; align-items: flex-start; margin: 0; padding: 0;">
-    <a href="https://www.natera.com/investor-relations/" style="flex-shrink: 0; display: block; line-height: 0;">
-      <img src="/Natera-social.webp" alt="Natera to Report Third Quarter Results on November 6, 2025" style="width: 200px; height: 120px; object-fit: cover; border-radius: 8px; display: block;">
-    </a>
-    <div style="flex: 1; min-width: 0;">
-      <a href="https://www.natera.com/investor-relations/" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none; display: block;">Natera to Report Third Quarter Results on November 6, 2025</a>
-    </div>
-  </div>
-</div>
-
-<div style="margin-bottom: 24px;">
-  <p style="margin: 0; padding: 0 0 12px 0; font-size: 16px; color: #1f2937; line-height: 1.6;">A look at Natera's recognition for innovation — a natural complement to your own work advancing technology-enabled healthcare solutions.</p>
-  <div style="display: flex; gap: 16px; align-items: flex-start; margin: 0; padding: 0;">
-    <a href="https://www.natera.com/company/news/natera-named-to-fast-companys-next-big-things-in-tech-list/" style="flex-shrink: 0; display: block; line-height: 0;">
-      <img src="/Natera-social.webp" alt="Natera Named to Fast Company's Next Big Things in Tech List" style="width: 200px; height: 120px; object-fit: cover; border-radius: 8px; display: block;">
-    </a>
-    <div style="flex: 1; min-width: 0;">
-      <a href="https://www.natera.com/company/news/natera-named-to-fast-companys-next-big-things-in-tech-list/" style="font-size: 16px; font-weight: 600; color: #2563eb; text-decoration: none; display: block;">Natera Named to Fast Company's Next Big Things in Tech List</a>
-    </div>
-  </div>
-</div>
-
-Happy to chat if you're thinking about next steps or just want to swap perspectives on the evolving rare disease landscape.
-
-Best,`
-};
-
-// Hardcoded email content for Breanna Achenbach
-const BREANNA_HARDCODED_EMAIL = {
-  subject: "Opportunity at Natera - PRN Phlebotomist Role",
-  body: `Hi Breanna,
-
-I've been following your journey at Quest Diagnostics and really admire your dedication to patient care and precision in phlebotomy. Given your expertise in specimen collection and commitment to healthcare excellence, I thought you might be interested in exploring an opportunity with Natera.
-
-<div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin: 16px 0; background: #ffffff;">
-  <h2 style="margin: 0 0 8px 0; font-size: 18px; color: #1f2937; font-weight: 600;">
-    <a href="https://job-boards.greenhouse.io/natera/jobs/5635534004" style="color: #2563eb; text-decoration: none;">
-      PRN Phlebotomist (1099)
-    </a>
-  </h2>
-
-  <div style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
-    <strong style="color: #374151;">Natera</strong> • Denver, CO • Contract / PRN
-  </div>
-
-  <div style="color: #059669; font-size: 14px; font-weight: 600; margin-bottom: 10px;">
-    Competitive compensation
-  </div>
-
-  <p style="color: #374151; font-size: 15px; line-height: 1.5; margin: 0 0 10px 0;">
-    As a PRN Phlebotomist at Natera, you'll play a key role in advancing genetic testing and diagnostics by ensuring high-quality specimen collection and exceptional patient care. This mobile/field-based role focuses on supporting Natera's diagnostics programs across oncology, women's health, and organ health.
-  </p>
-
-  <div style="margin-top: 12px;">
-    <a href="https://job-boards.greenhouse.io/natera/jobs/5635534004" style="display: inline-block; background: #2563eb; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">
-      View Full Details
-    </a>
-  </div>
-</div>
-
-Your background at Quest aligns well with what we're looking for, and this position could be a great way to expand into more lab-integrated practices while continuing to refine your phlebotomy expertise.
-
-If you have any questions about the role, feel free to reach out to me directly.
-
-Would you be open to a quick 15-minute chat this week to discuss?
-
-Best,`
-};
-
 const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
-  const backend = getCurrentBackend();
   const [currentCandidateIndex, setCurrentCandidateIndex] = useState(0);
   const [candidates, setCandidates] = useState<CandidateEmail[]>([]);
   const [loading, setLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
-
-  // Select hero image and footer logo based on backend
-  const heroImage = backend === 'natera' ? '/Natera%20Blog%20Hero.png' : '/Email%20image.png';
-  const footerLogo = backend === 'natera' ? '/natera-logo.svg' : '/Kong_Footer_Logo.png';
 
   useEffect(() => {
     loadEmailData();
@@ -145,52 +57,58 @@ const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
   const loadEmailData = () => {
     try {
       const preGeneratedData = localStorage.getItem('preGeneratedEmailData');
-      console.log('OutreachContract - Raw preGeneratedEmailData:', preGeneratedData);
 
       if (preGeneratedData) {
         const parsedData = JSON.parse(preGeneratedData);
         console.log('OutreachContract - Loaded pre-generated data:', parsedData);
-        console.log('OutreachContract - roleEmails keys:', parsedData.roleEmails ? Object.keys(parsedData.roleEmails) : 'none');
 
         const loadedCandidates: CandidateEmail[] = [];
 
         // Check if we have role-specific email data
         if (parsedData.roleEmails) {
-          // Load all candidates dynamically (candidate0, candidate1, candidate2, etc.)
-          let candidateIndex = 0;
-          while (parsedData.roleEmails[`candidate${candidateIndex}`]) {
-            const candidateData = parsedData.roleEmails[`candidate${candidateIndex}`];
+          // Load Jacob Wang
+          if (parsedData.roleEmails.jacobWang && parsedData.roleEmails.jacobWang.email) {
+            const jacobData = parsedData.roleEmails.jacobWang;
+            loadedCandidates.push({
+              name: jacobData.candidate?.name || "Jacob Wang",
+              role: jacobData.candidate?.current_title || "Senior Software Engineer",
+              company: jacobData.candidate?.company || "Google",
+              emailBody: jacobData.email.body || '',
+              emailSubject: jacobData.email.subject || ''
+            });
+          }
 
-            if (candidateData && candidateData.email) {
-              const candidateName = candidateData.candidate?.name || "Unknown";
+          // Load Kristina Wong - Always use hardcoded content for testing
+          loadedCandidates.push({
+            name: "Kristina Wong",
+            role: "Senior Product Designer",
+            company: "Vanta",
+            emailBody: KRISTINA_HARDCODED_EMAIL.body,
+            emailSubject: KRISTINA_HARDCODED_EMAIL.subject
+          });
 
-              // Use hardcoded emails for specific Natera candidates
-              const isCarolAnne = candidateName.toLowerCase().includes('carol') ||
-                                 candidateName.toLowerCase().includes('weeks');
-              const isBreanna = candidateName.toLowerCase().includes('breanna') ||
-                               candidateName.toLowerCase().includes('achenbach');
+          // Load Colin Farnan
+          if (parsedData.roleEmails.colinFarnan && parsedData.roleEmails.colinFarnan.email) {
+            const colinData = parsedData.roleEmails.colinFarnan;
+            loadedCandidates.push({
+              name: colinData.candidate?.name || "Colin Farnan",
+              role: colinData.candidate?.current_title || "Account Executive",
+              company: colinData.candidate?.company || "Datadog",
+              emailBody: colinData.email.body || '',
+              emailSubject: colinData.email.subject || ''
+            });
+          }
 
-              let emailBody = candidateData.email.body || '';
-              let emailSubject = candidateData.email.subject || '';
-
-              if (isCarolAnne) {
-                emailBody = CAROLANNE_HARDCODED_EMAIL.body;
-                emailSubject = CAROLANNE_HARDCODED_EMAIL.subject;
-              } else if (isBreanna) {
-                emailBody = BREANNA_HARDCODED_EMAIL.body;
-                emailSubject = BREANNA_HARDCODED_EMAIL.subject;
-              }
-
-              loadedCandidates.push({
-                name: candidateName,
-                role: candidateData.candidate?.current_title || "Unknown Role",
-                company: candidateData.candidate?.company || "",
-                emailBody: emailBody,
-                emailSubject: emailSubject
-              });
-            }
-
-            candidateIndex++;
+          // Load Vijay Kethan
+          if (parsedData.roleEmails.vijayKethan && parsedData.roleEmails.vijayKethan.email) {
+            const vijayData = parsedData.roleEmails.vijayKethan;
+            loadedCandidates.push({
+              name: vijayData.candidate?.name || "Vijay Kethan",
+              role: vijayData.candidate?.current_title || "Senior Customer Success Manager",
+              company: vijayData.candidate?.company || "Epicor",
+              emailBody: vijayData.email.body || '',
+              emailSubject: vijayData.email.subject || ''
+            });
           }
         }
 
@@ -217,41 +135,6 @@ const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
   };
 
   const getDefaultCandidates = (): CandidateEmail[] => {
-    // Return backend-specific default candidates
-    if (backend === 'natera') {
-      return [
-        {
-          name: "Breanna Achenbach",
-          role: "Phlebotomist",
-          company: "Quest Diagnostics",
-          emailBody: BREANNA_HARDCODED_EMAIL.body,
-          emailSubject: BREANNA_HARDCODED_EMAIL.subject
-        },
-        {
-          name: "Ozgur Acar",
-          role: "Registered Nurse",
-          company: "Stanford Healthcare Hospital",
-          emailBody: `Hi Ozgur,
-
-Your journey from accounting to nursing, especially your expertise in cardiac and neurosurgery at Stanford Health Care, is truly inspiring.
-
-I came across some articles that might resonate with your work in healthcare innovation.
-
-Looking forward to connecting!
-
-Best,`
-        },
-        {
-          name: "Carol-Anne Weeks",
-          role: "Healthcare Specialist",
-          company: "Amgen",
-          emailBody: CAROLANNE_HARDCODED_EMAIL.body,
-          emailSubject: CAROLANNE_HARDCODED_EMAIL.subject
-        }
-      ];
-    }
-
-    // Kong default candidates
     return [
       {
         name: "Jacob Wang",
@@ -300,12 +183,7 @@ I'd love to discuss some opportunities where your customer success expertise and
   };
 
   const formatEmailBody = (body: string): string => {
-    // If the email already contains HTML (like blog article cards), return as-is
-    if (body.includes('<div') || body.includes('<img')) {
-      return body;
-    }
-
-    // Otherwise, format plain text email body
+    // Format email body similar to EmailPreview component
     return body
       .replace(/\n\n/g, '</p><p>')  // Convert double newlines to paragraph breaks
       .replace(/\n/g, '<br>')        // Convert single newlines to line breaks
@@ -335,22 +213,24 @@ I'd love to discuss some opportunities where your customer success expertise and
     const fullName = currentCandidate?.name || 'Unknown';
     const firstName = fullName.split(' ')[0];
 
-    // Get the current role key dynamically (candidate0, candidate1, etc.)
-    const currentRoleKey = `candidate${currentCandidateIndex}`;
+    // Get the current role key based on candidate index
+    const roleKeys = ['jacobWang', 'kristinaWong', 'colinFarnan', 'vijayKethan'];
+    const currentRoleKey = roleKeys[currentCandidateIndex];
 
-    // Get interests and job preferences from the stored email data
+    // Get interests and job preferences from the stored email data (from Kong API)
     let professionalInterests = [
       'career development topics',
-      'professional growth',
-      'industry trends'
+      'back-end software engineering',
+      'cloud computing',
+      'new java releases'
     ]; // fallback
 
     let jobPreferences = {
-      titles: ['Open to new opportunities'],
-      locations: ['Remote', 'Flexible'],
+      titles: ['Software Engineer'],
+      locations: ['Austin, TX', 'Remote'],
       levelSeniority: 'Senior',
       jobSpecifics: [],
-      company: ''
+      company: 'Kong'
     }; // fallback
 
     try {
@@ -358,14 +238,14 @@ I'd love to discuss some opportunities where your customer success expertise and
       if (preGeneratedData) {
         const parsedData = JSON.parse(preGeneratedData);
 
-        // Try to get data from role-specific data for the current candidate
+        // Try to get data from role-specific data for the current role
         if (parsedData.roleEmails && currentRoleKey && parsedData.roleEmails[currentRoleKey]) {
           const roleData = parsedData.roleEmails[currentRoleKey];
 
           // Parse interests
           if (roleData.interests) {
             const interestsText = roleData.interests;
-            console.log(`Getting interests for ${currentRoleKey}:`, interestsText);
+            console.log(`Getting interests for role ${currentRoleKey}:`, interestsText);
 
             // Parse the interests text (format: "• Interest 1\n• Interest 2\n...")
             const interestLines = interestsText.split('\n')
@@ -382,7 +262,7 @@ I'd love to discuss some opportunities where your customer success expertise and
           // Parse job preferences
           if (roleData.job_preferences) {
             const jobPrefText = roleData.job_preferences;
-            console.log(`Getting job preferences for ${currentRoleKey}:`, jobPrefText);
+            console.log(`Getting job preferences for role ${currentRoleKey}:`, jobPrefText);
 
             const lines = jobPrefText.split('\n');
             const parsedJobPrefs = { ...jobPreferences };
@@ -417,7 +297,7 @@ I'd love to discuss some opportunities where your customer success expertise and
       console.error('Error parsing data from API:', error);
     }
 
-    // Store candidate information for the chat
+    // Store candidate information for the chat using data from Kong API
     const candidateData = {
       name: fullName,
       firstName: firstName,
@@ -460,11 +340,6 @@ I'd love to discuss some opportunities where your customer success expertise and
 
   return (
     <div className="outreach-contract">
-      {/* Progress Bar */}
-      <div className="progress-bar">
-        <div className="progress-fill" style={{ width: '95%' }}></div>
-      </div>
-
       <div className="content-wrapper">
         {/* Sticky Header Container */}
         <div className={`sticky-header ${isScrolled ? 'scrolled' : ''}`}>
@@ -506,7 +381,7 @@ I'd love to discuss some opportunities where your customer success expertise and
                   <div className="hero-container">
                     <div className="hero-image-wrapper">
                       <img
-                        src={heroImage}
+                        src="/Email%20image.png"
                         alt="Hero"
                         className="hero-image"
                       />
@@ -549,7 +424,7 @@ I'd love to discuss some opportunities where your customer success expertise and
 
                 {/* Footer */}
                 <div className="email-footer">
-                  <img src={footerLogo} alt={`${backend === 'natera' ? 'Natera' : 'Kong'} Logo`} className="footer-logo" />
+                  <img src="/Kong_Footer_Logo.png" alt="Kong Logo" className="footer-logo" />
                   <div className="footer-divider-line"></div>
                   <p className="footer-text">
                     This email was sent to you because you are subscribed to the career newsletter.

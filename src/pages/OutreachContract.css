@@ -568,18 +568,3 @@
 .email-body-text div[style*="border"] a[style*="display: inline-block"] {
   margin-top: 8px !important;
 }
-
-/* Ensure images in email body are visible */
-.email-body-text img {
-  display: block !important;
-  max-width: 100%;
-  height: auto;
-}
-
-.email-body-text div[style*="display: flex"] img {
-  display: block !important;
-  width: 200px !important;
-  height: 120px !important;
-  object-fit: cover !important;
-  border-radius: 8px !important;
-}
