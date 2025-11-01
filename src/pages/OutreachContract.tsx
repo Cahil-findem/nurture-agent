@@ -74,18 +74,6 @@ I've been following your journey at Quest Diagnostics and really admire your ded
     As a PRN Phlebotomist at Natera, you'll play a key role in advancing genetic testing and diagnostics by ensuring high-quality specimen collection and exceptional patient care. This mobile/field-based role focuses on supporting Natera's diagnostics programs across oncology, women's health, and organ health.
   </p>
 
-  <ul style="color: #374151; font-size: 15px; line-height: 1.6; margin: 0 0 10px 20px; padding: 0;">
-    <li>Verify test orders and patient information, ensuring specimen integrity and proper documentation.</li>
-    <li>Collect and track blood samples via venipuncture following aseptic technique.</li>
-    <li>Handle PHI securely and comply with professional and regulatory standards (including JCAHO).</li>
-    <li>Utilize Natera's Skedulo system to log and track draws, courier pickups, and daily tallies.</li>
-    <li>Collaborate with logistics teams to manage specimen transport and reporting.</li>
-  </ul>
-
-  <p style="color: #374151; font-size: 15px; margin: 10px 0;">
-    Candidates should have at least 2 years of phlebotomy experience and a high school diploma (or equivalent). National certification and additional training are preferred.
-  </p>
-
   <div style="margin-top: 12px;">
     <a href="https://job-boards.greenhouse.io/natera/jobs/5635534004" style="display: inline-block; background: #2563eb; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">
       View Full Details
@@ -211,6 +199,13 @@ const OutreachContract: React.FC<OutreachContractProps> = ({ onNavigate }) => {
     if (backend === 'natera') {
       return [
         {
+          name: "Breanna Achenbach",
+          role: "Phlebotomist",
+          company: "Quest Diagnostics",
+          emailBody: BREANNA_HARDCODED_EMAIL.body,
+          emailSubject: BREANNA_HARDCODED_EMAIL.subject
+        },
+        {
           name: "Ozgur Acar",
           role: "Registered Nurse",
           company: "Stanford Healthcare Hospital",
@@ -230,13 +225,6 @@ Best,`
           company: "Amgen",
           emailBody: CAROLANNE_HARDCODED_EMAIL.body,
           emailSubject: CAROLANNE_HARDCODED_EMAIL.subject
-        },
-        {
-          name: "Breanna Achenbach",
-          role: "Phlebotomist",
-          company: "Quest Diagnostics",
-          emailBody: BREANNA_HARDCODED_EMAIL.body,
-          emailSubject: BREANNA_HARDCODED_EMAIL.subject
         }
       ];
     }
