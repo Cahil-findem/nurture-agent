@@ -163,6 +163,20 @@ Best,`
           company: "Amgen",
           emailBody: CAROLANNE_HARDCODED_EMAIL.body,
           emailSubject: CAROLANNE_HARDCODED_EMAIL.subject
+        },
+        {
+          name: "Breanna Achenbach",
+          role: "Phlebotomist",
+          company: "Quest Diagnostics",
+          emailBody: `Hi Breanna,
+
+Your dedication to patient care as a Phlebotomist at Quest Diagnostics is commendable. Your expertise in venipuncture and specimen collection plays a vital role in healthcare diagnostics.
+
+I came across some articles about innovations in diagnostic testing that might interest you.
+
+Looking forward to connecting!
+
+Best,`
         }
       ];
     }
