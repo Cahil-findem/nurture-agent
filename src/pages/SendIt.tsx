@@ -18,7 +18,7 @@ interface GeneratedData {
 }
 
 interface SendItProps {
-  onNavigate?: (page: string) => void;
+  onNavigate?: (page: string, direction?: 'forward' | 'backward') => void;
 }
 
 const SendIt: React.FC<SendItProps> = () => {
