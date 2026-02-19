@@ -101,7 +101,7 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
         // Check for existing email first
         try {
           console.log(`RecipeLoader - Checking for existing email for ${role.name} (${candidateId})`);
-          const checkResponse = await fetch(`/api/sendit/emails?candidate_id=${encodeURIComponent(candidateId)}`);
+          const checkResponse = await fetch(`https://kong-email-creator.vercel.app/api/emails?candidate_id=${encodeURIComponent(candidateId)}`);
           if (checkResponse.ok) {
             const checkData = await checkResponse.json();
             if (checkData.emails && checkData.emails.length > 0) {
