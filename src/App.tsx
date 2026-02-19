@@ -56,7 +56,7 @@ function App() {
       case 'outreach-contract':
         return <OutreachContract onNavigate={navigateToPage} />;
       case 'sendit':
-        return <SendIt onNavigate={navigateToPage} />;
+        return <SendIt />;
       default:
         return <DemoSetup onNavigate={navigateToPage} />;
     }
