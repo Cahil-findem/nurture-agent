@@ -15,8 +15,17 @@ import './App.css';
 
 type CurrentPage = 'demo-setup' | 'onboarding' | 'onboarding-step2' | 'goal-selection' | 'segments' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'chat' | 'outreach-contract' | 'sendit';
 
+const pageRoutes: Record<string, CurrentPage> = {
+  '/sendit': 'sendit'
+};
+
+function getInitialPage(): CurrentPage {
+  const path = window.location.pathname;
+  return pageRoutes[path] || 'demo-setup';
+}
+
 function App() {
-  const [currentPage, setCurrentPage] = useState<CurrentPage>('demo-setup');
+  const [currentPage, setCurrentPage] = useState<CurrentPage>(getInitialPage());
   const [navigationDirection, setNavigationDirection] = useState<'forward' | 'backward'>('forward');
 
   const navigateToPage = (page: CurrentPage, direction: 'forward' | 'backward' = 'forward') => {
