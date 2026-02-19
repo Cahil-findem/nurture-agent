@@ -10,9 +10,10 @@ import RecipeLoader from './pages/RecipeLoader';
 import Recipe2 from './pages/Recipe2';
 import Chat from './pages/Chat';
 import OutreachContract from './pages/OutreachContract';
+import SendIt from './pages/SendIt';
 import './App.css';
 
-type CurrentPage = 'demo-setup' | 'onboarding' | 'onboarding-step2' | 'goal-selection' | 'segments' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'chat' | 'outreach-contract';
+type CurrentPage = 'demo-setup' | 'onboarding' | 'onboarding-step2' | 'goal-selection' | 'segments' | 'recipe1' | 'recipe-loader' | 'recipe2' | 'chat' | 'outreach-contract' | 'sendit';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<CurrentPage>('demo-setup');
@@ -54,6 +55,8 @@ function App() {
         return <Chat onNavigate={navigateToPage} />;
       case 'outreach-contract':
         return <OutreachContract onNavigate={navigateToPage} />;
+      case 'sendit':
+        return <SendIt />;
       default:
         return <DemoSetup onNavigate={navigateToPage} />;
     }

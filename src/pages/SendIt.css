@@ -1,0 +1,373 @@
+.sendit {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: white;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+
+.sendit-container {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.sendit-content {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+/* Header */
+.sendit-header {
+  align-self: stretch;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #DCDFEA;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.sendit-title {
+  align-self: stretch;
+  color: #101828;
+  font-size: 24px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+  line-height: 32px;
+  margin: 0;
+  text-align: left;
+}
+
+.sendit-subtitle {
+  align-self: stretch;
+  color: #465366;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0;
+  text-align: left;
+}
+
+/* Form */
+.sendit-form {
+  align-self: stretch;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/* Actions */
+.sendit-actions {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* Results Layout: Table + Email Viewer side by side */
+.sendit-results-layout {
+  align-self: stretch;
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+/* Results Table */
+.sendit-results {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.sendit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+}
+
+.sendit-table th {
+  text-align: left;
+  padding: 12px 16px;
+  color: #465366;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #DCDFEA;
+  background: #F9FAFB;
+}
+
+.sendit-table td {
+  padding: 12px 16px;
+  color: #101828;
+  border-bottom: 1px solid #DCDFEA;
+  vertical-align: middle;
+}
+
+.sendit-table tr:hover td {
+  background: #F9FAFB;
+}
+
+.sendit-row-active td {
+  background: #EFF6FF;
+}
+
+.sendit-row-active:hover td {
+  background: #EFF6FF;
+}
+
+/* Action Buttons */
+.sendit-actions-cell {
+  display: flex;
+  gap: 8px;
+}
+
+.sendit-action-btn {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 18px;
+}
+
+.sendit-generate-btn {
+  background: #4599FA;
+  color: white;
+  border: 1px solid #4599FA;
+}
+
+.sendit-generate-btn:hover:not(:disabled) {
+  background: #3280E8;
+  border-color: #3280E8;
+}
+
+.sendit-generate-btn:disabled {
+  background: #9CA3AF;
+  border-color: #9CA3AF;
+  cursor: not-allowed;
+}
+
+.sendit-view-btn {
+  background: white;
+  color: #344054;
+  border: 1px solid #DCDFEA;
+}
+
+.sendit-view-btn:hover:not(:disabled) {
+  background: #F9FAFB;
+  border-color: #98A2B3;
+}
+
+.sendit-view-btn:disabled {
+  color: #9CA3AF;
+  border-color: #E5E7EB;
+  cursor: not-allowed;
+  background: #F9FAFB;
+}
+
+/* Email Viewer */
+.sendit-email-viewer {
+  width: 550px;
+  flex-shrink: 0;
+}
+
+.sendit-email-plain {
+  padding: 24px;
+  border: 1px solid #DCDFEA;
+  border-radius: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  color: #101828;
+  line-height: 24px;
+}
+
+.sendit-email-plain p {
+  margin: 0 0 8px 0;
+}
+
+.sendit-email-plain p:last-child {
+  margin-bottom: 0;
+}
+
+.sendit-email-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px 0;
+}
+
+.sendit-email-input {
+  flex: 1;
+  padding: 4px 8px;
+  background: white;
+  border: 1px solid #DCDFEA;
+  border-radius: 6px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  color: #101828;
+  line-height: 24px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.sendit-email-input:focus {
+  border-color: #4599FA;
+}
+
+.sendit-email-select {
+  flex: 1;
+  padding: 4px 8px;
+  background: white;
+  border: 1px solid #DCDFEA;
+  border-radius: 6px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  color: #101828;
+  line-height: 24px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.sendit-email-select:focus {
+  border-color: #4599FA;
+}
+
+.sendit-send-btn {
+  width: 100%;
+  padding: 10px 16px;
+  background: #4599FA;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+}
+
+.sendit-send-btn:hover:not(:disabled) {
+  background: #3280E8;
+}
+
+.sendit-send-btn:disabled {
+  background: #9CA3AF;
+  cursor: not-allowed;
+}
+
+.sendit-email-body {
+  color: #465366;
+  font-size: 15px;
+  font-family: 'Roboto', sans-serif;
+  line-height: 24px;
+}
+
+.sendit-email-body a {
+  color: #4599FA;
+  text-decoration: underline;
+}
+
+.sendit-email-body p {
+  margin: 0 0 12px 0;
+}
+
+.sendit-email-body p:last-child {
+  margin-bottom: 0;
+}
+
+.sendit-email-placeholder {
+  width: 550px;
+  height: 400px;
+  border: 2px dashed #DCDFEA;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #9CA3AF;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+}
+
+.sendit-email-placeholder p {
+  margin: 0;
+  text-align: center;
+  max-width: 300px;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .sendit-results-layout {
+    flex-direction: column;
+  }
+
+  .sendit-email-viewer {
+    width: 100%;
+    max-width: 550px;
+  }
+
+  .sendit-email-placeholder {
+    width: 100%;
+    max-width: 550px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sendit-container {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .sendit-content {
+    gap: 24px;
+  }
+
+  .sendit-table th,
+  .sendit-table td {
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sendit-container {
+    width: 95%;
+    padding: 16px;
+  }
+
+  .sendit-title {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .sendit-actions-cell {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
