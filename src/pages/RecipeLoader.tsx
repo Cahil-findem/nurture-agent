@@ -94,10 +94,41 @@ const RecipeLoader: React.FC<RecipeLoaderProps> = ({ onNavigate }) => {
       ];
 
       // Fetch email data for all candidates in parallel
+      // First check if emails already exist in Kong, skip generation if so
       const emailPromises = roles.map(async (role) => {
         const candidateId = candidateIds[role.key as keyof typeof candidateIds];
-        
-        console.log(`RecipeLoader - Making API call for ${role.name} with candidate_id: ${candidateId}`);
+
+        // Check for existing email first
+        try {
+          console.log(`RecipeLoader - Checking for existing email for ${role.name} (${candidateId})`);
+          const checkResponse = await fetch(`/api/sendit/emails?candidate_id=${encodeURIComponent(candidateId)}`);
+          if (checkResponse.ok) {
+            const checkData = await checkResponse.json();
+            if (checkData.emails && checkData.emails.length > 0) {
+              console.log(`RecipeLoader - ✅ Found existing email for ${role.name}, skipping generation`);
+              // Fetch full candidate data via process-and-email (returns candidate info + generates new email from existing data)
+              const smartResponse = await fetch('https://kong-email-creator.vercel.app/api/process-and-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ candidate_id: candidateId })
+              });
+              if (smartResponse.ok) {
+                const emailResponse = await smartResponse.json();
+                console.log(`RecipeLoader - ✅ Loaded existing data for ${role.name}:`, emailResponse);
+                return {
+                  role: role.key,
+                  candidateId: candidateId,
+                  emailResponse: emailResponse
+                };
+              }
+            }
+          }
+        } catch (e) {
+          console.log(`RecipeLoader - Could not check existing emails for ${role.name}, falling back to generate`);
+        }
+
+        // Fallback: generate new email
+        console.log(`RecipeLoader - Generating new email for ${role.name} with candidate_id: ${candidateId}`);
         const response = await fetch('https://kong-email-creator.vercel.app/api/generate-email', {
           method: 'POST',
           headers: {
